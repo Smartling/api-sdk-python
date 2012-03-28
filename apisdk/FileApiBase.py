@@ -1,3 +1,18 @@
+''' Copyright 2012 Smartling, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License in the LICENSE file, or at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+'''
+
 #FileApi class implementation
 
 import httplib
@@ -40,27 +55,31 @@ class FileApiBase:
 
     # commands
 
-    def commandUpload(self, path, name, type):
+    def commandUpload(self, uploadData):
         params = { 
-                    Params.FILE_URI  : name, 
-                    Params.FILE_TYPE : type, 
-                    Params.FILE_PATH : path + name, 
+                    Params.FILE_URI  : uploadData.name, 
+                    Params.FILE_TYPE : uploadData.type, 
+                    Params.FILE_PATH : uploadData.path + uploadData.name
                   }
+        if (uploadData.approveContent):
+            params [Params.APPROVED] = uploadData.approveContent
+        
+        if (uploadData.charset):
+            params [Params.CHARSET] = uploadData.charset          
+            
         return self.uploadMultipart( params )                  
     
-    def commandList(self):
-        return self.command( Uri.LIST, {} )
+    def commandList(self, **kw):
+        return self.command( Uri.LIST, kw )
 
-    def commandGet(self, fileUri, locale):
-        params =  { 
-            Params.FILE_URI : fileUri, 
-            Params.LOCALE   : locale 
-            }
-        return self.command( Uri.GET, params )
+    def commandGet(self, fileUri, locale, **kw):
+        kw[Params.FILE_URI] = fileUri; 
+        kw[Params.LOCALE]   = locale 
+   
+        return self.command( Uri.GET, kw )
         
-    def commandStatus(self, fileUri, locale):
-        params = { 
-            Params.FILE_URI : fileUri, 
-            Params.LOCALE   : locale 
-            }
-        return self.command( Uri.STATUS, params )   
+    def commandStatus(self, fileUri, locale, **kw):
+        kw[Params.FILE_URI] = fileUri; 
+        kw[Params.LOCALE]   = locale 
+        
+        return self.command( Uri.STATUS, kw )   

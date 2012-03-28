@@ -13,4 +13,19 @@
  * limitations under the License.
 '''
 
-#module initialization
+#properties for upload
+
+class UploadData:
+    charset = ""
+    approveContent = 0
+    
+    def __init__(self, path, name, type):
+        self.path = path
+        self.name = name
+        self.type = type
+    
+    def setCharset(self, charset):
+        self.charset = charset
+        
+    def setApproveContent(self, approveContent):
+        self.approveContent = approveContent

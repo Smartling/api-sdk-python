@@ -1,3 +1,18 @@
+''' Copyright 2012 Smartling, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License in the LICENSE file, or at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+'''
+
 import  urllib
 import urllib2
 import mimetools, mimetypes
@@ -18,7 +33,9 @@ class MultipartPostHandler(urllib2.BaseHandler):
         if data is not None and type(data) != str:
             v_files = []
             v_vars = []
+            charser_str = ""
             try:
+                 charser_str = '; charset=%s' %  data.get("charset","")
                  for(key, value) in data.items():
                      if type(value) == file:
                          v_files.append((key, value))
@@ -27,12 +44,13 @@ class MultipartPostHandler(urllib2.BaseHandler):
             except TypeError:
                 systype, value, traceback = sys.exc_info()
                 raise TypeError, "not a valid non-string sequence or mapping object", traceback
-
+            
             if len(v_files) == 0:
                 data = urllib.urlencode(v_vars, self.doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
-                contenttype = 'multipart/form-data; boundary=%s' % boundary
+                contenttype = 'multipart/form-data%s; boundary=%s' % (charser_str, boundary)
+                
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
                     print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
