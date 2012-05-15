@@ -16,6 +16,7 @@
 #constants for File API
 
 class Params:
+    alloweRretrievalTypes = ('pending', 'published', 'pseudo')
     API_KEY    = 'apiKey'
     PROJECT_ID = 'projectId'
     FILE_PATH  = 'file_path'
@@ -25,6 +26,7 @@ class Params:
     FILE       = 'file'
     APPROVED   = 'approved'
     CHARSET    = 'charset'
+    RETRIEVAL_TYPE = 'retrievalType'
     
 class Uri:
     base = '/v1/file/'
@@ -32,3 +34,9 @@ class Uri:
     LIST   = base + 'list'
     GET    = base + 'get'
     STATUS = base + 'status'
+    DELETE = base + 'delete'
+    
+class ReqMethod:
+    POST   = "POST"
+    GET    = "POST"
+    DELETE = "DELETE"

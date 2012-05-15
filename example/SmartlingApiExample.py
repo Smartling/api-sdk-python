@@ -48,7 +48,13 @@ class SmartlingApiExample:
         print self.fapi.status(self.uploadData.name, self.locale)
 
         self.printMarker("file from server goes here")
-        print self.fapi.get(self.uploadData.name, self.locale)
+        print self.fapi.get( self.uploadData.name, self.locale)
+        
+        self.printMarker("delete from server goes here")
+        print self.fapi.delete(self.uploadData.name)
+        
+        self.printMarker("doing list again to see if it's deleted")
+        print self.fapi.list()
 
 
 FILE_NAME      = "java.properties"
@@ -58,7 +64,7 @@ FILE_PATH      = "../resources/"
 
 #test simple file
 uploadData = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
-useSandbox = False
+useSandbox = True
 example = SmartlingApiExample (useSandbox, uploadData, "ru-RU")
 example.test()
 

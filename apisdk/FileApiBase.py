@@ -19,7 +19,7 @@ import httplib
 import urllib
 import urllib2
 from MultipartPostHandler import MultipartPostHandler
-from Constants import Uri, Params
+from Constants import Uri, Params, ReqMethod
 
 class FileApiBase:
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
@@ -36,17 +36,18 @@ class FileApiBase:
     def uploadMultipart(self, params):
         self.addApiKeys(params) 
         params [Params.FILE] = open(params[Params.FILE_PATH],'rb')
+        del params[Params.FILE_PATH] #no need in extra field in POST
         opener = urllib2.build_opener(MultipartPostHandler)
         urllib2.install_opener(opener)
         req = urllib2.Request('https://'+self.host + Uri.UPLOAD, params)
         response = urllib2.urlopen(req).read().strip()
         return response 
 
-    def command(self, uri, params):
+    def command(self, method, uri, params):
         self.addApiKeys(params)
         params_encoded = urllib.urlencode( params )
         conn = httplib.HTTPSConnection( self.host )
-        conn.request("POST", uri, params_encoded, self.headers)
+        conn.request(method, uri, params_encoded, self.headers)
         response = conn.getresponse()
         data = response.read()
         conn.close()
@@ -70,16 +71,24 @@ class FileApiBase:
         return self.uploadMultipart( params )                  
     
     def commandList(self, **kw):
-        return self.command( Uri.LIST, kw )
+        return self.command( ReqMethod.POST, Uri.LIST, kw )
 
     def commandGet(self, fileUri, locale, **kw):
         kw[Params.FILE_URI] = fileUri; 
         kw[Params.LOCALE]   = locale 
+        if kw.has_key(Params.RETRIEVAL_TYPE) and not kw[Params.RETRIEVAL_TYPE] in Params.alloweRretrievalTypes:
+            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE], Params.RETRIEVAL_TYPE, Params.alloweRretrievalTypes)
+        
    
-        return self.command( Uri.GET, kw )
+        return self.command( ReqMethod.POST, Uri.GET, kw )
+        
+    def commandDelete(self, fileUri, **kw):
+        kw[Params.FILE_URI] = fileUri; 
+   
+        return self.command( ReqMethod.POST, Uri.DELETE, kw)        
         
     def commandStatus(self, fileUri, locale, **kw):
         kw[Params.FILE_URI] = fileUri; 
         kw[Params.LOCALE]   = locale 
         
-        return self.command( Uri.STATUS, kw )   
+        return self.command( ReqMethod.POST, Uri.STATUS, kw )   

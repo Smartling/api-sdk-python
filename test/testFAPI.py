@@ -36,11 +36,12 @@ class testFapi(object):
     def setUp(self):
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
         self.locale = "ru-RU"
-
-    def testUpload(self):
+        self.doUpload()
+        
+    def doUpload(self):
+        #ensure file is uploaded which is necesary for all tests
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
-        res = self.fapi.upload(uploadData)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
+        return self.fapi.upload(uploadData)
 
     def testFileList(self):
         res = self.fapi.list()
@@ -54,3 +55,18 @@ class testFapi(object):
         res = self.fapi.get(self.FILE_NAME, self.locale)
         lines = open( self.FILE_PATH + self.FILE_NAME, "rb" ).readlines()
         assert_equal( len(res.split("\n")), len(lines) )
+        
+    def testGetFileWithTypeFromServer(self):
+        res = self.fapi.get(self.FILE_NAME, self.locale, retrievalType='pseudo')
+        lines = open( self.FILE_PATH + self.FILE_NAME, "rb" ).readlines()
+        assert_equal( len(res.split("\n")), len(lines) )    
+        
+    def testFileDelete(self):
+        res = self.fapi.list()
+        count_old = res.count('"fileUri":')
+        res = self.fapi.delete(self.FILE_NAME)
+        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
+        res = self.fapi.list()
+        count_new = res.count('"fileUri":')
+        assert_equal(count_old-1,count_new)
+        self.doUpload() #ensure file is uploaded back after it's deleted

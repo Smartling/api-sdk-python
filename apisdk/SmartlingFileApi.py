@@ -34,6 +34,9 @@ class SmartlingFileApi(FileApiBase):
     def status(self, fileUri, locale, **kw):
         return self.commandStatus( fileUri, locale, **kw )
         
+    def delete(self, fileUri, **kw):
+        return self.commandDelete(fileUri, **kw)        
+        
 class SmartlingFileApiFactory:
     sandbox_host    = 'sandbox-api.smartling.com'
     api_host        = 'api.smartling.com'
