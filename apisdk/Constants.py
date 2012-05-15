@@ -17,6 +17,7 @@
 
 class Params:
     alloweRretrievalTypes = ('pending', 'published', 'pseudo')
+
     API_KEY    = 'apiKey'
     PROJECT_ID = 'projectId'
     FILE_PATH  = 'file_path'

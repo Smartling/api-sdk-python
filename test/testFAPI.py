@@ -70,3 +70,4 @@ class testFapi(object):
         count_new = res.count('"fileUri":')
         assert_equal(count_old-1,count_new)
         self.doUpload() #ensure file is uploaded back after it's deleted
+

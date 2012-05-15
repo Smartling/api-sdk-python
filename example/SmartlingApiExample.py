@@ -64,7 +64,7 @@ FILE_PATH      = "../resources/"
 
 #test simple file
 uploadData = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
-useSandbox = True
+useSandbox = False
 example = SmartlingApiExample (useSandbox, uploadData, "ru-RU")
 example.test()
 
