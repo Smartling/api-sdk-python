@@ -21,6 +21,10 @@ from apisdk.SmartlingFileApi import SmartlingFileApi
 from apisdk.UploadData import UploadData
 from nose.tools import assert_equal
 
+# don't forget to set real API_KEY and PROJECT_ID
+# or use environment variables:
+# export SL_API_KEY=********-****-****-****-************
+# export SL_PROJECT_ID=*******    
 
 class testFapi(object):
     HOST           = 'sandbox-api.smartling.com'
@@ -34,6 +38,8 @@ class testFapi(object):
     CODE_SUCCESS_TOKEN = '"code":"SUCCESS"'
     
     def setUp(self):
+        self.MY_API_KEY    = os.environ.get('SL_API_KEY', self.MY_API_KEY)
+        self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
         self.locale = "ru-RU"
         self.doUpload()
