@@ -93,3 +93,9 @@ class FileApiBase:
         
         return self.command( ReqMethod.POST, Uri.STATUS, kw )   
 
+
+    def commandRename(self, fileUri, newUri, **kw):
+        kw[Params.FILE_URI] = fileUri 
+        kw[Params.FILE_URI_NEW] = newUri 
+
+        return self.command( ReqMethod.POST, Uri.RENAME, kw )   

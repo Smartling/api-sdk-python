@@ -28,6 +28,7 @@ class Params:
     APPROVED   = 'approved'
     CHARSET    = 'charset'
     RETRIEVAL_TYPE = 'retrievalType'
+    FILE_URI_NEW   = 'newFileUri'
     
 class Uri:
     base = '/v1/file/'
@@ -36,6 +37,7 @@ class Uri:
     GET    = base + 'get'
     STATUS = base + 'status'
     DELETE = base + 'delete'
+    RENAME = base + 'rename'
     
 class ReqMethod:
     POST   = "POST"

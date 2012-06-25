@@ -34,6 +34,9 @@ class SmartlingFileApi(FileApiBase):
     def status(self, fileUri, locale, **kw):
         return self.commandStatus( fileUri, locale, **kw )
         
+    def rename(self, fileUri, newUri, **kw):
+        return self.commandRename( fileUri, newUri, **kw )        
+        
     def delete(self, fileUri, **kw):
         return self.commandDelete(fileUri, **kw)        
         

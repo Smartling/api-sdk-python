@@ -34,6 +34,7 @@ class testFapi(object):
     FILE_NAME      = "java.properties"
     FILE_TYPE      = "javaProperties"        
     FILE_PATH      = "../resources/"
+    FILE_NAME_NEW  = "java.properties.renamed"
     
     CODE_SUCCESS_TOKEN = '"code":"SUCCESS"'
     
@@ -77,3 +78,7 @@ class testFapi(object):
         assert_equal(count_old-1,count_new)
         self.doUpload() #ensure file is uploaded back after it's deleted
 
+    def testFileRename(self):
+        self.fapi.delete(self.FILE_NAME_NEW)
+        res = self.fapi.rename(self.FILE_NAME, self.FILE_NAME_NEW)
+        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
