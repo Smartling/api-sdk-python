@@ -26,13 +26,14 @@ class SmartlingApiExample:
     MY_API_KEY     = "YOUR_API_KEY"
     MY_PROJECT_ID  = "YOUR_PROJECT_ID"
     
-    def __init__(self, useSandbox, uploadData, locale):
+    def __init__(self, useSandbox, uploadData, locale, new_name):
         if useSandbox :
             self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID)
         else:
             self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApiProd(self.MY_API_KEY, self.MY_PROJECT_ID)
         self.uploadData = uploadData
         self.locale = locale
+        self.new_name = new_name
 
     def printMarker(self, caption):
         print "--" + caption + "-"*40
@@ -50,22 +51,27 @@ class SmartlingApiExample:
         self.printMarker("file from server goes here")
         print self.fapi.get( self.uploadData.name, self.locale)
         
+        self.printMarker("renaming file")
+        print self.fapi.rename(self.uploadData.name, self.new_name)
+        
         self.printMarker("delete from server goes here")
-        print self.fapi.delete(self.uploadData.name)
+        print self.fapi.delete(self.new_name)
         
         self.printMarker("doing list again to see if it's deleted")
         print self.fapi.list()
+        
 
 
 FILE_NAME      = "java.properties"
 FILE_NAME_UTF16= "javaUTF16.properties"
 FILE_TYPE      = "javaProperties"        
 FILE_PATH      = "../resources/"
+FILE_NAME_RENAMED = "java.properties.renamed"
 
 #test simple file
 uploadData = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
 useSandbox = False
-example = SmartlingApiExample (useSandbox, uploadData, "ru-RU")
+example = SmartlingApiExample (useSandbox, uploadData, "ru-RU", FILE_NAME_RENAMED)
 example.test()
 
 #add charset and approveContent parameters
@@ -73,5 +79,5 @@ uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
 uploadDataUtf16.setCharset("UTF-16")
 uploadDataUtf16.setApproveContent("true")
 useSandbox = True
-example = SmartlingApiExample (useSandbox, uploadDataUtf16, "ru-RU")
+example = SmartlingApiExample (useSandbox, uploadDataUtf16, "ru-RU", FILE_NAME_RENAMED)
 example.test()
