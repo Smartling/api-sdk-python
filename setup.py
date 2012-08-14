@@ -22,7 +22,7 @@ install_requires = []
 setup(
     name="api-sdk-python",
     author="Smartling, Inc.",
-    author_email="anatolija@archer-soft.com",
+    author_email="gjones@smartling.com",
     description="Smartling python library for file translations",
     url="http://www.smartling.com",
 
