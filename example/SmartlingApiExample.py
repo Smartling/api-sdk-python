@@ -15,10 +15,10 @@
 
 import os, sys
 lib_path = os.path.abspath('../')
-sys.path.append(lib_path) # allow to import ../smartlingapisdk/SmartlingFileApi
+sys.path.append(lib_path) # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingapisdk.SmartlingFileApi import SmartlingFileApi, SmartlingFileApiFactory
-from smartlingapisdk.UploadData import UploadData
+from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, SmartlingFileApiFactory
+from smartlingApiSdk.UploadData import UploadData
 
 class SmartlingApiExample:
     

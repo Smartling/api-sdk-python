@@ -26,7 +26,7 @@ setup(
     description="Smartling python library for file translations",
     url="http://www.smartling.com",
 
-    packages=['smartlingapisdk'],
+    packages=['smartlingApiSdk'],
     install_requires = install_requires,
 
     keywords = (
