@@ -1,4 +1,4 @@
-[Smartling Translation API](https://docs.smartling.com/display/docs/Smartling+API)
+[Smartling Translation API](https://docs.smartling.com/display/docs/Smartling+Translation+API)
 =================
 
 This repository contains the Python sdk for accessing the Smartling Translation API.
