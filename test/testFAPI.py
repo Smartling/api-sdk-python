@@ -15,10 +15,10 @@
 
 import os, sys
 lib_path = os.path.abspath('../')
-sys.path.append(lib_path) # allow to import ../apisdk/SmartlingFileApi
+sys.path.append(lib_path) # allow to import ../smartlingapisdk/SmartlingFileApi
 
-from apisdk.SmartlingFileApi import SmartlingFileApi
-from apisdk.UploadData import UploadData
+from smartlingapisdk.SmartlingFileApi import SmartlingFileApi
+from smartlingapisdk.UploadData import UploadData
 from nose.tools import assert_equal
 
 # don't forget to set real API_KEY and PROJECT_ID
