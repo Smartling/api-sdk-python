@@ -29,6 +29,7 @@ class Params:
     CHARSET    = 'charset'
     RETRIEVAL_TYPE = 'retrievalType'
     FILE_URI_NEW   = 'newFileUri'
+    CALLBACKURL    = 'callbackUrl'
     
 class Uri:
     base = '/v1/file/'

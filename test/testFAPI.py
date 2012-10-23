@@ -35,6 +35,7 @@ class testFapi(object):
     FILE_TYPE      = "javaProperties"        
     FILE_PATH      = "../resources/"
     FILE_NAME_NEW  = "java.properties.renamed"
+    CALLBACK_URL   = "http://google.com/?q=hello"
     
     CODE_SUCCESS_TOKEN = '"code":"SUCCESS"'
     
@@ -48,6 +49,7 @@ class testFapi(object):
     def doUpload(self):
         #ensure file is uploaded which is necesary for all tests
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
+        uploadData.setCallbackUrl(self.CALLBACK_URL)
         return self.fapi.upload(uploadData)
 
     def testFileList(self):

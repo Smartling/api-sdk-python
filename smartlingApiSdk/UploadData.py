@@ -18,6 +18,7 @@
 class UploadData:
     charset = ""
     approveContent = 0
+    callbackUr = ""
     
     def __init__(self, path, name, type):
         self.path = path
@@ -29,3 +30,6 @@ class UploadData:
         
     def setApproveContent(self, approveContent):
         self.approveContent = approveContent
+        
+    def setCallbackUrl(self, callbackUrl):
+        self.callbackUrl = callbackUrl    

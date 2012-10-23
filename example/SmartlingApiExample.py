@@ -67,10 +67,12 @@ FILE_NAME_UTF16= "javaUTF16.properties"
 FILE_TYPE      = "javaProperties"        
 FILE_PATH      = "../resources/"
 FILE_NAME_RENAMED = "java.properties.renamed"
+CALLBACK_URL      = "http://yourdomain.com/callback"
 
 #test simple file
 uploadData = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
 useSandbox = False
+uploadData.setCallbackUrl(CALLBACK_URL)
 example = SmartlingApiExample (useSandbox, uploadData, "ru-RU", FILE_NAME_RENAMED)
 example.test()
 
@@ -78,6 +80,7 @@ example.test()
 uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
 uploadDataUtf16.setCharset("UTF-16")
 uploadDataUtf16.setApproveContent("true")
+uploadData.setCallbackUrl(CALLBACK_URL)
 useSandbox = True
 example = SmartlingApiExample (useSandbox, uploadDataUtf16, "ru-RU", FILE_NAME_RENAMED)
 example.test()

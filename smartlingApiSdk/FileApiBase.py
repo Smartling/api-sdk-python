@@ -67,6 +67,9 @@ class FileApiBase:
         
         if (uploadData.charset):
             params [Params.CHARSET] = uploadData.charset          
+
+        if (uploadData.callbackUrl):
+            params [Params.CALLBACKURL] = uploadData.callbackUrl
             
         return self.uploadMultipart( params )                  
     
