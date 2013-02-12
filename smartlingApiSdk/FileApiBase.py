@@ -51,7 +51,7 @@ class FileApiBase:
         response = conn.getresponse()
         data = response.read()
         conn.close()
-        return data
+        return data, response.status
     
 
     # commands
