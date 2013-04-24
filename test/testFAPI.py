@@ -53,34 +53,34 @@ class testFapi(object):
         return self.fapi.upload(uploadData)
 
     def testFileList(self):
-        res = self.fapi.list()
+        res, status = self.fapi.list()
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
         
     def testFileStatus(self):
-        res = self.fapi.status(self.FILE_NAME, self.locale)
+        res, status = self.fapi.status(self.FILE_NAME, self.locale)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
 
     def testGetFileFromServer(self):
-        res = self.fapi.get(self.FILE_NAME, self.locale)
+        res, status = self.fapi.get(self.FILE_NAME, self.locale)
         lines = open( self.FILE_PATH + self.FILE_NAME, "rb" ).readlines()
         assert_equal( len(res.split("\n")), len(lines) )
         
     def testGetFileWithTypeFromServer(self):
-        res = self.fapi.get(self.FILE_NAME, self.locale, retrievalType='pseudo')
+        res, status = self.fapi.get(self.FILE_NAME, self.locale, retrievalType='pseudo')
         lines = open( self.FILE_PATH + self.FILE_NAME, "rb" ).readlines()
         assert_equal( len(res.split("\n")), len(lines) )    
         
     def testFileDelete(self):
-        res = self.fapi.list()
+        res, status = self.fapi.list()
         count_old = res.count('"fileUri":')
-        res = self.fapi.delete(self.FILE_NAME)
+        res, status = self.fapi.delete(self.FILE_NAME)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
-        res = self.fapi.list()
+        res, status = self.fapi.list()
         count_new = res.count('"fileUri":')
         assert_equal(count_old-1,count_new)
         self.doUpload() #ensure file is uploaded back after it's deleted
 
     def testFileRename(self):
         self.fapi.delete(self.FILE_NAME_NEW)
-        res = self.fapi.rename(self.FILE_NAME, self.FILE_NAME_NEW)
+        res, status = self.fapi.rename(self.FILE_NAME, self.FILE_NAME_NEW)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
