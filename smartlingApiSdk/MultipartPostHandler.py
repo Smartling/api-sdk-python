@@ -76,9 +76,10 @@ class MultipartPostHandler(urllib2.BaseHandler):
             buffer += 'Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename)
             buffer += 'Content-Type: %s\r\n' % contenttype
             fd.seek(0)
-            buffer += '\r\n' + fd.read() + '\r\n'
+            contents = fd.read().decode('utf-8')
+            buffer += '\r\n' + contents + '\r\n'
         buffer += '--%s--\r\n\r\n' % boundary
-        return boundary, buffer
+        return boundary, buffer.encode('utf-8')
     multipart_encode = Callable(multipart_encode)
 
     https_request = http_request
