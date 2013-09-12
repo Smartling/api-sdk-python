@@ -33,9 +33,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
         if data is not None and type(data) != str:
             v_files = []
             v_vars = []
-            charser_str = ""
             try:
-                 charser_str = '; charset=%s' %  data.get("charset","")
                  for(key, value) in data.items():
                      if type(value) == file:
                          v_files.append((key, value))
@@ -49,7 +47,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 data = urllib.urlencode(v_vars, self.doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
-                contenttype = 'multipart/form-data%s; boundary=%s' % (charser_str, boundary)
+                contenttype = 'multipart/form-data; boundary=%s' % boundary
                 
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):

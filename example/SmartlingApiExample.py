@@ -22,7 +22,6 @@ from smartlingApiSdk.UploadData import UploadData
 
 class SmartlingApiExample:
     
-    HOST           = 'sandbox-api.smartling.com'
     MY_API_KEY     = "YOUR_API_KEY"
     MY_PROJECT_ID  = "YOUR_PROJECT_ID"
     
@@ -40,7 +39,7 @@ class SmartlingApiExample:
 
     def test(self):
         self.printMarker("file upload")
-        print self.fapi.upload(uploadData)
+        print self.fapi.upload(self.uploadData)
 
         self.printMarker("files list")
         print self.fapi.list()
@@ -70,17 +69,16 @@ FILE_NAME_RENAMED = "java.properties.renamed"
 CALLBACK_URL      = "http://yourdomain.com/callback"
 
 #test simple file
-uploadData = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
+uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
 useSandbox = False
-uploadData.setCallbackUrl(CALLBACK_URL)
-example = SmartlingApiExample (useSandbox, uploadData, "ru-RU", FILE_NAME_RENAMED)
+uploadDataASCII.setCallbackUrl(CALLBACK_URL)
+example = SmartlingApiExample (useSandbox, uploadDataASCII, "ru-RU", FILE_NAME_RENAMED)
 example.test()
 
 #add charset and approveContent parameters
 uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
-uploadDataUtf16.setCharset("UTF-16")
 uploadDataUtf16.setApproveContent("true")
-uploadData.setCallbackUrl(CALLBACK_URL)
+uploadDataUtf16.setCallbackUrl(CALLBACK_URL)
 useSandbox = True
 example = SmartlingApiExample (useSandbox, uploadDataUtf16, "ru-RU", FILE_NAME_RENAMED)
 example.test()

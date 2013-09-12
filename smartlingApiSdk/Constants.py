@@ -26,7 +26,6 @@ class Params:
     LOCALE     = 'locale'
     FILE       = 'file'
     APPROVED   = 'approved'
-    CHARSET    = 'charset'
     RETRIEVAL_TYPE = 'retrievalType'
     FILE_URI_NEW   = 'newFileUri'
     CALLBACKURL    = 'callbackUrl'

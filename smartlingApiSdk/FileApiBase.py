@@ -65,9 +65,6 @@ class FileApiBase:
         if (uploadData.approveContent):
             params [Params.APPROVED] = uploadData.approveContent
         
-        if (uploadData.charset):
-            params [Params.CHARSET] = uploadData.charset          
-
         if (uploadData.callbackUrl):
             params [Params.CALLBACKURL] = uploadData.callbackUrl
             

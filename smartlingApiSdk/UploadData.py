@@ -16,7 +16,6 @@
 #properties for upload
 
 class UploadData:
-    charset = ""
     approveContent = 0
     callbackUr = ""
     
@@ -25,9 +24,6 @@ class UploadData:
         self.name = name
         self.type = type
     
-    def setCharset(self, charset):
-        self.charset = charset
-        
     def setApproveContent(self, approveContent):
         self.approveContent = approveContent
         
