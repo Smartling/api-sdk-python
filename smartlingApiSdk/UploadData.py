@@ -17,7 +17,7 @@
 
 class UploadData:
     approveContent = 0
-    callbackUr = ""
+    callbackUrl = ""
     
     def __init__(self, path, name, type):
         self.path = path

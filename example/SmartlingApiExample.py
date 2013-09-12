@@ -71,7 +71,6 @@ CALLBACK_URL      = "http://yourdomain.com/callback"
 #test simple file
 uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
 useSandbox = False
-uploadDataASCII.setCallbackUrl(CALLBACK_URL)
 example = SmartlingApiExample (useSandbox, uploadDataASCII, "ru-RU", FILE_NAME_RENAMED)
 example.test()
 
