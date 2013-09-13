@@ -1,4 +1,4 @@
-''' Copyright 2012 Smartling, Inc.
+''' Copyright 2013 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -13,23 +13,22 @@
  * limitations under the License.
 '''
 
-#properties for upload
+#Smartling directive which is used for file upload
 
-class UploadData:
-    approveContent = "false"
-    callbackUrl = ""
-    directives = []
+class SmartlingDirective:
+    sl_prefix = "smartling."
     
-    def __init__(self, path, name, type):
-        self.path = path
-        self.name = name
-        self.type = type
-    
-    def setApproveContent(self, approveContent):
-        self.approveContent = approveContent
+    def __init__(self, name, value):
+        if not name :
+            raise Exception("name cannot be empty!")
+        self.name = self.__remove_sl_prefix(name.lower())
         
-    def setCallbackUrl(self, callbackUrl):
-        self.callbackUrl = callbackUrl
-
-    def addDirective(self, directive):
-        self.directives.append(directive)
+        if value is None:
+            self.value = ""
+        else:
+            self.value = value
+    
+    def __remove_sl_prefix(self, name):
+        if name.startswith(self.sl_prefix):
+            return name[len(self.sl_prefix):]
+        return name

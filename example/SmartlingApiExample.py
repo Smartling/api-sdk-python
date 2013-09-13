@@ -18,7 +18,9 @@ lib_path = os.path.abspath('../')
 sys.path.append(lib_path) # allow to import ../smartlingApiSdk/SmartlingFileApi
 
 from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, SmartlingFileApiFactory
+from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from smartlingApiSdk.UploadData import UploadData
+
 
 class SmartlingApiExample:
     
@@ -70,6 +72,7 @@ CALLBACK_URL      = "http://yourdomain.com/callback"
 
 #test simple file
 uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
+uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom","\[.+?\]"))
 useSandbox = False
 example = SmartlingApiExample (useSandbox, uploadDataASCII, "ru-RU", FILE_NAME_RENAMED)
 example.test()
