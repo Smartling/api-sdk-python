@@ -48,4 +48,3 @@ class test_SmartlingDirective(object):
         
         d3 = SmartlingDirective("smartling.placeholder_format_custom smartling.none", "%s")
         assert_equal(d3.name, "placeholder_format_custom smartling.none")
-
