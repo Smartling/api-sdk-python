@@ -16,8 +16,9 @@
 #properties for upload
 
 class UploadData:
-    approveContent = 0
+    approveContent = "false"
     callbackUrl = ""
+    directives = []
     
     def __init__(self, path, name, type):
         self.path = path
@@ -28,4 +29,7 @@ class UploadData:
         self.approveContent = approveContent
         
     def setCallbackUrl(self, callbackUrl):
-        self.callbackUrl = callbackUrl    
+        self.callbackUrl = callbackUrl
+
+    def addDirective(self, directive):
+        self.directives.append(directive)

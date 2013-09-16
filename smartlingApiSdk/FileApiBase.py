@@ -68,6 +68,10 @@ class FileApiBase:
         if (uploadData.callbackUrl):
             params [Params.CALLBACKURL] = uploadData.callbackUrl
             
+        if (uploadData.directives):
+            for index, directive in enumerate(uploadData.directives):
+                params [directive.sl_prefix + directive.name] = directive.value
+
         return self.uploadMultipart( params )                  
     
     def commandList(self, **kw):
