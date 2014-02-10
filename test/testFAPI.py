@@ -24,28 +24,28 @@ from nose.tools import assert_equal
 # don't forget to set real API_KEY and PROJECT_ID
 # or use environment variables:
 # export SL_API_KEY=********-****-****-****-************
-# export SL_PROJECT_ID=*******    
+# export SL_PROJECT_ID=*******
 
 class testFapi(object):
     HOST           = 'sandbox-api.smartling.com'
     MY_API_KEY     = "YOUR_API_KEY"
     MY_PROJECT_ID  = "YOUR_PROJECT_ID"
-    
+
     FILE_NAME      = "java.properties"
-    FILE_TYPE      = "javaProperties"        
+    FILE_TYPE      = "javaProperties"
     FILE_PATH      = "../resources/"
     FILE_NAME_NEW  = "java.properties.renamed"
     CALLBACK_URL   = "http://google.com/?q=hello"
-    
+
     CODE_SUCCESS_TOKEN = '"code":"SUCCESS"'
-    
+
     def setUp(self):
         self.MY_API_KEY    = os.environ.get('SL_API_KEY', self.MY_API_KEY)
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
         self.locale = "ru-RU"
         self.doUpload()
-        
+
     def doUpload(self):
         #ensure file is uploaded which is necesary for all tests
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
@@ -55,7 +55,7 @@ class testFapi(object):
     def testFileList(self):
         res, status = self.fapi.list()
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
-        
+
     def testFileStatus(self):
         res, status = self.fapi.status(self.FILE_NAME, self.locale)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0 )
@@ -64,12 +64,12 @@ class testFapi(object):
         res, status = self.fapi.get(self.FILE_NAME, self.locale)
         lines = open( self.FILE_PATH + self.FILE_NAME, "rb" ).readlines()
         assert_equal( len(res.split("\n")), len(lines) )
-        
+
     def testGetFileWithTypeFromServer(self):
         res, status = self.fapi.get(self.FILE_NAME, self.locale, retrievalType='pseudo')
         lines = open( self.FILE_PATH + self.FILE_NAME, "rb" ).readlines()
-        assert_equal( len(res.split("\n")), len(lines) )    
-        
+        assert_equal( len(res.split("\n")), len(lines) )
+
     def testFileDelete(self):
         res, status = self.fapi.list()
         count_old = res.count('"fileUri":')

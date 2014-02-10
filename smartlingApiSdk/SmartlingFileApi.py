@@ -21,25 +21,25 @@ class SmartlingFileApi(FileApiBase):
 
     def __init__(self, host, apiKey, projectId):
         FileApiBase.__init__(self, host, apiKey, projectId)
-        
+
     def upload(self, uploadData):
-        return self.commandUpload( uploadData )                  
-    
+        return self.commandUpload( uploadData )
+
     def list(self, **kw):
         return self.commandList( **kw )
 
     def get(self, fileUri, locale, **kw):
         return self.commandGet(fileUri, locale, **kw)
-        
+
     def status(self, fileUri, locale, **kw):
         return self.commandStatus( fileUri, locale, **kw )
-        
+
     def rename(self, fileUri, newUri, **kw):
-        return self.commandRename( fileUri, newUri, **kw )        
-        
+        return self.commandRename( fileUri, newUri, **kw )
+
     def delete(self, fileUri, **kw):
-        return self.commandDelete(fileUri, **kw)        
-        
+        return self.commandDelete(fileUri, **kw)
+
 class SmartlingFileApiFactory:
     sandbox_host    = 'sandbox-api.smartling.com'
     api_host        = 'api.smartling.com'
@@ -48,6 +48,6 @@ class SmartlingFileApiFactory:
         if (productionMode):
             return SmartlingFileApi(self.api_host, apiKey, projectId)
         return SmartlingFileApi(self.sandbox_host, apiKey, projectId)
-        
+
     def getSmartlingTranslationApiProd(self, apiKey, projectId):
         return SmartlingFileApi(self.api_host, apiKey, projectId)

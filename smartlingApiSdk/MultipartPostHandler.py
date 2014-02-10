@@ -42,13 +42,13 @@ class MultipartPostHandler(urllib2.BaseHandler):
             except TypeError:
                 systype, value, traceback = sys.exc_info()
                 raise TypeError, "not a valid non-string sequence or mapping object", traceback
-            
+
             if len(v_files) == 0:
                 data = urllib.urlencode(v_vars, self.doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
-                
+
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
                     print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')

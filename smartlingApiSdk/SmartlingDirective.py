@@ -17,17 +17,17 @@
 
 class SmartlingDirective:
     sl_prefix = "smartling."
-    
+
     def __init__(self, name, value):
         if not name :
             raise Exception("name cannot be empty!")
         self.name = self.__remove_sl_prefix(name.lower())
-        
+
         if value is None:
             self.value = ""
         else:
             self.value = value
-    
+
     def __remove_sl_prefix(self, name):
         if name.startswith(self.sl_prefix):
             return name[len(self.sl_prefix):]

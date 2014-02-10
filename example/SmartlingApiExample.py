@@ -23,10 +23,10 @@ from smartlingApiSdk.UploadData import UploadData
 
 
 class SmartlingApiExample:
-    
+
     MY_API_KEY     = "YOUR_API_KEY"
     MY_PROJECT_ID  = "YOUR_PROJECT_ID"
-    
+
     def __init__(self, useSandbox, uploadData, locale, new_name):
         if useSandbox :
             self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID)
@@ -51,21 +51,21 @@ class SmartlingApiExample:
 
         self.printMarker("file from server goes here")
         print self.fapi.get( self.uploadData.name, self.locale)
-        
+
         self.printMarker("renaming file")
         print self.fapi.rename(self.uploadData.name, self.new_name)
-        
+
         self.printMarker("delete from server goes here")
         print self.fapi.delete(self.new_name)
-        
+
         self.printMarker("doing list again to see if it's deleted")
         print self.fapi.list()
-        
+
 
 
 FILE_NAME      = "java.properties"
 FILE_NAME_UTF16= "javaUTF16.properties"
-FILE_TYPE      = "javaProperties"        
+FILE_TYPE      = "javaProperties"
 FILE_PATH      = "../resources/"
 FILE_NAME_RENAMED = "java.properties.renamed"
 CALLBACK_URL      = "http://yourdomain.com/callback"
