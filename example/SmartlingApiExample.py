@@ -17,7 +17,7 @@ import os, sys
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path) # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, SmartlingFileApiFactory
+from smartlingApiSdk.SmartlingFileApi import SmartlingFileApiFactory
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from smartlingApiSdk.UploadData import UploadData
 
