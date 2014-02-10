@@ -47,7 +47,7 @@ class testFapi(object):
         self.doUpload()
 
     def doUpload(self):
-        #ensure file is uploaded which is necesary for all tests
+        #ensure file is uploaded which is necessary for all tests
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
         uploadData.setCallbackUrl(self.CALLBACK_URL)
         return self.fapi.upload(uploadData)

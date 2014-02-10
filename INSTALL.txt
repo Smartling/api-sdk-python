@@ -1,11 +1,11 @@
 File API sdk is ready to be used 'as is'.
-All necesary files are in smartlingApiSdk.
+All necessary files are in smartlingApiSdk.
 
 Example.
 
 Example script is placed in separate directory named 'example', and can't import from ../smartlingApiSdk, so minor tweak is done to add ../ to import path.
 To run example just do:
-cd exammple
+cd example
 python SmartlingApiExample.py
 
 

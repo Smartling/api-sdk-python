@@ -16,7 +16,7 @@
 #constants for File API
 
 class Params:
-    alloweRretrievalTypes = ('pending', 'published', 'pseudo')
+    allowedRetrievalTypes = ('pending', 'published', 'pseudo')
 
     API_KEY    = 'apiKey'
     PROJECT_ID = 'projectId'
@@ -28,7 +28,7 @@ class Params:
     APPROVED   = 'approved'
     RETRIEVAL_TYPE = 'retrievalType'
     FILE_URI_NEW   = 'newFileUri'
-    CALLBACKURL    = 'callbackUrl'
+    CALLBACK_URL    = 'callbackUrl'
 
 class Uri:
     base = '/v1/file/'

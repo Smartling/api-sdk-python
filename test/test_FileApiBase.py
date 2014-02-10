@@ -52,7 +52,7 @@ class test_UploadData(object):
 
         assert_equal(len(params), 5)
         assert_equal(params[Params.APPROVED], "true")
-        assert_equal(params[Params.CALLBACKURL], "smartling.com")
+        assert_equal(params[Params.CALLBACK_URL], "smartling.com")
 
 
     def test_commandUpload_Directives(self):

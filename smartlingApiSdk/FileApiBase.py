@@ -66,7 +66,7 @@ class FileApiBase:
             params [Params.APPROVED] = uploadData.approveContent
 
         if (uploadData.callbackUrl):
-            params [Params.CALLBACKURL] = uploadData.callbackUrl
+            params [Params.CALLBACK_URL] = uploadData.callbackUrl
 
         if (uploadData.directives):
             for index, directive in enumerate(uploadData.directives):
@@ -80,8 +80,8 @@ class FileApiBase:
     def commandGet(self, fileUri, locale, **kw):
         kw[Params.FILE_URI] = fileUri;
         kw[Params.LOCALE]   = locale
-        if kw.has_key(Params.RETRIEVAL_TYPE) and not kw[Params.RETRIEVAL_TYPE] in Params.alloweRretrievalTypes:
-            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE], Params.RETRIEVAL_TYPE, Params.alloweRretrievalTypes)
+        if kw.has_key(Params.RETRIEVAL_TYPE) and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
+            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE], Params.RETRIEVAL_TYPE, Params.allowedRetrievalTypes)
 
 
         return self.command( ReqMethod.POST, Uri.GET, kw )
