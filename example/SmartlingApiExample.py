@@ -13,9 +13,10 @@
  * limitations under the License.
 '''
 
-import os, sys
+import os
+import sys
 lib_path = os.path.abspath('../')
-sys.path.append(lib_path) # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
 from smartlingApiSdk.SmartlingFileApi import SmartlingFileApiFactory
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
@@ -24,11 +25,11 @@ from smartlingApiSdk.UploadData import UploadData
 
 class SmartlingApiExample:
 
-    MY_API_KEY     = "YOUR_API_KEY"
-    MY_PROJECT_ID  = "YOUR_PROJECT_ID"
+    MY_API_KEY = "YOUR_API_KEY"
+    MY_PROJECT_ID = "YOUR_PROJECT_ID"
 
     def __init__(self, useSandbox, uploadData, locale, new_name):
-        if useSandbox :
+        if useSandbox:
             self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID)
         else:
             self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApiProd(self.MY_API_KEY, self.MY_PROJECT_ID)
@@ -37,7 +38,7 @@ class SmartlingApiExample:
         self.new_name = new_name
 
     def printMarker(self, caption):
-        print "--" + caption + "-"*40
+        print "--" + caption + "-" * 40
 
     def test(self):
         self.printMarker("file upload")
@@ -50,7 +51,7 @@ class SmartlingApiExample:
         print self.fapi.status(self.uploadData.name, self.locale)
 
         self.printMarker("file from server goes here")
-        print self.fapi.get( self.uploadData.name, self.locale)
+        print self.fapi.get(self.uploadData.name, self.locale)
 
         self.printMarker("renaming file")
         print self.fapi.rename(self.uploadData.name, self.new_name)
@@ -62,19 +63,18 @@ class SmartlingApiExample:
         print self.fapi.list()
 
 
-
-FILE_NAME      = "java.properties"
-FILE_NAME_UTF16= "javaUTF16.properties"
-FILE_TYPE      = "javaProperties"
-FILE_PATH      = "../resources/"
+FILE_NAME = "java.properties"
+FILE_NAME_UTF16 = "javaUTF16.properties"
+FILE_TYPE = "javaProperties"
+FILE_PATH = "../resources/"
 FILE_NAME_RENAMED = "java.properties.renamed"
-CALLBACK_URL      = "http://yourdomain.com/callback"
+CALLBACK_URL = "http://yourdomain.com/callback"
 
 #test simple file
 uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
-uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom","\[.+?\]"))
+uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
 useSandbox = False
-example = SmartlingApiExample (useSandbox, uploadDataASCII, "ru-RU", FILE_NAME_RENAMED)
+example = SmartlingApiExample(useSandbox, uploadDataASCII, "ru-RU", FILE_NAME_RENAMED)
 example.test()
 
 #add charset and approveContent parameters
@@ -82,5 +82,5 @@ uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
 uploadDataUtf16.setApproveContent("true")
 uploadDataUtf16.setCallbackUrl(CALLBACK_URL)
 useSandbox = True
-example = SmartlingApiExample (useSandbox, uploadDataUtf16, "ru-RU", FILE_NAME_RENAMED)
+example = SmartlingApiExample(useSandbox, uploadDataUtf16, "ru-RU", FILE_NAME_RENAMED)
 example.test()

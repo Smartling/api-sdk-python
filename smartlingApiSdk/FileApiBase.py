@@ -21,85 +21,85 @@ import urllib2
 from MultipartPostHandler import MultipartPostHandler
 from Constants import Uri, Params, ReqMethod
 
+
 class FileApiBase:
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
     def __init__(self, host, apiKey, projectId):
-        self.host   = host
+        self.host = host
         self.apiKey = apiKey
         self.projectId = projectId
 
     def addApiKeys(self, params):
-        params [Params.API_KEY]    = self.apiKey
-        params [Params.PROJECT_ID] = self.projectId
+        params[Params.API_KEY] = self.apiKey
+        params[Params.PROJECT_ID] = self.projectId
 
     def uploadMultipart(self, params):
         self.addApiKeys(params)
-        params [Params.FILE] = open(params[Params.FILE_PATH],'rb')
-        del params[Params.FILE_PATH] #no need in extra field in POST
+        params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
+        del params[Params.FILE_PATH]  # no need in extra field in POST
         opener = urllib2.build_opener(MultipartPostHandler)
         urllib2.install_opener(opener)
-        req = urllib2.Request('https://'+self.host + Uri.UPLOAD, params)
+        req = urllib2.Request('https://' + self.host + Uri.UPLOAD, params)
         response = urllib2.urlopen(req).read().strip()
         return response
 
     def command(self, method, uri, params):
         self.addApiKeys(params)
-        params_encoded = urllib.urlencode( params )
-        conn = httplib.HTTPSConnection( self.host )
+        params_encoded = urllib.urlencode(params)
+        conn = httplib.HTTPSConnection(self.host)
         conn.request(method, uri, params_encoded, self.headers)
         response = conn.getresponse()
         data = response.read()
         conn.close()
         return data, response.status
 
-
     # commands
 
     def commandUpload(self, uploadData):
         params = {
-                    Params.FILE_URI  : uploadData.name,
-                    Params.FILE_TYPE : uploadData.type,
-                    Params.FILE_PATH : uploadData.path + uploadData.name
+                    Params.FILE_URI: uploadData.name,
+                    Params.FILE_TYPE: uploadData.type,
+                    Params.FILE_PATH: uploadData.path + uploadData.name
                   }
         if (uploadData.approveContent):
-            params [Params.APPROVED] = uploadData.approveContent
+            params[Params.APPROVED] = uploadData.approveContent
 
         if (uploadData.callbackUrl):
-            params [Params.CALLBACK_URL] = uploadData.callbackUrl
+            params[Params.CALLBACK_URL] = uploadData.callbackUrl
 
         if (uploadData.directives):
             for index, directive in enumerate(uploadData.directives):
-                params [directive.sl_prefix + directive.name] = directive.value
+                params[directive.sl_prefix + directive.name] = directive.value
 
-        return self.uploadMultipart( params )
+        return self.uploadMultipart(params)
 
     def commandList(self, **kw):
-        return self.command( ReqMethod.POST, Uri.LIST, kw )
+        return self.command(ReqMethod.POST, Uri.LIST, kw)
 
     def commandGet(self, fileUri, locale, **kw):
-        kw[Params.FILE_URI] = fileUri;
-        kw[Params.LOCALE]   = locale
-        if kw.has_key(Params.RETRIEVAL_TYPE) and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
-            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE], Params.RETRIEVAL_TYPE, Params.allowedRetrievalTypes)
+        kw[Params.FILE_URI] = fileUri
+        kw[Params.LOCALE] = locale
+        if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
+            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
+                                                                             Params.RETRIEVAL_TYPE,
+                                                                             Params.allowedRetrievalTypes)
 
-
-        return self.command( ReqMethod.POST, Uri.GET, kw )
+        return self.command(ReqMethod.POST, Uri.GET, kw)
 
     def commandDelete(self, fileUri, **kw):
-        kw[Params.FILE_URI] = fileUri;
+        kw[Params.FILE_URI] = fileUri
 
-        return self.command( ReqMethod.POST, Uri.DELETE, kw)
+        return self.command(ReqMethod.POST, Uri.DELETE, kw)
 
     def commandStatus(self, fileUri, locale, **kw):
-        kw[Params.FILE_URI] = fileUri;
-        kw[Params.LOCALE]   = locale
+        kw[Params.FILE_URI] = fileUri
+        kw[Params.LOCALE] = locale
 
-        return self.command( ReqMethod.POST, Uri.STATUS, kw )
-
+        return self.command(ReqMethod.POST, Uri.STATUS, kw)
 
     def commandRename(self, fileUri, newUri, **kw):
         kw[Params.FILE_URI] = fileUri
         kw[Params.FILE_URI_NEW] = newUri
 
-        return self.command( ReqMethod.POST, Uri.RENAME, kw )
+        return self.command(ReqMethod.POST, Uri.RENAME, kw)
