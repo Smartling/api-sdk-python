@@ -13,13 +13,16 @@
  * limitations under the License.
 '''
 
-import os, sys
+import os
+import sys
+
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)
 
 from smartlingApiSdk.UploadData import UploadData
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from nose.tools import assert_equal
+
 
 class test_UploadData(object):
     def test_init(self):
@@ -44,11 +47,11 @@ class test_UploadData(object):
     def test_addDirective(self):
         ud = UploadData("path", "name", "type")
         assert_equal(len(ud.directives), 0)
-        
-        ud.addDirective(SmartlingDirective("name","value"))
+
+        ud.addDirective(SmartlingDirective("name", "value"))
         assert_equal(len(ud.directives), 1)
         assert_equal(ud.directives[0].name, "name")
-        
-        ud.addDirective(SmartlingDirective("name2","value2"))
+
+        ud.addDirective(SmartlingDirective("name2", "value2"))
         assert_equal(len(ud.directives), 2)
         assert_equal(ud.directives[1].value, "value2")

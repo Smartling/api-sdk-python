@@ -13,13 +13,16 @@
  * limitations under the License.
 '''
 
-import os, sys
+import os
+import sys
+
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)
 
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from nose.tools import assert_equal
 from nose.tools import raises
+
 
 class test_SmartlingDirective(object):
     def test_init(self):
@@ -33,18 +36,18 @@ class test_SmartlingDirective(object):
 
     @raises(Exception)
     def test_init_empty_name(self):
-        d = SmartlingDirective("", "%s")
+        SmartlingDirective("", "%s")
 
     @raises(Exception)
     def test_init_None_name(self):
-        d = SmartlingDirective(None, "%s")
-        
+        SmartlingDirective(None, "%s")
+
     def test_remove_sl_prefix(self):
         d = SmartlingDirective("smartling.placeholder_format_custom", "%s")
         assert_equal(d.name, "placeholder_format_custom")
-        
+
         d2 = SmartlingDirective("sl.placeholder_format_custom", "%s")
         assert_equal(d2.name, "sl.placeholder_format_custom")
-        
+
         d3 = SmartlingDirective("smartling.placeholder_format_custom smartling.none", "%s")
         assert_equal(d3.name, "placeholder_format_custom smartling.none")

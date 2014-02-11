@@ -13,7 +13,9 @@
  * limitations under the License.
 '''
 
-import os, sys
+import os
+import sys
+
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)
 
@@ -27,14 +29,14 @@ from nose.tools import assert_equal
 class test_UploadData(object):
     def mock_uploadMultipart(self, params):
         return params
-    
+
     def test_commandUpload(self):
         ud = UploadData("path", "name", "type")
-        
+
         api = FileApiBase("host", "apiKey", "projectId")
-        api.uploadMultipart = self.mock_uploadMultipart 
+        api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
-        
+
         assert_equal(len(params), 4)
         assert_equal(params[Params.FILE_URI], "name")
         assert_equal(params[Params.FILE_TYPE], "type")
@@ -47,26 +49,24 @@ class test_UploadData(object):
         ud.setCallbackUrl("smartling.com")
 
         api = FileApiBase("host", "apiKey", "projectId")
-        api.uploadMultipart = self.mock_uploadMultipart 
+        api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
-        
+
         assert_equal(len(params), 5)
         assert_equal(params[Params.APPROVED], "true")
-        assert_equal(params[Params.CALLBACKURL], "smartling.com")
-
+        assert_equal(params[Params.CALLBACK_URL], "smartling.com")
 
     def test_commandUpload_Directives(self):
         ud = UploadData("path", "name", "type")
         ud.setApproveContent("true")
         ud.setCallbackUrl("smartling.com")
-        ud.addDirective(SmartlingDirective("placeholder_format_custom","\[.+?\]"))
-        ud.addDirective(SmartlingDirective("placeholder_format","IOS"))
-
+        ud.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
+        ud.addDirective(SmartlingDirective("placeholder_format", "IOS"))
 
         api = FileApiBase("host", "apiKey", "projectId")
-        api.uploadMultipart = self.mock_uploadMultipart 
+        api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
-        
+
         assert_equal(len(params), 7)
         assert_equal(params["smartling.placeholder_format_custom"], "\[.+?\]")
         assert_equal(params["smartling.placeholder_format"], "IOS")
