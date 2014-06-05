@@ -26,6 +26,8 @@ class Callable:
 
 
 class MultipartPostHandler(urllib2.BaseHandler):
+    """ handler for multipart HTTP POST, helper object to provide POST functionality """
+
     handler_order = urllib2.HTTPHandler.handler_order - 10  # needs to run first
     # Controls how sequences are uncoded. If true, elements may be given multiple values by
     #  assigning a sequence.

@@ -17,6 +17,7 @@
 
 
 class UploadData:
+    """ Helper class to store `upload` and `import` command attributes """
     approveContent = "false"
     callbackUrl = ""
     directives = []

@@ -19,6 +19,7 @@ except ImportError:
     import simplejson24 as json
     
 class Data:
+    """ provides dictionary items to be object attributes """
     def __init__(self, dict):
         self.dict = dict
         
@@ -29,12 +30,15 @@ class Data:
         return `self.dict`
 
 class ApiResponse:
+    """ response object to store parsed json response as python object, it also behaves like string for backward 
+        compatibility with previous SDK versions where response was a string """
     def __init__(self, response_string, status_code):
         self.status_code = status_code
         self.response_string = response_string
         self.parse_response(response_string)
         
     def parse_response(self, response_string):
+        """ parses json and fills object attributes according json attributes """
         self.response_dict = json.loads(response_string)
         print self.response_dict
         for k, v in self.response_dict['response'].items():
@@ -44,9 +48,11 @@ class ApiResponse:
                 setattr(self, k, v)
 
     def __str__(self):
+        """ provides string representation of object as json response """
         return self.response_string
         
     def __getattr__(self, key):
+        """ provides string object methods to be available for response to behave like a string """
         try:
             return getattr(self, key)
         except:

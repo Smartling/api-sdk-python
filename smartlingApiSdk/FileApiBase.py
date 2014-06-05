@@ -25,6 +25,7 @@ from ApiResponse import ApiResponse
 
 
 class FileApiBase:
+    """ basic class implementing low-level api calls """
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
     response_as_string = False
 
@@ -44,7 +45,10 @@ class FileApiBase:
         opener = urllib2.build_opener(MultipartPostHandler)
         urllib2.install_opener(opener)
         req = urllib2.Request('https://' + self.host + uri, params)
-        response = urllib2.urlopen(req)
+        try:
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError, e:
+            response = e
         if sys.version_info[:2] >= (2,6):
             status_code = response.getcode() 
         else:

@@ -1,18 +1,18 @@
 File API sdk is ready to be used 'as is'.
 All necessary files are in smartlingApiSdk.
+So you could place directory smartlingApiSdk someplace in your project and use it as shown in example.
 
 Example.
 
-Example script is placed in separate directory named 'example', and can't import from ../smartlingApiSdk, so minor tweak is done to add ../ to import path.
+Example script is placed in separate directory named 'example'.
+It should give you a examples of initializing API and using api calls.
 To run example just do:
 cd example
 python SmartlingApiExample.py
 
-
 Test.
 
-Test also can't import from ../smartlingApiSdk, so it also has ../ added to import path.
-Also test use nose python framework.
+Test uses nose python framework.
 Information about installing nose is here http://readthedocs.org/docs/nose/en/latest.
 Nose framework is used for test only and is not necessary for file API SDK to be used.
 To run test do following:

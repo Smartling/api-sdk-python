@@ -82,7 +82,7 @@ class SmartlingApiExample:
         print self.fapi.delete(self.uploadData.name)
 
     def test(self):
-        """ simple test illustration set of API commands: """
+        """ simple illustration for set of API commands: upload, list, status, get, rename, delete """
         self.printMarker("file upload")
         print self.fapi.upload(self.uploadData)
 
@@ -117,14 +117,6 @@ FILE_NAME_IMPORT = "test_import.xml"
 FILE_NAME_TO_IMPORT = "test_import_es.xml"
 FILE_TYPE_IMPORT ="android"
 
-def import_test():
-    uploadDataImport = UploadData(FILE_PATH, FILE_NAME_IMPORT, FILE_TYPE_IMPORT)
-    uploadDataImport.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
-    useSandbox = False
-    example = SmartlingApiExample(useSandbox, uploadDataImport, "it-IT", FILE_NAME_RENAMED)
-    example.test_import(FILE_NAME_TO_IMPORT)
-
-
 def ascii_test():
     #test simple file
     uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
@@ -142,6 +134,14 @@ def utf16_test():
     example = SmartlingApiExample(useSandbox, uploadDataUtf16, "it-IT", FILE_NAME_RENAMED)
     example.test()
 
-import_test()
+def import_test():
+    #example for import and last_modified commands
+    uploadDataImport = UploadData(FILE_PATH, FILE_NAME_IMPORT, FILE_TYPE_IMPORT)
+    uploadDataImport.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
+    useSandbox = False
+    example = SmartlingApiExample(useSandbox, uploadDataImport, "it-IT", FILE_NAME_RENAMED)
+    example.test_import(FILE_NAME_TO_IMPORT)
+
 ascii_test()
 utf16_test()
+import_test()

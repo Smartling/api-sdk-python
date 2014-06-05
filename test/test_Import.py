@@ -30,7 +30,7 @@ from nose.tools import assert_equal
 # export SL_LOCALE=**-**
 
 
-class testFapi(object):
+class testImport(object):
     MY_API_KEY = "YOUR_API_KEY"
     MY_PROJECT_ID = "YOUR_PROJECT_ID"
     SL_LOCALE = "ru-RU"
