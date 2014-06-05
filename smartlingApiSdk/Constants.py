@@ -38,6 +38,8 @@ class Uri:
     STATUS = base + 'status'
     DELETE = base + 'delete'
     RENAME = base + 'rename'
+    IMPORT = base + 'import'
+    LAST_MODIFIED = base + 'last_modified'
 
 class ReqMethod:
     POST   = "POST"

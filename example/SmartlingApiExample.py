@@ -25,10 +25,11 @@ from smartlingApiSdk.UploadData import UploadData
 
 class SmartlingApiExample:
 
-    MY_API_KEY = "YOUR_API_KEY"
-    MY_PROJECT_ID = "YOUR_PROJECT_ID"
+    MY_API_KEY = "YOUR_API_KEY" #should be changed with read values
+    MY_PROJECT_ID = "YOUR_PROJECT_ID" #should be changed with read values
 
     def __init__(self, useSandbox, uploadData, locale, new_name):
+        self.getCredentials()
         if useSandbox:
             self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID)
         else:
@@ -36,11 +37,52 @@ class SmartlingApiExample:
         self.uploadData = uploadData
         self.locale = locale
         self.new_name = new_name
+        
+    def getCredentials(self):
+        """ get api key and project id from environment variables
+            to set environment variables use command : export SL_API_KEY=******* ; export SL_PROJECT_ID=****** """
+        self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
+        self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
+
 
     def printMarker(self, caption):
         print "--" + caption + "-" * 40
 
+    def test_import(self, name_to_import):
+        """ this method tests `import` command """
+        self.printMarker("file upload")
+        #upload file first to be able upload it's translations later
+        print self.fapi.upload(self.uploadData)
+
+        self.printMarker("files list")
+        #list all files to ensure upload worked
+        print self.fapi.list()
+
+        self.printMarker("importing uploaded")
+        old_name = self.uploadData.name
+        #set correct uri/name for file to be imported
+        self.uploadData.uri = self.uploadData.name
+        self.uploadData.name = name_to_import
+
+        #import translations from file
+        print self.fapi.import_call(self.uploadData, self.locale, translationState="READY_FOR_PUBLISH")
+
+        self.uploadData.name = old_name
+
+        #perform `last_modified` command
+        self.printMarker("last modified")
+        resp, code = self.fapi.last_modified(self.uploadData.name)
+        print "resp.messages=", resp.messages
+        print "resp.code=", resp.code
+        print "resp.data.items="
+        for v in resp.data.items: print v
+        
+        self.printMarker("delete from server goes here")
+        #delete test file imported in the beginning of test
+        print self.fapi.delete(self.uploadData.name)
+
     def test(self):
+        """ simple test illustration set of API commands: """
         self.printMarker("file upload")
         print self.fapi.upload(self.uploadData)
 
@@ -70,17 +112,36 @@ FILE_PATH = "../resources/"
 FILE_NAME_RENAMED = "java.properties.renamed"
 CALLBACK_URL = "http://yourdomain.com/callback"
 
-#test simple file
-uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
-uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
-useSandbox = False
-example = SmartlingApiExample(useSandbox, uploadDataASCII, "ru-RU", FILE_NAME_RENAMED)
-example.test()
 
-#add charset and approveContent parameters
-uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
-uploadDataUtf16.setApproveContent("true")
-uploadDataUtf16.setCallbackUrl(CALLBACK_URL)
-useSandbox = True
-example = SmartlingApiExample(useSandbox, uploadDataUtf16, "ru-RU", FILE_NAME_RENAMED)
-example.test()
+FILE_NAME_IMPORT = "test_import.xml"
+FILE_NAME_TO_IMPORT = "test_import_es.xml"
+FILE_TYPE_IMPORT ="android"
+
+def import_test():
+    uploadDataImport = UploadData(FILE_PATH, FILE_NAME_IMPORT, FILE_TYPE_IMPORT)
+    uploadDataImport.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
+    useSandbox = False
+    example = SmartlingApiExample(useSandbox, uploadDataImport, "it-IT", FILE_NAME_RENAMED)
+    example.test_import(FILE_NAME_TO_IMPORT)
+
+
+def ascii_test():
+    #test simple file
+    uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
+    uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
+    useSandbox = False
+    example = SmartlingApiExample(useSandbox, uploadDataASCII, "it-IT", FILE_NAME_RENAMED)
+    example.test()
+
+def utf16_test():
+    #add charset and approveContent parameters
+    uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
+    uploadDataUtf16.setApproveContent("true")
+    uploadDataUtf16.setCallbackUrl(CALLBACK_URL)
+    useSandbox = False
+    example = SmartlingApiExample(useSandbox, uploadDataUtf16, "it-IT", FILE_NAME_RENAMED)
+    example.test()
+
+import_test()
+ascii_test()
+utf16_test()

@@ -41,6 +41,12 @@ class SmartlingFileApi(FileApiBase):
     def delete(self, fileUri, **kw):
         return self.commandDelete(fileUri, **kw)
 
+    def import_call(self, uploadData, locale, **kw):
+        return self.commandImport(uploadData, locale, **kw)
+        
+    def last_modified(self, fileUri, locale=None, **kw):
+        return self.commandLastModified(fileUri, **kw)
+    
 
 class SmartlingFileApiFactory:
     sandbox_host = 'sandbox-api.smartling.com'
@@ -53,3 +59,4 @@ class SmartlingFileApiFactory:
 
     def getSmartlingTranslationApiProd(self, apiKey, projectId):
         return SmartlingFileApi(self.api_host, apiKey, projectId)
+

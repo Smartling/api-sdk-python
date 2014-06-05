@@ -17,13 +17,16 @@
 
 import httplib
 import urllib
-import urllib2
+import sys, urllib2
 from MultipartPostHandler import MultipartPostHandler
 from Constants import Uri, Params, ReqMethod
+from ApiResponse import ApiResponse
+
 
 
 class FileApiBase:
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+    response_as_string = False
 
     def __init__(self, host, apiKey, projectId):
         self.host = host
@@ -34,17 +37,24 @@ class FileApiBase:
         params[Params.API_KEY] = self.apiKey
         params[Params.PROJECT_ID] = self.projectId
 
-    def uploadMultipart(self, params):
+    def uploadMultipart(self, uri, params):
         self.addApiKeys(params)
         params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
         del params[Params.FILE_PATH]  # no need in extra field in POST
         opener = urllib2.build_opener(MultipartPostHandler)
         urllib2.install_opener(opener)
-        req = urllib2.Request('https://' + self.host + Uri.UPLOAD, params)
-        response = urllib2.urlopen(req).read().strip()
-        return response
-
-    def command(self, method, uri, params):
+        req = urllib2.Request('https://' + self.host + uri, params)
+        response = urllib2.urlopen(req)
+        if sys.version_info[:2] >= (2,6):
+            status_code = response.getcode() 
+        else:
+            status_code = 0 #value for python v2.5 and less
+        response_data = response.read().strip()
+        if self.response_as_string:
+            return response_data, status_code
+        return ApiResponse(response_data, status_code), status_code
+        
+    def command_raw(self, method, uri, params):
         self.addApiKeys(params)
         params_encoded = urllib.urlencode(params)
         conn = httplib.HTTPSConnection(self.host)
@@ -53,6 +63,12 @@ class FileApiBase:
         data = response.read()
         conn.close()
         return data, response.status
+
+    def command(self, method, uri, params):
+        data, code = self.command_raw(method, uri, params)
+        if self.response_as_string:
+            return data, code
+        return  ApiResponse(data, code), code
 
     # commands
 
@@ -72,11 +88,17 @@ class FileApiBase:
             for index, directive in enumerate(uploadData.directives):
                 params[directive.sl_prefix + directive.name] = directive.value
 
-        return self.uploadMultipart(params)
+        return self.uploadMultipart(Uri.UPLOAD, params)
 
     def commandList(self, **kw):
         return self.command(ReqMethod.POST, Uri.LIST, kw)
 
+    def commandLastModified(self, fileUri, locale=None, **kw):
+        kw[Params.FILE_URI] = fileUri
+        if locale is not None:
+            kw[Params.LOCALE] = locale
+        return self.command(ReqMethod.GET, Uri.LAST_MODIFIED, kw)
+        
     def commandGet(self, fileUri, locale, **kw):
         kw[Params.FILE_URI] = fileUri
         kw[Params.LOCALE] = locale
@@ -85,12 +107,22 @@ class FileApiBase:
                                                                              Params.RETRIEVAL_TYPE,
                                                                              Params.allowedRetrievalTypes)
 
-        return self.command(ReqMethod.POST, Uri.GET, kw)
+        return self.command_raw(ReqMethod.POST, Uri.GET, kw)
 
     def commandDelete(self, fileUri, **kw):
         kw[Params.FILE_URI] = fileUri
 
         return self.command(ReqMethod.POST, Uri.DELETE, kw)
+        
+    def commandImport(self, uploadData, locale, **kw):
+        kw[Params.FILE_URI]  = uploadData.uri
+        kw[Params.FILE_TYPE] = uploadData.type
+        kw[Params.FILE_PATH] = uploadData.path + uploadData.name
+        kw["file"] = uploadData.path + uploadData.name + ";type=text/plain"
+        kw[Params.LOCALE] = locale
+        self.addApiKeys(kw)
+
+        return self.uploadMultipart(Uri.IMPORT, kw)
 
     def commandStatus(self, fileUri, locale, **kw):
         kw[Params.FILE_URI] = fileUri

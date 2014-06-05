@@ -27,7 +27,7 @@ from nose.tools import assert_equal
 
 
 class test_UploadData(object):
-    def mock_uploadMultipart(self, params):
+    def mock_uploadMultipart(self, uri, params):
         return params
 
     def test_commandUpload(self):

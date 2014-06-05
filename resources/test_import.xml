@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="string_1">Hello</string>
+    <string name="string_2">Goodbye</string>
+</resources>

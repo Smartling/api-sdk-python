@@ -46,7 +46,7 @@ class testFapi(object):
         self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
-        self.locale = "ru-RU"
+        self.locale =  os.environ.get('SL_LOCALE', "ru-RU")
         self.doUpload()
 
     def doUpload(self):
@@ -87,3 +87,10 @@ class testFapi(object):
         self.fapi.delete(self.FILE_NAME_NEW)
         res, status = self.fapi.rename(self.FILE_NAME, self.FILE_NAME_NEW)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+
+    def testLastModified(self):
+        resp, status = self.fapi.last_modified(self.FILE_NAME)
+        assert_equal(True, resp.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(True, len(resp.data.items)>0)
+
+
