@@ -26,7 +26,7 @@ from smartlingApiSdk.UploadData import UploadData
 class SmartlingApiExample:
 
     MY_API_KEY = "YOUR_API_KEY" #should be changed with read values
-    MY_PROJECT_ID = "YOUR_PROJECT_ID" #should be changed with read values
+    MY_PROJECT_ID = "YOUR_PROJECT_ID" #should be changed with real values
 
     def __init__(self, useSandbox, uploadData, locale, new_name):
         self.getCredentials()
