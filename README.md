@@ -6,7 +6,7 @@ This repository contains the Python sdk for accessing the Smartling Translation 
 The Smartling Translation API allows developers to seamlessly internationalize their website by automating the translation and integration of their site content.
 Developers can upload resource files and download the translated file(s) in a locale of their choosing. There are options to allow for professional translation, community translation and machine translation.
 
-For a full description of the Smartling Translation API, please read the docs at: https://docs.smartling.com/display/docs/Smartling+API
+For a full description of the Smartling Translation API, please read the docs at: https://docs.smartling.com/display/docs/Smartling+Translation+API
 
 
 Quick start
