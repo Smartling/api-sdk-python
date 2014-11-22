@@ -44,8 +44,15 @@ https://github.com/Smartling/api-sdk-python/issues
 Authors
 -------
 
-Greg Jones
+Anatoly Artamonov
+* https://github.com/anatolija
+* aartamonov@smartling.com
 
+Alex Koval
+* https://github.com/junky
+* akoval@smartling.com
+
+Greg Jones
 * http://github.com/jones-smartling
 * gjones@smartling.com
 

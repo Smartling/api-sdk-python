@@ -15,6 +15,7 @@
 
 import os
 import sys
+import time
 
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
@@ -51,25 +52,25 @@ class testImport(object):
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
         self.locale =  os.environ.get('SL_LOCALE', self.SL_LOCALE)
-        self.doUpload()
+        timestamp = `time.time()`
+        self.uri = self.FILE_NAME + timestamp
+        self.doUpload(self.uri)
 
-    def doUpload(self):
+    def doUpload(self, uri):
         #ensure file is uploaded which is necessary for all tests
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
         uploadData.setCallbackUrl(self.CALLBACK_URL)
+        uploadData.setUri(uri)
         return self.fapi.upload(uploadData)
 
     def tearDown(self):
-        print self.fapi.delete(self.FILE_NAME)
-        print "lits after delete"
-        print self.fapi.list()
+        print self.fapi.delete(self.uri)
         
     def testImport(self):
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
-        uploadData.uri = uploadData.name
+        uploadData.uri = self.uri
         uploadData.name = self.FILE_NAME_IMPORT
         resp, status = self.fapi.import_call(uploadData, self.locale, translationState="READY_FOR_PUBLISH")
-        print resp
         assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
         assert_equal(resp.data.wordCount, 2)
         assert_equal(resp.data.stringCount, 2)

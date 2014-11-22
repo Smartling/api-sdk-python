@@ -13,10 +13,8 @@
  * limitations under the License.
 '''
 
-#Smartling directive which is used for file upload
-
-
 class SmartlingDirective:
+    """ Smartling directive which is used for file upload """
     sl_prefix = "smartling."
 
     def __init__(self, name, value):

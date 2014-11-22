@@ -78,7 +78,7 @@ class FileApiBase:
 
     def commandUpload(self, uploadData):
         params = {
-                    Params.FILE_URI: uploadData.name,
+                    Params.FILE_URI: uploadData.uri or uploadData.name,
                     Params.FILE_TYPE: uploadData.type,
                     Params.FILE_PATH: uploadData.path + uploadData.name
                   }

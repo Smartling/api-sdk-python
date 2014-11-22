@@ -20,13 +20,14 @@ class UploadData:
     """ Helper class to store `upload` and `import` command attributes """
     approveContent = "false"
     callbackUrl = ""
-    directives = []
 
     def __init__(self, path, name, type):
         self.path = path
         self.name = name
         self.type = type
-
+        self.uri  = name
+        self.directives = []
+ 
     def setApproveContent(self, approveContent):
         self.approveContent = approveContent
 
@@ -35,3 +36,6 @@ class UploadData:
 
     def addDirective(self, directive):
         self.directives.append(directive)
+
+    def setUri(self, uri):
+        self.uri = uri

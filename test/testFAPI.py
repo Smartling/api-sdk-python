@@ -15,6 +15,7 @@
 
 import os
 import sys
+import time
 
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
@@ -35,9 +36,12 @@ class testFapi(object):
     MY_PROJECT_ID = "YOUR_PROJECT_ID"
 
     FILE_NAME = "java.properties"
+    FILE_NAME_16 = "javaUTF16.properties"
     FILE_TYPE = "javaProperties"
     FILE_PATH = "../resources/"
     FILE_NAME_NEW = "java.properties.renamed"
+    FILE_NAME_NEW_16 = "javaUTF16.properties.renamed"
+
     CALLBACK_URL = "http://google.com/?q=hello"
 
     CODE_SUCCESS_TOKEN = '"code":"SUCCESS"'
@@ -47,11 +51,22 @@ class testFapi(object):
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
         self.locale =  os.environ.get('SL_LOCALE', "ru-RU")
-        self.doUpload()
+        timestamp = `time.time()`
+        self.uri = self.FILE_NAME + timestamp 
+        self.doUpload(self.FILE_NAME, self.uri)
 
-    def doUpload(self):
+        self.uri16 = self.FILE_NAME_16 + timestamp 
+        self.doUpload(self.FILE_NAME_16, self.uri16)
+
+
+    def tearDown(self):
+        res, status = self.fapi.delete(self.uri)
+        res, status = self.fapi.delete(self.uri16)
+
+    def doUpload(self, name, uri):
         #ensure file is uploaded which is necessary for all tests
-        uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
+        uploadData = UploadData(self.FILE_PATH, name, self.FILE_TYPE)
+        uploadData.setUri(uri)
         uploadData.setCallbackUrl(self.CALLBACK_URL)
         return self.fapi.upload(uploadData)
 
@@ -60,37 +75,54 @@ class testFapi(object):
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
 
     def testFileStatus(self):
-        res, status = self.fapi.status(self.FILE_NAME, self.locale)
+        res, status = self.fapi.status(self.uri, self.locale)
+        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        
+        res, status = self.fapi.status(self.uri16, self.locale)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
 
     def testGetFileFromServer(self):
-        res, status = self.fapi.get(self.FILE_NAME, self.locale)
+        res, status = self.fapi.get(self.uri, self.locale)
         lines = open(self.FILE_PATH + self.FILE_NAME, "rb").readlines()
         assert_equal(len(res.split("\n")), len(lines))
 
+        res, status = self.fapi.get(self.uri16, self.locale)
+        lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines()
+        assert_equal(len(res.split("\n")), len(lines))
+        
     def testGetFileWithTypeFromServer(self):
-        res, status = self.fapi.get(self.FILE_NAME, self.locale, retrievalType='pseudo')
+        res, status = self.fapi.get(self.uri, self.locale, retrievalType='pseudo')
         lines = open(self.FILE_PATH + self.FILE_NAME, "rb").readlines()
+        assert_equal(len(res.split("\n")), len(lines))
+        
+        res, status = self.fapi.get(self.uri16, self.locale, retrievalType='pseudo')
+        lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines()
         assert_equal(len(res.split("\n")), len(lines))
 
     def testFileDelete(self):
-        res, status = self.fapi.list()
+        res, status = self.fapi.list(uriMask="*"+self.uri)
         count_old = res.count('"fileUri":')
-        res, status = self.fapi.delete(self.FILE_NAME)
+        res, status = self.fapi.delete(self.uri)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
-        res, status = self.fapi.list()
-        count_new = res.count('"fileUri":')
-        assert_equal(count_old - 1, count_new)
-        self.doUpload()  # ensure file is uploaded back after it's deleted
-
+        
+        res, status = self.fapi.delete(self.uri16)
+        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+ 
     def testFileRename(self):
         self.fapi.delete(self.FILE_NAME_NEW)
-        res, status = self.fapi.rename(self.FILE_NAME, self.FILE_NAME_NEW)
+        res, status = self.fapi.rename(self.uri, self.FILE_NAME_NEW)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        
+        self.fapi.delete(self.FILE_NAME_NEW_16)
+        res, status = self.fapi.rename(self.uri16, self.FILE_NAME_NEW_16)
+        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)        
 
     def testLastModified(self):
-        resp, status = self.fapi.last_modified(self.FILE_NAME)
+        resp, status = self.fapi.last_modified(self.uri)
         assert_equal(True, resp.find(self.CODE_SUCCESS_TOKEN) > 0)
         assert_equal(True, len(resp.data.items)>0)
 
+        resp, status = self.fapi.last_modified(self.uri16)
+        assert_equal(True, resp.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(True, len(resp.data.items)>0)
 

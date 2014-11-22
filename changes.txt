@@ -1,0 +1,72 @@
+Nov 25, 2014 - v 1.2.3
+    - updated unit tests to use unique file url for every tests
+    - fixed 'maximum recursion depth exceeded in __subclasscheck__' warning for testFAPI.py unit test for python2.6
+    - fixed occasional unit tests failure because of shared UploadData.directives
+    - added UTF16 tests for testFAPI.py
+
+Jun 24, 2014 - v 1.2.2
+    - added this file
+    - fixed current version in smartlingApiSdk/__init__.py
+
+Jun 06, 2014 - v 1.2.1
+    - fixed comment typo
+
+Jun 05, 2014 - v 1.2
+    - added import command support
+    - added last_modified command support
+    - added json parsing
+    - imporved documentation
+    - added http error handings for http post
+
+Feb 11, 2014 - v 1.1.6
+    - remove trailing whitespace
+    - fixed typos
+    - changed CALLBACKURL to CALLBACK_URL for consistency
+    - fixes from PyFlakes issues
+    - stylistic cleanup from pep8 
+
+Sep 16, 2013 - v 1.1.5
+    - added example resource string on which directives are applied
+
+Sep 13, 2013 - v 1.1.4
+    - added Smartling directives for file upload
+
+Sep 12, 2013 - v 1.1.3
+    - removed Charset parameter. Smartling automatically detects file encoding on server side
+    - fixed setting of default value of CallbackUrl parameter.
+
+24 Apr, 2013 - v 1.1.2
+    - added response status to return values
+    - updated tests after response status is added
+
+Oct 23, 2012 - v 1.1.1
+    - added URK callback support
+
+Aug 14, 2012 - v 1.1.0
+    - renamed package directory
+    - changed package name capitalization
+    - fixed email in setup.py
+    - added setup.py and fixed url in readme file
+    - renamed apisdk to smartlingapisdk + added setup.py 
+
+Jun 25, 2012 - v 1.0.5
+    - added file rename command and test for it
+    - added example for rename command
+    
+May 22, 2012 - v 1.0.4
+    - updated test to use environment variables for API_KEY and PROJECT_ID
+
+May 15, 2012 - v 1.0.3
+    - added delete command 
+    - added check for correct retrievalType value 
+
+Apr 03, 2012 - v 1.0.2
+    - added example
+
+28 Mar, 2012 - v 1.0.1 
+    - added copyright note
+    - code refactorings
+    - added optional parameters to commands
+    
+22 Mar, 2012 - v 1.0 
+    - initial version released

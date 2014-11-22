@@ -48,7 +48,7 @@ class SmartlingFileApi(FileApiBase):
         """ implements `upload` api command
             returns (response, status_code) tuple
             for python 2.5 and less commands `upload` and `import_call` returns status_code 0
-            for details on `upload` command see  https://docs.smartling.com/display/docs/Files+API#FilesAPI-/file/upload%28POST)"""
+            for details on `upload` command see  https://docs.smartling.com/display/docs/Files+API#FilesAPI-/file/upload%28POST) """
         return self.commandUpload(uploadData)
 
     def list(self, **kw):
@@ -66,13 +66,13 @@ class SmartlingFileApi(FileApiBase):
     def status(self, fileUri, locale, **kw):
         """ implements `status` api command
             returns (response, status_code) tuple
-            for details on `status` command see  https://docs.smartling.com/display/docs/Files+API#FilesAPI-/file/status%28GET)"""
+            for details on `status` command see  https://docs.smartling.com/display/docs/Files+API#FilesAPI-/file/status%28GET) """
         return self.commandStatus(fileUri, locale, **kw)
 
     def rename(self, fileUri, newUri, **kw):
         """ implements `rename` api command
             returns (response, status_code) tuple
-            for details on `rename` command see  https://docs.smartling.com/display/docs/Files+API#FilesAPI-/file/rename%28POST)"""
+            for details on `rename` command see  https://docs.smartling.com/display/docs/Files+API#FilesAPI-/file/rename%28POST) """
         return self.commandRename(fileUri, newUri, **kw)
 
     def delete(self, fileUri, **kw):

@@ -15,13 +15,22 @@ Test.
 Test uses nose python framework.
 Information about installing nose is here http://readthedocs.org/docs/nose/en/latest.
 Nose framework is used for test only and is not necessary for file API SDK to be used.
+
+
 To run test do following:
+obtain api key and project id from smartling
+export api key, project id, locale:
+
+export SL_API_KEY=********-****-****-****-************
+export SL_PROJECT_ID=*********
+export SL_LOCALE=**-**
+
 cd test
 nosetests testFAPI.py
 
 Correct tests output looks like this:
-......
+.......
 ----------------------------------------------------------------------
-Ran 6 tests in 8.071s
+Ran 7 tests in 8.071s
 
 OK

@@ -46,13 +46,12 @@ class ApiResponse:
                 self.data = Data(v)
             else:
                 setattr(self, k, v)
-
-    def __str__(self):
-        """ provides string representation of object as json response """
-        return self.response_string
-        
+    
     def __getattr__(self, key):
         """ provides string object methods to be available for response to behave like a string """
+        if hasattr(self.response_string, key):
+            return getattr(self.response_string, key)
+            
         try:
             return getattr(self, key)
         except:
