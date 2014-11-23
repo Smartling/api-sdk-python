@@ -70,7 +70,7 @@ class testImport(object):
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
         uploadData.uri = self.uri
         uploadData.name = self.FILE_NAME_IMPORT
-        resp, status = self.fapi.import_call(uploadData, self.locale, translationState="READY_FOR_PUBLISH")
+        resp, status = self.fapi.import_call(uploadData, self.locale, translationState="PUBLISHED")
         assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
         assert_equal(resp.data.wordCount, 2)
         assert_equal(resp.data.stringCount, 2)
