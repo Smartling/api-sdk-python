@@ -41,8 +41,8 @@ class SmartlingFileApi(FileApiBase):
              api.list(locale='es-ES', offset=50)
         """
 
-    def __init__(self, host, apiKey, projectId):
-        FileApiBase.__init__(self, host, apiKey, projectId)
+    def __init__(self, host, apiKey, projectId, proxySettings=None):
+        FileApiBase.__init__(self, host, apiKey, projectId, proxySettings)
 
     def upload(self, uploadData):
         """ implements `upload` api command
@@ -100,11 +100,18 @@ class SmartlingFileApiFactory:
     sandbox_host = 'sandbox-api.smartling.com'
     api_host = 'api.smartling.com'
 
-    def getSmartlingTranslationApi(self, productionMode, apiKey, projectId):
+    def getSmartlingTranslationApi(self, productionMode, apiKey, projectId, proxySettings=None):
         if (productionMode):
-            return SmartlingFileApi(self.api_host, apiKey, projectId)
-        return SmartlingFileApi(self.sandbox_host, apiKey, projectId)
+            return SmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
+        return SmartlingFileApi(self.sandbox_host, apiKey, projectId, proxySettings)
 
-    def getSmartlingTranslationApiProd(self, apiKey, projectId):
-        return SmartlingFileApi(self.api_host, apiKey, projectId)
+    def getSmartlingTranslationApiProd(self, apiKey, projectId, proxySettings=None):
+        return SmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
 
+class ProxySettings:
+    """ settings for http proxy to be used to pass api requests, !!! Only basic authentication is supported for restricted proxy access !!! """
+    def __init__(self, username, passwd, host, port):
+        self.username = username
+        self.passwd = passwd
+        self.host = host
+        self.port = port

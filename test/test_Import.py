@@ -20,7 +20,7 @@ import time
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi
+from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, ProxySettings
 from smartlingApiSdk.UploadData import UploadData
 from nose.tools import assert_equal
 
@@ -50,7 +50,12 @@ class testImport(object):
     def setUp(self):
         self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
-        self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID)
+        useProxy = False
+        if useProxy :
+            proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
+        else:
+            proxySettings = None        
+        self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
         self.locale =  os.environ.get('SL_LOCALE', self.SL_LOCALE)
         timestamp = `time.time()`
         self.uri = self.FILE_NAME + timestamp

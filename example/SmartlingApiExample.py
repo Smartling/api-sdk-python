@@ -18,7 +18,7 @@ import sys
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApi import SmartlingFileApiFactory
+from smartlingApiSdk.SmartlingFileApi import SmartlingFileApiFactory, ProxySettings
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from smartlingApiSdk.UploadData import UploadData
 
@@ -30,10 +30,17 @@ class SmartlingApiExample:
 
     def __init__(self, useSandbox, uploadData, locale, new_name):
         self.getCredentials()
-        if useSandbox:
-            self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID)
+
+        useProxy = False
+        if useProxy :
+            proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
         else:
-            self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApiProd(self.MY_API_KEY, self.MY_PROJECT_ID)
+            proxySettings = None
+
+        if useSandbox:
+            self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
+        else:
+            self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApiProd(self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
         self.uploadData = uploadData
         self.locale = locale
         self.new_name = new_name

@@ -1,3 +1,6 @@
+Dec 11, 2014 - v 1.2.4
+    - added optional support for proxy with basic authentication 
+    
 Nov 25, 2014 - v 1.2.3
     - updated unit tests to use unique file url for every tests
     - fixed 'maximum recursion depth exceeded in __subclasscheck__' warning for testFAPI.py unit test for python2.6

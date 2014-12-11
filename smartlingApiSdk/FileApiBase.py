@@ -17,7 +17,7 @@
 
 import httplib
 import urllib
-import sys, urllib2
+import sys, urllib2, base64
 from MultipartPostHandler import MultipartPostHandler
 from Constants import Uri, Params, ReqMethod
 from ApiResponse import ApiResponse
@@ -29,10 +29,11 @@ class FileApiBase:
     headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
     response_as_string = False
 
-    def __init__(self, host, apiKey, projectId):
+    def __init__(self, host, apiKey, projectId, proxySettings=None):
         self.host = host
         self.apiKey = apiKey
         self.projectId = projectId
+        self.proxySettings = proxySettings
 
     def addApiKeys(self, params):
         params[Params.API_KEY] = self.apiKey
@@ -44,7 +45,8 @@ class FileApiBase:
         del params[Params.FILE_PATH]  # no need in extra field in POST
         opener = urllib2.build_opener(MultipartPostHandler)
         urllib2.install_opener(opener)
-        req = urllib2.Request('https://' + self.host + uri, params)
+        host = self.getProxyHostAndAddHeaders()
+        req = urllib2.Request('https://' + host + uri, params, headers=self.headers)
         try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
@@ -57,11 +59,24 @@ class FileApiBase:
         if self.response_as_string:
             return response_data, status_code
         return ApiResponse(response_data, status_code), status_code
+
+    def getProxyHostAndAddHeaders(self):
+        if not self.proxySettings : return self.host
+        self.headers["Host"] = self.host
+        if self.proxySettings.username is not None and self.proxySettings.passwd is not None:
+            base64string = base64.encodestring('%s:%s' % (self.proxySettings.username, self.proxySettings.passwd))[:-1]
+            authheader =  "Basic %s" % base64string
+            self.headers["Authorization"] = authheader
+        proxy_host = self.proxySettings.host
+        if self.proxySettings.port:
+            proxy_host += ":%s" % self.proxySettings.port
+        return proxy_host
         
     def command_raw(self, method, uri, params):
         self.addApiKeys(params)
+        host = self.getProxyHostAndAddHeaders()
         params_encoded = urllib.urlencode(params)
-        conn = httplib.HTTPSConnection(self.host)
+        conn = httplib.HTTPSConnection(host)
         conn.request(method, uri, params_encoded, self.headers)
         response = conn.getresponse()
         data = response.read()
