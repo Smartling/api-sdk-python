@@ -1,3 +1,7 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
 ''' Copyright 2012 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,5 +19,5 @@
 
 #module initialization
 
-__version__ = '1.2.4'
+__version__ = '1.2.5'
 

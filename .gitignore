@@ -1,1 +1,3 @@
 *.py[cod]
+/SmartlingApiSdk.egg-info
+/dist

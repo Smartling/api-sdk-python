@@ -1,3 +1,7 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
 ''' Copyright 2012 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +17,22 @@
  * limitations under the License.
 '''
 
-#!/usr/bin/env python
-
 from setuptools import setup
 
-install_requires = []
-
 setup(
-    name="api-sdk-python",
+    name="SmartlingApiSdk",
+    version = "1.2.5",
     author="Smartling, Inc.",
-    author_email="gjones@smartling.com",
+    author_email="aartamonov@smartling.com",
     description="Smartling python library for file translations",
-    url="http://www.smartling.com",
-    packages=['smartlingApiSdk'],
-    install_requires=install_requires,
-    keywords=(
-        'translation',
-        'localization',
-        'internationalization',
-    ),
     license='Apache License v2.0',
+    keywords='translation localization internationalization',
+    url="https://docs.smartling.com/display/docs/Files+API",
+    long_description="python SDK to work with Smartling API for file translation",
+    packages=['smartlingApiSdk', "simplejson24", "example", "test"],
+    include_package_data = True,
+    package_data = {
+        '': ['*.properties', '*.xml'],
+    },
+   
 )
