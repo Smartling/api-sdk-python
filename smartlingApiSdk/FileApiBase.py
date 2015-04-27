@@ -48,7 +48,7 @@ class FileApiBase:
         params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
         del params[Params.FILE_PATH]  # no need in extra field in POST
         response_data, status_code = self.getHttpResponseAndStatus( uri, params, MultipartPostHandler)
-        response_data = response.read().strip()
+        response_data = response_data.strip()
         if self.response_as_string:
             return response_data, status_code
         return ApiResponse(response_data, status_code), status_code
