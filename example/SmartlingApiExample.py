@@ -37,7 +37,7 @@ class SmartlingApiExample:
 
         useProxy = False
         if useProxy :
-            proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
+            proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port")
         else:
             proxySettings = None
 

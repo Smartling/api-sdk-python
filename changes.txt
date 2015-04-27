@@ -1,3 +1,6 @@
+Apr 27, 2015 - v 1.2.6
+    - reworked proxy support
+    
 Dec 25, 2014 - v 1.2.5
     - added encoding definition to all py files and changes for publishig sdk to pypi https://pypi.python.org/pypi/SmartlingApiSdk
 

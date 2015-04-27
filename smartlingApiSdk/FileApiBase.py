@@ -47,10 +47,32 @@ class FileApiBase:
         self.addApiKeys(params)
         params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
         del params[Params.FILE_PATH]  # no need in extra field in POST
-        opener = urllib2.build_opener(MultipartPostHandler)
-        urllib2.install_opener(opener)
-        host = self.getProxyHostAndAddHeaders()
-        req = urllib2.Request('https://' + host + uri, params, headers=self.headers)
+        response_data, status_code = self.getHttpResponseAndStatus( uri, params, MultipartPostHandler)
+        response_data = response.read().strip()
+        if self.response_as_string:
+            return response_data, status_code
+        return ApiResponse(response_data, status_code), status_code
+  
+    def getHttpResponseAndStatus(self, uri, params, handler=None):
+        if self.proxySettings:
+            if self.proxySettings.username:
+                proxy_str = 'http://%s:%s@%s:%s' % (self.proxySettings.username, self.proxySettings.passwd, self.proxySettings.host, self.proxySettings.port)
+            else: 
+                proxy_str = 'http://%s:%s' % (self.proxySettings.host, self.proxySettings.port)
+
+            opener = urllib2.build_opener(
+                handler or urllib2.HTTPHandler(),
+                handler or urllib2.HTTPSHandler(),
+                urllib2.ProxyHandler({"https": proxy_str}))
+            urllib2.install_opener(opener)
+        elif handler:
+            opener = urllib2.build_opener(MultipartPostHandler)
+            urllib2.install_opener(opener)
+        
+        if not handler:
+            params = urllib.urlencode(params)
+
+        req = urllib2.Request('https://' + self.host + uri, params, headers=self.headers)
         try:
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
@@ -59,33 +81,13 @@ class FileApiBase:
             status_code = response.getcode() 
         else:
             status_code = 0 #value for python v2.5 and less
-        response_data = response.read().strip()
-        if self.response_as_string:
-            return response_data, status_code
-        return ApiResponse(response_data, status_code), status_code
+        response_data = response.read()   
+        return response_data, status_code
 
-    def getProxyHostAndAddHeaders(self):
-        if not self.proxySettings : return self.host
-        self.headers["Host"] = self.host
-        if self.proxySettings.username is not None and self.proxySettings.passwd is not None:
-            base64string = base64.encodestring('%s:%s' % (self.proxySettings.username, self.proxySettings.passwd))[:-1]
-            authheader =  "Basic %s" % base64string
-            self.headers["Authorization"] = authheader
-        proxy_host = self.proxySettings.host
-        if self.proxySettings.port:
-            proxy_host += ":%s" % self.proxySettings.port
-        return proxy_host
-        
+  
     def command_raw(self, method, uri, params):
         self.addApiKeys(params)
-        host = self.getProxyHostAndAddHeaders()
-        params_encoded = urllib.urlencode(params)
-        conn = httplib.HTTPSConnection(host)
-        conn.request(method, uri, params_encoded, self.headers)
-        response = conn.getresponse()
-        data = response.read()
-        conn.close()
-        return data, response.status
+        return self.getHttpResponseAndStatus(uri, params)
 
     def command(self, method, uri, params):
         data, code = self.command_raw(method, uri, params)
