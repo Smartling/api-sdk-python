@@ -44,7 +44,6 @@ class ApiResponse:
     def parse_response(self, response_string):
         """ parses json and fills object attributes according json attributes """
         self.response_dict = json.loads(response_string)
-        print self.response_dict
         for k, v in self.response_dict['response'].items():
             if k=='data':
                 self.data = Data(v)
