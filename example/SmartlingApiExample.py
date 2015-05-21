@@ -63,11 +63,13 @@ class SmartlingApiExample:
         """ this method tests `import` command """
         self.printMarker("file upload")
         #upload file first to be able upload it's translations later
-        print self.fapi.upload(self.uploadData)
-
+        resp, code = self.fapi.upload(self.uploadData)
+        print resp, code
+    
         self.printMarker("files list")
         #list all files to ensure upload worked
-        print self.fapi.list()
+        resp, code = self.fapi.list()
+        print resp, code
 
         self.printMarker("importing uploaded")
         old_name = self.uploadData.name
@@ -76,7 +78,8 @@ class SmartlingApiExample:
         self.uploadData.name = name_to_import
 
         #import translations from file
-        print self.fapi.import_call(self.uploadData, self.locale, translationState="READY_FOR_PUBLISH")
+        resp, code = self.fapi.import_call(self.uploadData, self.locale, translationState="READY_FOR_PUBLISH")
+        print resp, code
 
         self.uploadData.name = old_name
 
@@ -90,30 +93,38 @@ class SmartlingApiExample:
         
         self.printMarker("delete from server goes here")
         #delete test file imported in the beginning of test
-        print self.fapi.delete(self.uploadData.name)
+        resp, code = self.fapi.delete(self.uploadData.name)
+        print resp, code
 
     def test(self):
         """ simple illustration for set of API commands: upload, list, status, get, rename, delete """
         self.printMarker("file upload")
-        print self.fapi.upload(self.uploadData)
+        resp, code = self.fapi.upload(self.uploadData)
+        print resp, code
 
         self.printMarker("files list")
-        print self.fapi.list()
+        resp, code = self.fapi.list()
+        print resp, code
 
         self.printMarker("file status")
-        print self.fapi.status(self.uploadData.name, self.locale)
+        resp, code = self.fapi.status(self.uploadData.name, self.locale)
+        print resp, code
 
         self.printMarker("file from server goes here")
-        print self.fapi.get(self.uploadData.name, self.locale)
+        resp, code = self.fapi.get(self.uploadData.name, self.locale)
+        print resp, code
 
         self.printMarker("renaming file")
-        print self.fapi.rename(self.uploadData.name, self.new_name)
+        resp, code = self.fapi.rename(self.uploadData.name, self.new_name)
+        print resp, code
 
         self.printMarker("delete from server goes here")
-        print self.fapi.delete(self.new_name)
+        resp, code = self.fapi.delete(self.new_name)
+        print resp, code
 
         self.printMarker("doing list again to see if it's deleted")
-        print self.fapi.list()
+        resp, code = self.fapi.list()
+        print resp, code
 
 
 FILE_NAME = "java.properties"
