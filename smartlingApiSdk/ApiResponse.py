@@ -39,6 +39,7 @@ class ApiResponse:
     def __init__(self, response_string, status_code):
         self.status_code = status_code
         self.response_string = response_string
+        print status_code, response_string
         self.parse_response(response_string)
         
     def parse_response(self, response_string):

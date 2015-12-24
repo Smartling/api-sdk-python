@@ -24,7 +24,7 @@ import time
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, ProxySettings
+from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, ProxySettings, SmartlingFileApiFactory
 from smartlingApiSdk.UploadData import UploadData
 from nose.tools import assert_equal
 
@@ -35,7 +35,6 @@ from nose.tools import assert_equal
 
 
 class testFapi(object):
-    HOST = 'sandbox-api.smartling.com'
     MY_API_KEY = "YOUR_API_KEY"
     MY_PROJECT_ID = "YOUR_PROJECT_ID"
 
@@ -58,7 +57,7 @@ class testFapi(object):
             proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
         else:
             proxySettings = None        
-        self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
+        self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
         self.locale =  os.environ.get('SL_LOCALE', "ru-RU")
         timestamp = `time.time()`
         self.uri = self.FILE_NAME + timestamp 

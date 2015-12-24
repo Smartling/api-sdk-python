@@ -101,16 +101,11 @@ class SmartlingFileApi(FileApiBase):
 
 class SmartlingFileApiFactory:
     """ Factory class to build SmartlingFileApi objects """
-    sandbox_host = 'sandbox-api.smartling.com'
     api_host = 'api.smartling.com'
 
-    def getSmartlingTranslationApi(self, productionMode, apiKey, projectId, proxySettings=None):
-        if (productionMode):
-            return SmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
-        return SmartlingFileApi(self.sandbox_host, apiKey, projectId, proxySettings)
-
-    def getSmartlingTranslationApiProd(self, apiKey, projectId, proxySettings=None):
+    def getSmartlingTranslationApi(self, apiKey, projectId, proxySettings=None):
         return SmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
+
 
 class ProxySettings:
     """ settings for http proxy to be used to pass api requests, !!! Only basic authentication is supported for restricted proxy access !!! """

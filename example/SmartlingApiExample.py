@@ -32,7 +32,7 @@ class SmartlingApiExample:
     MY_API_KEY = "YOUR_API_KEY" #should be changed with read values
     MY_PROJECT_ID = "YOUR_PROJECT_ID" #should be changed with real values
 
-    def __init__(self, useSandbox, uploadData, locale, new_name):
+    def __init__(self, uploadData, locale, new_name):
         self.getCredentials()
 
         useProxy = False
@@ -41,10 +41,7 @@ class SmartlingApiExample:
         else:
             proxySettings = None
 
-        if useSandbox:
-            self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(False, self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
-        else:
-            self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApiProd(self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
+        self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi( self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
         self.uploadData = uploadData
         self.locale = locale
         self.new_name = new_name
@@ -143,8 +140,7 @@ def ascii_test():
     #test simple file
     uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
     uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
-    useSandbox = False
-    example = SmartlingApiExample(useSandbox, uploadDataASCII, "it-IT", FILE_NAME_RENAMED)
+    example = SmartlingApiExample(uploadDataASCII, "it-IT", FILE_NAME_RENAMED)
     example.test()
 
 def utf16_test():
@@ -152,16 +148,14 @@ def utf16_test():
     uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
     uploadDataUtf16.setApproveContent("true")
     uploadDataUtf16.setCallbackUrl(CALLBACK_URL)
-    useSandbox = False
-    example = SmartlingApiExample(useSandbox, uploadDataUtf16, "it-IT", FILE_NAME_RENAMED)
+    example = SmartlingApiExample(uploadDataUtf16, "it-IT", FILE_NAME_RENAMED)
     example.test()
 
 def import_test():
     #example for import and last_modified commands
     uploadDataImport = UploadData(FILE_PATH, FILE_NAME_IMPORT, FILE_TYPE_IMPORT)
     uploadDataImport.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
-    useSandbox = False
-    example = SmartlingApiExample(useSandbox, uploadDataImport, "it-IT", FILE_NAME_RENAMED)
+    example = SmartlingApiExample(uploadDataImport, "it-IT", FILE_NAME_RENAMED)
     example.test_import(FILE_NAME_TO_IMPORT)
 
 ascii_test()
