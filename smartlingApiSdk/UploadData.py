@@ -24,6 +24,7 @@ class UploadData:
     """ Helper class to store `upload` and `import` command attributes """
     approveContent = "false"
     callbackUrl = ""
+    localesToApprove = []
 
     def __init__(self, path, name, type):
         self.path = path
