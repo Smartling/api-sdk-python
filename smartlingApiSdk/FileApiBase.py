@@ -112,6 +112,10 @@ class FileApiBase:
         if (uploadData.directives):
             for index, directive in enumerate(uploadData.directives):
                 params[directive.sl_prefix + directive.name] = directive.value
+                
+        if (uploadData.localesToApprove):
+            for index, locale in enumerate(uploadData.localesToApprove):
+                params['{0}[{1}]'.format(Params.LOCALES_TO_APPROVE, index)] = locale
 
         return self.uploadMultipart(Uri.UPLOAD, params)
 
