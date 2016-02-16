@@ -37,6 +37,9 @@ class UploadData:
 
     def setCallbackUrl(self, callbackUrl):
         self.callbackUrl = callbackUrl
+        
+    def setLocalesToApprove(self, localesToApprove):
+        self.localesToApprove = localesToApprove
 
     def addDirective(self, directive):
         self.directives.append(directive)
