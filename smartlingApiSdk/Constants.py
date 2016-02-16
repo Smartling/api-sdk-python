@@ -33,6 +33,7 @@ class Params:
     RETRIEVAL_TYPE = 'retrievalType'
     FILE_URI_NEW   = 'newFileUri'
     CALLBACK_URL    = 'callbackUrl'
+    LOCALES_TO_APPROVE = 'localesToApprove'
 
 class Uri:
     base = '/v1/file/'
