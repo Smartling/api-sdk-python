@@ -39,7 +39,7 @@ class ApiResponse:
     def __init__(self, response_string, status_code):
         self.status_code = status_code
         self.response_string = response_string
-        print status_code, response_string
+        #print status_code, response_string
         self.parse_response(response_string)
         
     def parse_response(self, response_string):
@@ -53,7 +53,7 @@ class ApiResponse:
     
     def __getattr__(self, key):
         """ provides string object methods to be available for response to behave like a string """
-        if hasattr(self.response_string, key):
+        if hasattr(self.response_dict, key):
             return getattr(self.response_string, key)
             
         try:

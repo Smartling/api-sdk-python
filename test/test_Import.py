@@ -24,7 +24,8 @@ import time
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi, ProxySettings
+from smartlingApiSdk.SmartlingFileApi import SmartlingFileApi
+from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.UploadData import UploadData
 from nose.tools import assert_equal
 

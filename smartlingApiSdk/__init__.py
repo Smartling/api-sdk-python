@@ -18,6 +18,6 @@
 '''
 
 #module initialization
-
-__version__ = '1.2.9'
+from version import version
+__version__ = version
 

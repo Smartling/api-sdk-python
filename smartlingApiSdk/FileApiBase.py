@@ -19,18 +19,13 @@
 
 #FileApi class implementation
 
-import httplib
-import urllib
-import sys, urllib2, base64
+from HttpClient import HttpClient
 from MultipartPostHandler import MultipartPostHandler
 from Constants import Uri, Params, ReqMethod
 from ApiResponse import ApiResponse
 
-
-
 class FileApiBase:
     """ basic class implementing low-level api calls """
-    headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
     response_as_string = False
 
     def __init__(self, host, apiKey, projectId, proxySettings=None):
@@ -38,6 +33,7 @@ class FileApiBase:
         self.apiKey = apiKey
         self.projectId = projectId
         self.proxySettings = proxySettings
+        self.httpClient = HttpClient(host, proxySettings)
 
     def addApiKeys(self, params):
         params[Params.API_KEY] = self.apiKey
@@ -47,47 +43,18 @@ class FileApiBase:
         self.addApiKeys(params)
         params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
         del params[Params.FILE_PATH]  # no need in extra field in POST
-        response_data, status_code = self.getHttpResponseAndStatus( uri, params, MultipartPostHandler)
+        response_data, status_code = self.getHttpResponseAndStatus( ReqMethod.POST, uri, params, MultipartPostHandler)
         response_data = response_data.strip()
         if self.response_as_string:
             return response_data, status_code
         return ApiResponse(response_data, status_code), status_code
   
-    def getHttpResponseAndStatus(self, uri, params, handler=None):
-        if self.proxySettings:
-            if self.proxySettings.username:
-                proxy_str = 'http://%s:%s@%s:%s' % (self.proxySettings.username, self.proxySettings.passwd, self.proxySettings.host, self.proxySettings.port)
-            else: 
-                proxy_str = 'http://%s:%s' % (self.proxySettings.host, self.proxySettings.port)
-
-            opener = urllib2.build_opener(
-                handler or urllib2.HTTPHandler(),
-                handler or urllib2.HTTPSHandler(),
-                urllib2.ProxyHandler({"https": proxy_str}))
-            urllib2.install_opener(opener)
-        elif handler:
-            opener = urllib2.build_opener(MultipartPostHandler)
-            urllib2.install_opener(opener)
-        
-        if not handler:
-            params = urllib.urlencode(params)
-
-        req = urllib2.Request('https://' + self.host + uri, params, headers=self.headers)
-        try:
-            response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
-            response = e
-        if sys.version_info[:2] >= (2,6):
-            status_code = response.getcode() 
-        else:
-            status_code = 0 #value for python v2.5 and less
-        response_data = response.read()   
-        return response_data, status_code
-
+    def getHttpResponseAndStatus(self, method, uri, params, handler=None):
+        return self.httpClient.getHttpResponseAndStatus(method, uri, params, handler)
   
     def command_raw(self, method, uri, params):
         self.addApiKeys(params)
-        return self.getHttpResponseAndStatus(uri, params)
+        return self.getHttpResponseAndStatus(method, uri, params)
 
     def command(self, method, uri, params):
         data, code = self.command_raw(method, uri, params)

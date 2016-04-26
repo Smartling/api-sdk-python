@@ -22,18 +22,22 @@ import sys
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApi import SmartlingFileApiFactory, ProxySettings
+from smartlingApiSdk.SmartlingFileApiV2 import SmartlingFileApiV2
+from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from smartlingApiSdk.UploadData import UploadData
+from smartlingApiSdk.Credentials import Credentials
 
 
 class SmartlingApiExample:
 
-    MY_API_KEY = "YOUR_API_KEY" #should be changed with read values
-    MY_PROJECT_ID = "YOUR_PROJECT_ID" #should be changed with real values
+    def __init__(self, file_name, file_type, new_name):
+        credentials = Credentials() #Gets your Smartling credetnials from environment variables
 
-    def __init__(self, uploadData, locale, new_name):
-        self.getCredentials()
+        self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
+        self.MY_USER_SECRET = credentials.MY_USER_SECRET
+        self.MY_PROJECT_ID = credentials.MY_PROJECT_ID
+        self.MY_LOCALE = credentials.MY_LOCALE
 
         useProxy = False
         if useProxy :
@@ -41,18 +45,11 @@ class SmartlingApiExample:
         else:
             proxySettings = None
 
-        self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi( self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
-        self.uploadData = uploadData
-        self.locale = locale
+        self.fapi = SmartlingFileApiV2( self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
+        self.file_type = file_type
+        self.file_name = file_name
         self.new_name = new_name
         
-    def getCredentials(self):
-        """ get api key and project id from environment variables
-            to set environment variables use command : export SL_API_KEY=******* ; export SL_PROJECT_ID=****** """
-        self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
-        self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
-
-
     def printMarker(self, caption):
         print "--" + caption + "-" * 40
 
@@ -60,7 +57,12 @@ class SmartlingApiExample:
         """ this method tests `import` command """
         self.printMarker("file upload")
         #upload file first to be able upload it's translations later
-        resp, code = self.fapi.upload(self.uploadData)
+        
+        path = FILE_PATH + self.file_name
+        resp, code = self.fapi.upload(path, self.file_type)
+        if 200!=code:
+            raise "failed"
+   
         print resp, code
     
         self.printMarker("files list")
@@ -69,50 +71,53 @@ class SmartlingApiExample:
         print resp, code
 
         self.printMarker("importing uploaded")
-        old_name = self.uploadData.name
         #set correct uri/name for file to be imported
-        self.uploadData.uri = self.uploadData.name
-        self.uploadData.name = name_to_import
+        path_to_import = FILE_PATH + name_to_import
 
         #import translations from file
-        resp, code = self.fapi.import_call(self.uploadData, self.locale, translationState="READY_FOR_PUBLISH")
+        resp, code = self.fapi.import_call(path, path_to_import, 
+                    self.file_type, self.MY_LOCALE, 
+                     translationState="PUBLISHED")
         print resp, code
 
-        self.uploadData.name = old_name
+        if 200!=code:
+            raise "failed"
 
         #perform `last_modified` command
         self.printMarker("last modified")
-        resp, code = self.fapi.last_modified(self.uploadData.name)
-        print "resp.messages=", resp.messages
+        resp, code = self.fapi.last_modified(path, self.MY_LOCALE)
         print "resp.code=", resp.code
-        print "resp.data.items="
-        for v in resp.data.items: print v
+        print "resp.data", resp.data
         
         self.printMarker("delete from server goes here")
         #delete test file imported in the beginning of test
-        resp, code = self.fapi.delete(self.uploadData.name)
+        resp, code = self.fapi.delete(path)
         print resp, code
 
     def test(self):
         """ simple illustration for set of API commands: upload, list, status, get, rename, delete """
         self.printMarker("file upload")
-        resp, code = self.fapi.upload(self.uploadData)
+        path = FILE_PATH + self.file_name
+        directives=[SmartlingDirective("placeholder_format_custom", "\[.+?\]")]
+        resp, code = self.fapi.upload(path, self.file_type, authorize="true", callbackUrl=CALLBACK_URL, SmartlingDirectives=directives)
         print resp, code
+        if 200!=code:
+            raise "failed"
 
         self.printMarker("files list")
         resp, code = self.fapi.list()
         print resp, code
 
         self.printMarker("file status")
-        resp, code = self.fapi.status(self.uploadData.name, self.locale)
+        resp, code = self.fapi.status(path)
         print resp, code
 
         self.printMarker("file from server goes here")
-        resp, code = self.fapi.get(self.uploadData.name, self.locale)
+        resp, code = self.fapi.get(path, self.MY_LOCALE)
         print resp, code
 
         self.printMarker("renaming file")
-        resp, code = self.fapi.rename(self.uploadData.name, self.new_name)
+        resp, code = self.fapi.rename(path, self.new_name)
         print resp, code
 
         self.printMarker("delete from server goes here")
@@ -138,24 +143,17 @@ FILE_TYPE_IMPORT ="android"
 
 def ascii_test():
     #test simple file
-    uploadDataASCII = UploadData(FILE_PATH, FILE_NAME, FILE_TYPE)
-    uploadDataASCII.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
-    example = SmartlingApiExample(uploadDataASCII, "it-IT", FILE_NAME_RENAMED)
+    example = SmartlingApiExample(FILE_NAME, FILE_TYPE, FILE_NAME_RENAMED)
     example.test()
 
 def utf16_test():
     #add charset and approveContent parameters
-    uploadDataUtf16 = UploadData(FILE_PATH, FILE_NAME_UTF16, FILE_TYPE)
-    uploadDataUtf16.setApproveContent("true")
-    uploadDataUtf16.setCallbackUrl(CALLBACK_URL)
-    example = SmartlingApiExample(uploadDataUtf16, "it-IT", FILE_NAME_RENAMED)
+    example = SmartlingApiExample(FILE_NAME_UTF16, FILE_TYPE, FILE_NAME_RENAMED)
     example.test()
 
 def import_test():
     #example for import and last_modified commands
-    uploadDataImport = UploadData(FILE_PATH, FILE_NAME_IMPORT, FILE_TYPE_IMPORT)
-    uploadDataImport.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
-    example = SmartlingApiExample(uploadDataImport, "it-IT", FILE_NAME_RENAMED)
+    example = SmartlingApiExample(FILE_NAME_IMPORT, FILE_TYPE_IMPORT, FILE_NAME_RENAMED)
     example.test_import(FILE_NAME_TO_IMPORT)
 
 ascii_test()
