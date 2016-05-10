@@ -1,5 +1,5 @@
 Dec 24, 2015 - v 1.2.9
-    - removed sandbox references as obsolote
+    - removed sandbox references as obsolete
 
 May 21, 2015 - v 1.2.8
     - removed debug output from ApiResponse
