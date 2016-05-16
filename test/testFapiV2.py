@@ -33,8 +33,6 @@ from nose.tools import assert_equal
 from smartlingApiSdk.version import version
 from smartlingApiSdk.Credentials import Credentials
 
-from smartlingApiSdk.UploadData import UploadData
-
 class testFapiV2(object):
 
     FILE_NAME = "java.properties"

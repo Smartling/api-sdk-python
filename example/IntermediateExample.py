@@ -25,9 +25,7 @@ sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 from smartlingApiSdk.SmartlingFileApiV2 import SmartlingFileApiV2
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
-from smartlingApiSdk.UploadData import UploadData
 from smartlingApiSdk.Credentials import Credentials
-
 
 class SmartlingApiExample:
 
@@ -141,14 +139,9 @@ FILE_NAME_IMPORT = "test_import.xml"
 FILE_NAME_TO_IMPORT = "test_import_es.xml"
 FILE_TYPE_IMPORT ="android"
 
-def ascii_test():
+def upload_test():
     #test simple file
     example = SmartlingApiExample(FILE_NAME, FILE_TYPE, FILE_NAME_RENAMED)
-    example.test()
-
-def utf16_test():
-    #add charset and approveContent parameters
-    example = SmartlingApiExample(FILE_NAME_UTF16, FILE_TYPE, FILE_NAME_RENAMED)
     example.test()
 
 def import_test():
@@ -156,6 +149,5 @@ def import_test():
     example = SmartlingApiExample(FILE_NAME_IMPORT, FILE_TYPE_IMPORT, FILE_NAME_RENAMED)
     example.test_import(FILE_NAME_TO_IMPORT)
 
-ascii_test()
-utf16_test()
+upload_test()
 import_test()

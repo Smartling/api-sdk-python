@@ -13,44 +13,12 @@ Quick start
 -----------
 
 Clone the repo, `git clone git@github.com:Smartling/api-sdk-python.git`.
-Use example or tests to see how to work with SDK.
-Note that Smartling creadentials should be set for SDK to work
-Both tests and example will raise exception if credentials are not set.
+Use examples in ./example directory to see how to work with SDK.
+There are 3 examples:
+SimpleExample.py - basic API SDK operartions
+IntermediateExample.py - a bit more advanced : introduces rename, import and SmartlingDirectives
+AdvancedExample.py - calls every API call and test response for a proper value
 
-Use example in examples directory, or more full coverage of every api call in tests/testFapiV2.py:
-
-(Note that nosetests package is requeired for tests)
-cd tests
-nosetests testFapiV2.py
-
-But it can be also tested directly like:
-    
-    from testFapiV2 import testFapiV2
-
-    t = testFapiV2()
-    t.setUp()
-    
-    t.testGetTranslations()
-    t.testGetOriginal()
-    t.testGetAllLocalesZip()
-    t.testGetAllLocalesCsv()
-    t.testGetMultipleLocalesAsZip()
-    t.testFileListTypes()
-    t.testGet()
-    t.testFileList()
-    t.testProjects()
-    t.testProjectDetails()
-    t.testStatusLocale()
-    t.testStatus()
-    t.testFileRename()
-    t.testLastModified()
-    t.testLastModifiedAll()
-    t.testImport()
-    t.testListAuthorizedLocales()
-    t.testUnauthorize()
-    t.testAuthorize()
-        
-    t.tearDown()
 
 Versioning
 ----------
