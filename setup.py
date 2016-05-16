@@ -21,7 +21,7 @@ from setuptools import setup
 
 setup(
     name="SmartlingApiSdk",
-    version = "1.2.5",
+    version = "2.0.1",
     author="Smartling, Inc.",
     author_email="aartamonov@smartling.com",
     description="Smartling python library for file translations",
