@@ -1,4 +1,7 @@
-May 16, 2016 - v 2.0.1
+May 16, 2013 - v 2.0.2
+    - Added morexamples + bugfix
+
+May 13, 2013 - v 2.0.1
     - Added APIv2 support http://docs.smartling.com/pages/API/v2
 
 Dec 24, 2015 - v 1.2.9
