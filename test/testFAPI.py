@@ -121,14 +121,12 @@ class testFapi(object):
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
  
     def testFileRename(self):
-        self.fapi.delete(self.FILE_NAME_NEW)
         res, status = self.fapi.rename(self.uri, self.FILE_NAME_NEW)
         assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
         
-        self.fapi.delete(self.FILE_NAME_NEW_16)
-        res, status = self.fapi.rename(self.uri16, self.FILE_NAME_NEW_16)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)        
-
+        res, status = self.fapi.rename(self.FILE_NAME_NEW, self.uri)
+        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0) 
+        
     def testLastModified(self):
         resp, status = self.fapi.last_modified(self.uri)
         assert_equal(True, resp.find(self.CODE_SUCCESS_TOKEN) > 0)
