@@ -25,6 +25,7 @@ from Constants import Uri, Params, ReqMethod
 from ApiResponse import ApiResponse
 from AuthClient import AuthClient
 from UrlV2Helper import UrlV2Helper
+from Constants import FileTypes
 
 """
 Upload File - /files-api/v2/projects/{projectId}/file (POST)
@@ -80,7 +81,7 @@ class FileApiV2:
     def getAuthHeader(self):
         token = self.authClient.getToken()
         if token is None:
-            raise "Error getting token"
+            raise "Error getting token, check you credentials"
             
         return {"Authorization" : "Bearer "+ token} 
    
@@ -94,59 +95,64 @@ class FileApiV2:
             return data, code
         return  ApiResponse(data, code), code
 
+    def validateFileTypes(self, kw):
+        fileTypes = kw.get("fileTypes",[])
+        if type(fileTypes) != type([]) and type(fileTypes) != type(()):
+            fileTypes = [fileTypes]
+        for t in fileTypes: 
+            if not getattr(FileTypes, t, None):
+                unsupported = "\nUnsupported file type:%s\n" % t
+                raise unsupported
 
-#-----------------------------------------------------------------------------------
-
-    def commandGet(self, fileUri, locale, **kw):
-        """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Single-Locale/ """
-        kw[Params.FILE_URI] = fileUri
- 
+    def checkRetrievalType(self, kw):
         if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
             raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
                                                                              Params.RETRIEVAL_TYPE,
                                                                              Params.allowedRetrievalTypes)
+
+    def processDirectives(self, params, directives):
+        for name, value in directives.items():
+           params["smartling." + name] = value
+
+#-----------------------------------------------------------------------------------
+
+    def commandGet(self, fileUri, locale, directives={}, **kw):
+        """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Single-Locale/ """
+        kw[Params.FILE_URI] = fileUri
+ 
+        self.checkRetrievalType(kw)
+        self.processDirectives(kw, directives)
         url = self.urlHelper.getUrl(self.urlHelper.GET, localeId=locale)
         return self.command_raw(ReqMethod.GET, url, kw)
 
-
-    def commandGetMultipleLocalesAsZip(self, fileUri, localeIds, **kw):
+    def commandGetMultipleLocalesAsZip(self, fileUri, localeIds, directives={}, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Multiple-Locales/ """
         kw[Params.FILE_URIS] = fileUri
         kw[Params.LOCALE_IDS] = localeIds
  
-        if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
-            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
-                                                                             Params.RETRIEVAL_TYPE,
-                                                                             Params.allowedRetrievalTypes)
-        
+        self.checkRetrievalType(kw)
+        self.processDirectives(kw, directives)
         
         return self.command_raw(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.GET_MULTIPLE_LOCALES), kw)
-
  
- 
- 
-    def commandGetAllLocalesZip(self, fileUri, **kw):
+    def commandGetAllLocalesZip(self, fileUri, directives={}, **kw):
          """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales """
          kw[Params.FILE_URI] = fileUri
   
-         if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
-             raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
-                                                                              Params.RETRIEVAL_TYPE,
-                                                                              Params.allowedRetrievalTypes)
+         self.checkRetrievalType(kw)
+         self.processDirectives(kw, directives)
 
          url = self.urlHelper.getUrl(self.urlHelper.GET_ALL_LOCALES_ZIP)
          
          return self.command_raw(ReqMethod.GET, url, kw)
         
 
-    def commandGetAllLocalesCsv(self, fileUri, **kw):
+    def commandGetAllLocalesCsv(self, fileUri, directives={}, **kw):
          """  http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales-CSV """
          kw[Params.FILE_URI] = fileUri
   
-         if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
-             raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
-                                                                              Params.RETRIEVAL_TYPE,
-                                                                              Params.allowedRetrievalTypes)
+         self.checkRetrievalType(kw)
+         self.processDirectives(kw, directives)
 
          url = self.urlHelper.getUrl(self.urlHelper.GET_ALL_LOCALES_CSV)
          return self.command_raw(ReqMethod.GET, url, kw)
@@ -163,14 +169,15 @@ class FileApiV2:
     def commandList(self, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/List/ """
         url = self.urlHelper.getUrl(self.urlHelper.LIST_FILES)
+        self.validateFileTypes(kw)
+        
         return self.command(ReqMethod.GET, url, kw)
         
     def commandListFileTypes(self, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/List-File-Types/ """
         return self.command(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.LIST_FILE_TYPES), kw)
 
-
-    def commandUpload(self, filePath, fileType, **kw):
+    def commandUpload(self, filePath, fileType, directives={}, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Upload-File/ """
         params = {
                 Params.FILE_URI: filePath,
@@ -181,13 +188,7 @@ class FileApiV2:
         for k,v in kw.items():
             params[k] = v
 
-        if params.has_key("SmartlingDirectives"):
-            directives = kw["SmartlingDirectives"]
-            del params["SmartlingDirectives"]
-            if type(directives) != type([]) and type(directives) != type(()):
-                directives = [directives]
-            for directive in directives:
-               params[directive.sl_prefix + directive.name] = directive.value
+        self.processDirectives(params, directives)
         
         url = self.urlHelper.getUrl(self.urlHelper.UPLOAD)
         return self.uploadMultipart(url, params)
@@ -246,15 +247,18 @@ class FileApiV2:
         url = self.urlHelper.getUrl(self.urlHelper.LAST_MODIFIED_ALL)
         return self.command(ReqMethod.GET, url, kw) 
 
-    def commandImport(self, filePathOriginal, filePathTranslated, fileType, localeId, **kw):
+    def commandImport(self, fileUriOriginal, filePathTranslated, fileType, localeId, directives={}, **kw):
+        self.validateFileTypes({"fileTypes":fileType})
         params = {}
-        params[Params.FILE_URI]  = filePathOriginal
+        params[Params.FILE_URI]  = fileUriOriginal
         params[Params.FILE_TYPE] = fileType
         params[Params.FILE_PATH] = filePathTranslated
         params["file"] = filePathTranslated + ";type=text/plain"
 
         for k,v in kw.items():
             params[k] = v
+        
+        self.processDirectives(params, directives)
         
         url = self.urlHelper.getUrl(self.urlHelper.IMPORT, localeId = localeId)
         return self.uploadMultipart(url, params)
@@ -282,11 +286,13 @@ class FileApiV2:
         url = self.urlHelper.getUrl(self.urlHelper.UNAUTHORIZE)
         return self.command(ReqMethod.DELETE, url, kw)
         
-    def commandGetTranslations(self, fileUri, filePath, localeId, **kw):
+    def commandGetTranslations(self, fileUri, filePath, localeId, directives={}, **kw):
         """  http://docs.smartling.com/pages/API/v2/FileAPI/Get-Translations/ """
         kw[Params.FILE_URI]  = fileUri
         kw[Params.FILE_PATH] = filePath
         kw["file"] = filePath + ";type=text/plain"
+        
+        self.processDirectives(kw, directives)
 
         url = self.urlHelper.getUrl(self.urlHelper.GET_TRANSLATIONS, localeId = localeId)
         return self.uploadMultipart(url, kw, response_as_string=True)       

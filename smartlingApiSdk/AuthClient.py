@@ -32,6 +32,8 @@ class AuthClient:
         self.httpClient = HttpClient(self.host, proxySettings)
         self.userIdentifier = userIdentifier
         self.userSecret = userSecret
+        self.accessExpiresAt = 0
+        self.refreshExpiresAt = 0
         
     def request(self, uri, body):
         header = {"Content-Type": "application/json"}
@@ -57,8 +59,9 @@ class AuthClient:
         self.request(self.refreshUri, body)
         
     def getToken(self):
-        if not hasattr(self,'accessToken'):
+        if not getattr(self,'accessToken', None):
             self.authenticate()
+            return self.accessToken
         
         now = time.time()
         if now >= self.accessExpiresAt:

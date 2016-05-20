@@ -1,8 +1,11 @@
+May 20, 2013 - v 2.0.4
+    - Minor bugs fixed
+
 May 16, 2013 - v 2.0.3
     - Credentials default values fix
 
 May 16, 2013 - v 2.0.2
-    - Added more xamples + bugfix
+    - Added more examples + bugfix
 
 May 13, 2013 - v 2.0.1
     - Added APIv2 support http://docs.smartling.com/pages/API/v2

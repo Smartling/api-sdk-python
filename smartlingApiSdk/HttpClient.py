@@ -86,6 +86,7 @@ class HttpClient:
         #processes lits parameters separately i.e. {key:[v1, v2]} is encoded as 'key[]=v1&key[]=v2'
         result = ""
         for k, v in params.items():
+            if type(v) == bool: params[k] = str(v).lower()
             if type(v) == type([]) or type(v) == type(()):
                 del params[k]
                 for single in v:
@@ -105,6 +106,7 @@ class HttpClient:
 
     def encodeListParams(self, params):
          for k, v in params.items():
+            if type(v) == bool: params[k] = str(v).lower()
             if type(v) == type([]) or type(v) == type(()):
                 del params[k]
                 params[k + '[]'] = ",".join(v)

@@ -96,8 +96,8 @@ class SmartlingApiExample:
         """ simple illustration for set of API commands: upload, list, status, get, rename, delete """
         self.printMarker("file upload")
         path = FILE_PATH + self.file_name
-        directives=[SmartlingDirective("placeholder_format_custom", "\[.+?\]")]
-        resp, code = self.fapi.upload(path, self.file_type, authorize="true", callbackUrl=CALLBACK_URL, SmartlingDirectives=directives)
+        directives={"placeholder_format_custom" : "\[.+?\]"}
+        resp, code = self.fapi.upload(path, self.file_type, authorize="true", callbackUrl=CALLBACK_URL, directives=directives)
         print resp, code
         if 200!=code:
             raise "failed"

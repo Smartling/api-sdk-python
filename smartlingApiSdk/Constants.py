@@ -20,7 +20,7 @@
 #constants for File API
 
 class Params:
-    allowedRetrievalTypes = ('pending', 'published', 'pseudo')
+    allowedRetrievalTypes = ('pending', 'published', 'pseudo', 'contextMatchingInstrumented')
 
     API_KEY    = 'apiKey'
     PROJECT_ID = 'projectId'
@@ -53,3 +53,22 @@ class ReqMethod:
     POST   = "POST"
     GET    = "GET"
     DELETE = "DELETE"
+
+class FileTypes:
+    android        = "android"
+    ios            = "ios"
+    gettext        = "gettext"
+    html           = "html"
+    javaProperties = "javaProperties"
+    yaml           = "yaml"
+    xliff          = "xliff"
+    xml            = "xml"
+    json           = "json"
+    docx           = "docx"
+    pptx           = "pptx"
+    xlsx           = "xlsx"
+    idml           = "idml"
+    qt             = "qt"
+    resx           = "resx"
+    plaintext      = "plaintext"
+    cvs            = "cvs"

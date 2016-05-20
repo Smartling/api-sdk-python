@@ -32,6 +32,7 @@ from smartlingApiSdk.ProxySettings import ProxySettings
 from nose.tools import assert_equal
 from smartlingApiSdk.version import version
 from smartlingApiSdk.Credentials import Credentials
+from smartlingApiSdk.Constants import FileTypes
 
 class testFapiV2(object):
 
@@ -107,7 +108,7 @@ class testFapiV2(object):
         return res, status
         
     def testFileList(self):
-        res, status = self.fapi.list()
+        res, status = self.fapi.list(fileTypes=[FileTypes.android, FileTypes.javaProperties])
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 
         uris = map(lambda x:x['fileUri'], res.data.items)

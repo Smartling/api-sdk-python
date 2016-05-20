@@ -51,7 +51,7 @@ fapi = SmartlingFileApiV2( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, pr
 #Upload file to Smartling
 print "\nUploading ..."
 path = FILE_PATH + FILE_NAME
-resp, code = fapi.upload(path, FILE_TYPE, authorize="true")
+resp, code = fapi.upload(path, FILE_TYPE, authorize=True)
 print resp, code
 if 200!=code:
     raise "failed"
@@ -59,12 +59,16 @@ if 200!=code:
 #List uploaded files
 print "\nList ..."
 resp, code = fapi.list()
+print "items size= ", len(resp.data.items)
 print code, resp
+
 
 #check file status
 print "\nFile status ..."
 resp, code = fapi.status(path)
 print code, resp
+print resp.data.fileUri
+print "items size=", len(resp.data.items)
 
 #read uplaoded file
 print "\nRead file from server ..."

@@ -79,23 +79,38 @@ class SmartlingFileApiV2(FileApiV2):
             for details on `get` command see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Single-Locale/ """
         return self.commandGet(fileUri, locale, **kw)
         
-    def get_multiple_locales(self, fileUri, localeIds, **kw):   
+    def get_multiple_locales(self, fileUri, localeIds, directives={}, **kw):   
         """ downloads multiple locales of file(s) as zip
             returns (response, status_code) tuple where response is zip file
-            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Multiple-Locales/ """
-        return self.commandGetMultipleLocalesAsZip(fileUri, localeIds, **kw)
+            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Multiple-Locales/ 
+
+            if you wish to pass smartling.[command] use directives argument 
+            for example smartling.placeholder_format_custom directive:
+            directives={'placeholder_format_custom' : '\[.+?\]'}
+            """
+        return self.commandGetMultipleLocalesAsZip(fileUri, localeIds, directives, **kw)
         
-    def get_all_locales(self, fileUri, **kw):
+    def get_all_locales(self, fileUri, directives={}, **kw):
         """ downloads all locales of file as zip
             returns (response, status_code) tuple where response is zip file
-            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales/ """
-        return self.commandGetAllLocalesZip(fileUri, **kw)
+            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales/ 
+
+            if you wish to pass smartling.[command] use directives argument 
+            for example smartling.placeholder_format_custom directive:
+            directives={'placeholder_format_custom' : '\[.+?\]'}
+            """
+        return self.commandGetAllLocalesZip(fileUri, directives, **kw)
         
-    def get_all_locales_csv(self, fileUri, **kw):
+    def get_all_locales_csv(self, fileUri, directives={}, **kw):
         """ downloads all translations for the requested file in a single CSV file
             returns (response, status_code) tuple where response is csv file
-            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales-CSV/ """
-        return self.commandGetAllLocalesCsv(fileUri, **kw)      
+            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales-CSV/
+
+            if you wish to pass smartling.[command] use directives argument 
+            for example smartling.placeholder_format_custom directive:
+            directives={'placeholder_format_custom' : '\[.+?\]'}
+            """
+        return self.commandGetAllLocalesCsv(fileUri, directives, **kw)      
 
     def get_original(self, fileUri):
         """ downloads the original version of the requested file from Smartling
@@ -151,11 +166,16 @@ class SmartlingFileApiV2(FileApiV2):
             for details see http://docs.smartling.com/pages/API/v2/FileAPI/Last-Modified/All-Locales/ """
         return self.commandLastModifiedAll(fileUri, **kw)    
         
-    def import_call(self, filePathOriginal, filePathTranslated, fileType, localeId, **kw):
+    def import_call(self, fileUriOriginal, filePathTranslated, fileType, localeId, directives={}, **kw):
         """ Import Translations.
             returns (response, status_code) tuple
-            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Import-Translations/ """
-        return self.commandImport(filePathOriginal, filePathTranslated, fileType, localeId, **kw)
+            for details see http://docs.smartling.com/pages/API/v2/FileAPI/Import-Translations/
+
+            if you wish to pass smartling.[command] use directives argument 
+            for example smartling.placeholder_format_custom directive:
+            directives={'placeholder_format_custom' : '\[.+?\]'}
+            """
+        return self.commandImport(fileUriOriginal, filePathTranslated, fileType, localeId, directives, **kw)
         
 
     def list_authorized_locales(self, fileUri):
@@ -176,8 +196,13 @@ class SmartlingFileApiV2(FileApiV2):
             for details see http://docs.smartling.com/pages/API/v2/FileAPI/Authorize-Content/Unauthorize/ / """
         return self.commandUnauthorize(fileUri, localeIds)
         
-    def get_translations(self, fileUri, filePath, localeId, **kw):
+    def get_translations(self, fileUri, filePath, localeId, directives={}, **kw):
         """ Temporarily uploads a file, then returns a translated version for requested locales.
             returns (response, status_code) tuple
-            for http://docs.smartling.com/pages/API/v2/FileAPI/Get-Translations/ """
-        return self.commandGetTranslations(fileUri, filePath, localeId, **kw)
+            for http://docs.smartling.com/pages/API/v2/FileAPI/Get-Translations/
+
+            if you wish to pass smartling.[command] use directives argument 
+            for example smartling.placeholder_format_custom directive:
+            directives={'placeholder_format_custom' : '\[.+?\]'}
+            """
+        return self.commandGetTranslations(fileUri, filePath, localeId, directives, **kw)
