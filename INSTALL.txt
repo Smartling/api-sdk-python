@@ -6,11 +6,32 @@ Example.
 
 Example script is placed in separate directory named 'example'.
 It should give you a examples of initializing API and using api calls.
-To run example just do:
-cd example
-python SmartlingApiExample.py
+To run example you should set up smartling credentials for your project like this:
 
-Test.
+use environment variables:
+     export SL_LOCALE=**-**
+     export SL_USER_IDENTIFIER=******************************
+     export SL_USER_SECRET=*******************************************************
+ 
+     #optional
+     export SL_ACCOUNT_UID=******* #required only to list projects api call
+     export SL_PROJECT_ID=******* #required for api calls `projects` and `project_details`
+or set credential explicitly in class smartlingApiSdk/Credentials.py
+
+After credentials are set do:
+
+cd example
+python SimpleExample.py
+
+or
+python IntermediateExample.py
+
+or
+python AdvancedExample.py
+
+
+
+Tests.
 
 Test uses nose python framework.
 Information about installing nose is here http://readthedocs.org/docs/nose/en/latest.
@@ -26,11 +47,15 @@ export SL_PROJECT_ID=*********
 export SL_LOCALE=**-**
 
 cd test
-nosetests testFAPI.py
+nosetests testFapiV2.py
 
 Correct tests output looks like this:
-.......
+
+nosetests testFapiV2.py
+...................
 ----------------------------------------------------------------------
-Ran 7 tests in 8.071s
+Ran 19 tests in 110.315s
 
 OK
+
+

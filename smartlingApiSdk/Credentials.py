@@ -21,7 +21,7 @@ import os
 class CredentialsNotSet(Exception):
     noKeymessage = """ 
      don't forget to set real MY_PROJECT_ID, MY_USER_IDENTIFIER, MY_USER_SECRET, MY_LOCALE
-     in SetCredentials class
+     in Credentials class
      or use environment variables:
      export SL_LOCALE=**-**
      export SL_USER_IDENTIFIER=******************************
