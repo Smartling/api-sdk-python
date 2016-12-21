@@ -1,3 +1,6 @@
+Dec 21, 2016 - v 2.1.0
+    - Projects API is separeted from File Api into onw module : SmartlingProjectsApiV2.py
+
 May 20, 2016 - v 2.0.4
     - Minor bugs fixed
 

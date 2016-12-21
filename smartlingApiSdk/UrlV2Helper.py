@@ -44,8 +44,13 @@ class UrlV2Helper:
     def __init__(self, projectId):
         self.projectId = projectId
 
-    def getUrl(self, urlWithPlaceholders, localeId="", accountUid=""):
-        url = urlWithPlaceholders.replace("{projectId}", self.projectId)
+    def getUrl(self, urlWithPlaceholders, localeId="", accountUid="", projectId=""):
+        
+        url = urlWithPlaceholders
+        if self.projectId:
+            url = url.replace("{projectId}", self.projectId)
+        elif projectId:
+            url = url.replace("{projectId}", projectId)
 
         if localeId : 
             url = url.replace("{localeId}", localeId)
@@ -58,5 +63,8 @@ class UrlV2Helper:
             
         if "{accountUid}" in url:
             raise "Unhandled accountUid placeholder:" + url
+            
+        if "{projectId}" in url:
+            raise "Unhandled projectId placeholder:" + url
             
         return url

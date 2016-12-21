@@ -14,11 +14,11 @@ Quick start
 
 Clone the repo, `git clone git@github.com:Smartling/api-sdk-python.git`.
 Use examples in ./example directory to see how to work with SDK.
-There are 3 examples:
-SimpleExample.py - basic API SDK operartions
-IntermediateExample.py - a bit more advanced : introduces rename, import and SmartlingDirectives
-AdvancedExample.py - calls every API call and test response for a proper value
-
+There are 4 examples:
+SimpleExample.py - basic file API SDK operartions
+IntermediateExample.py - a bit more advanced file API example: introduces rename, import and SmartlingDirectives
+AdvancedExample.py - calls every file API call and tests response for a proper value
+ProjectsExample.py - calls projects API and tests response for a proper value
 
 Versioning
 ----------

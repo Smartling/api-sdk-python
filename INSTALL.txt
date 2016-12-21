@@ -29,7 +29,8 @@ python IntermediateExample.py
 or
 python AdvancedExample.py
 
-
+or
+python ProjectsExample.py
 
 Tests.
 
@@ -46,7 +47,11 @@ export SL_API_KEY=********-****-****-****-************
 export SL_PROJECT_ID=*********
 export SL_LOCALE=**-**
 
+export SL_USER_IDENTIFIER=******************************
+export SL_USER_SECRET=*******************************************************
+export SL_ACCOUNT_UID=******* #required only to list projects api call
 cd test
+
 nosetests testFapiV2.py
 
 Correct tests output looks like this:
@@ -59,3 +64,6 @@ Ran 19 tests in 110.315s
 OK
 
 
+export SL_API_KEY=********-****-****-****-************ is necessary for v1 api tests :
+testFAPI.py
+test_Import.py

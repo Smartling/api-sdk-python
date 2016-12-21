@@ -47,26 +47,6 @@ class SmartlingFileApiV2(FileApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):
         FileApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings)
 
-
-    def projects(self, accountUid):
-        """
-        Returns a list of all projects in an account, including basic project details.
-        returns (response, status_code) tuple
-        http://docs.smartling.com/pages/API/v2/Projects/List-Projects/
-        """
-        return self.commandProjects(accountUid)
-
-
-    def project_details(self):
-        """
-        Returns basic details on a specific Smartling project.
-        returns (response, status_code) tuple
-        for details see http://docs.smartling.com/pages/API/v2/Projects/Project-Details/
-        """
-        return self.commandProjectDetails()
-
-
-
     def upload(self, filePath, fileType, **kw):
         """ Uploads original source content to Smartling
             returns (response, status_code) tuple

@@ -195,29 +195,6 @@ class testFapiV2(object):
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
         print "testGetAllLocalesCsv", "OK"
 
-    def testProjects(self):
-        if self.MY_ACCOUNT_UID == "CHANGE_ME":
-            print "can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********"
-            return
-        res, status = self.fapi.projects(self.MY_ACCOUNT_UID)
-        
-        assert_equal(200, status)
-        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
-        
-        projects = map(lambda x:x['projectId'], res.data.items)
-
-        assert_equal(True, self.MY_PROJECT_ID in projects)
-        print "testProjects", "OK"
-
-    def testProjectDetails(self):
-        res, status = self.fapi.project_details()
-        
-        assert_equal(200, status)
-        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
-        assert_equal(self.MY_PROJECT_ID, res.data.projectId)
-        
-        print "testProjectDetails", "OK"
-
     def testStatus(self):
         res, status = self.fapi.status(self.uri)
         
