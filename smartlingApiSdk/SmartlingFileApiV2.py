@@ -19,7 +19,7 @@
 
 #FileApi class implementation
 
-from FileApiV2 import FileApiV2
+from .FileApiV2 import FileApiV2
 
 class SmartlingFileApiV2(FileApiV2):
     """ Wrapper class providing access to all file API commands, all methods below represent API commands.

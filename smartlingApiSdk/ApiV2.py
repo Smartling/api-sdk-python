@@ -19,12 +19,12 @@
 
 #FileApi class implementation
 
-from HttpClient import HttpClient
-from MultipartPostHandler import MultipartPostHandler
-from Constants import Params, ReqMethod
-from ApiResponse import ApiResponse
-from AuthClient import AuthClient
-from Constants import FileTypes
+from .HttpClient import HttpClient
+from .MultipartPostHandler import MultipartPostHandler
+from .Constants import Params, ReqMethod
+from .ApiResponse import ApiResponse
+from .AuthClient import AuthClient
+from .Constants import FileTypes
 
 """
 Upload File - /files-api/v2/projects/{projectId}/file (POST)
@@ -61,7 +61,7 @@ class ApiV2:
         self.authClient = AuthClient(userIdentifier, userSecret, proxySettings)
 
     def uploadMultipart(self, uri, params, response_as_string=False):
-        if params.has_key(Params.FILE_PATH):
+        if Params.FILE_PATH in params:
             params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
             del params[Params.FILE_PATH]  # no need in extra field in POST
 
@@ -78,7 +78,7 @@ class ApiV2:
     def getAuthHeader(self):
         token = self.authClient.getToken()
         if token is None:
-            raise "Error getting token, check you credentials"
+            raise Exception("Error getting token, check you credentials")
 
         return {"Authorization" : "Bearer "+ token} 
 
@@ -99,14 +99,14 @@ class ApiV2:
         for t in fileTypes: 
             if not getattr(FileTypes, t, None):
                 unsupported = "\nUnsupported file type:%s\n" % t
-                raise unsupported
+                raise Exception(unsupported)
 
     def checkRetrievalType(self, kw):
         if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
-            raise "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
+            Exception( "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
                                                                              Params.RETRIEVAL_TYPE,
-                                                                             Params.allowedRetrievalTypes)
+                                                                             Params.allowedRetrievalTypes) )
 
     def processDirectives(self, params, directives):
-        for name, value in directives.items():
+        for name, value in list(directives.items()):
            params["smartling." + name] = value

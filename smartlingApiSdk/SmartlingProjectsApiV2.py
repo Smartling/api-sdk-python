@@ -19,7 +19,7 @@
 
 #FileApi class implementation
 
-from ProjectsApiV2 import ProjectsApiV2
+from .ProjectsApiV2 import ProjectsApiV2
 
 class SmartlingProjectsApiV2(ProjectsApiV2):
     """ Wrapper class providing access to projects API commands, all methods below represent API commands.

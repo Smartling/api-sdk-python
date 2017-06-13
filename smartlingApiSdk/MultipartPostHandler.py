@@ -17,12 +17,21 @@
  * limitations under the License.
 '''
 
-import mimetools
-import mimetypes
 import sys
-import urllib
-import urllib2
 
+isVersion3Python =  sys.version_info[:2] >= (3,0)
+
+if isVersion3Python:
+    import email.generator as mimetools
+    import urllib.request as urllib2
+    from urllib.parse import urlencode
+else:
+    import mimetools
+    import urllib2
+    from urllib import urlencode
+
+import mimetypes
+from io import IOBase
 
 class Callable:
     def __init__(self, anycallable):
@@ -37,38 +46,56 @@ class MultipartPostHandler(urllib2.BaseHandler):
     #  assigning a sequence.
     doseq = 1
 
+    def ifFileInstance(self, value):
+        if isVersion3Python:
+            return isinstance(value, IOBase)
+        else:
+            return type(value) == file
+
     def http_request(self, request):
-        data = request.get_data()
+        if isVersion3Python:
+            data = request.data
+        else:
+            data = request.get_data()
         if data is not None and type(data) != str:
             v_files = []
             v_vars = []
             try:
-                for(key, value) in data.items():
-                    if type(value) == file:
+                for(key, value) in list(data.items()):
+                    if self.ifFileInstance(value):
                         v_files.append((key, value))
                     else:
                         v_vars.append((key, value))
             except TypeError:
                 systype, value, traceback = sys.exc_info()
-                raise TypeError("not a valid non-string sequence or mapping object"), traceback
+                raise TypeError("not a valid non-string sequence or mapping object")(traceback)
 
             if len(v_files) == 0:
-                data = urllib.urlencode(v_vars, self.doseq)
+                data = urlencode(v_vars, self.doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
 
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
-                    print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
+                    print("Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data'))
                 request.add_unredirected_header('Content-Type', contenttype)
+                request.headers["Content-type"] = contenttype
 
-            request.add_data(data)
+            if isVersion3Python:
+                request.data = data
+            else:
+                request.add_data(data)
         return request
 
-    def multipart_encode(vars, files, boundary=None, buffer=None):
+    def multipart_encode(self, vars, files, boundary=None, buffer=None):
         if boundary is None:
-            boundary = mimetools.choose_boundary()
+            if isVersion3Python:
+                boundary = mimetools._make_boundary()
+                boundary = boundary.replace("=", "-")
+            else:
+                boundary = mimetools.choose_boundary()
+
         if buffer is None:
             buffer = ''
         for(key, value) in vars:
@@ -82,9 +109,15 @@ class MultipartPostHandler(urllib2.BaseHandler):
             buffer += 'Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename)
             buffer += 'Content-Type: %s\r\n' % contenttype
             fd.seek(0)
-            buffer += '\r\n' + fd.read() + '\r\n'
-        buffer += '--%s--\r\n\r\n' % boundary
+            if isVersion3Python:
+                buffer = buffer.encode() + b'\r\n' + fd.read() + b'\r\n'
+            else:
+                buffer += '\r\n' + fd.read() + '\r\n'
+
+        if isVersion3Python:
+            buffer += b'--%b--\r\n\r\n' % boundary.encode()
+        else:
+            buffer += '--%s--\r\n\r\n' % boundary
         return boundary, buffer
-    multipart_encode = Callable(multipart_encode)
 
     https_request = http_request

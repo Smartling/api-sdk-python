@@ -19,9 +19,9 @@
 
 #FileApi class implementation
 
-from Constants import Params, ReqMethod
-from UrlV2Helper import UrlV2Helper
-from ApiV2 import ApiV2
+from .Constants import Params, ReqMethod
+from .UrlV2Helper import UrlV2Helper
+from .ApiV2 import ApiV2
 
 class FileApiV2(ApiV2):
     """ basic class implementing file api calls """
@@ -33,7 +33,7 @@ class FileApiV2(ApiV2):
     def commandGet(self, fileUri, locale, directives={}, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Single-Locale/ """
         kw[Params.FILE_URI] = fileUri
- 
+
         self.checkRetrievalType(kw)
         self.processDirectives(kw, directives)
         url = self.urlHelper.getUrl(self.urlHelper.GET, localeId=locale)
@@ -43,28 +43,28 @@ class FileApiV2(ApiV2):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Multiple-Locales/ """
         kw[Params.FILE_URIS] = fileUri
         kw[Params.LOCALE_IDS] = localeIds
- 
+
         self.checkRetrievalType(kw)
         self.processDirectives(kw, directives)
-        
+
         return self.command_raw(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.GET_MULTIPLE_LOCALES), kw)
- 
+
     def commandGetAllLocalesZip(self, fileUri, directives={}, **kw):
          """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales """
          kw[Params.FILE_URI] = fileUri
-  
+
          self.checkRetrievalType(kw)
          self.processDirectives(kw, directives)
 
          url = self.urlHelper.getUrl(self.urlHelper.GET_ALL_LOCALES_ZIP)
-         
+
          return self.command_raw(ReqMethod.GET, url, kw)
-        
+
 
     def commandGetAllLocalesCsv(self, fileUri, directives={}, **kw):
          """  http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales-CSV """
          kw[Params.FILE_URI] = fileUri
-  
+
          self.checkRetrievalType(kw)
          self.processDirectives(kw, directives)
 
@@ -76,17 +76,17 @@ class FileApiV2(ApiV2):
          """  http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/Original-File/ """
          kw = {}
          kw[Params.FILE_URI] = fileUri
-  
+
          url = self.urlHelper.getUrl(self.urlHelper.GET_ORIGINAL)
-         return self.command_raw(ReqMethod.GET, url, kw)            
+         return self.command_raw(ReqMethod.GET, url, kw)
 
     def commandList(self, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/List/ """
         url = self.urlHelper.getUrl(self.urlHelper.LIST_FILES)
         self.validateFileTypes(kw)
-        
+
         return self.command(ReqMethod.GET, url, kw)
-        
+
     def commandListFileTypes(self, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/List-File-Types/ """
         return self.command(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.LIST_FILE_TYPES), kw)
@@ -99,11 +99,11 @@ class FileApiV2(ApiV2):
                 Params.FILE_PATH: filePath
             }
 
-        for k,v in kw.items():
+        for k,v in list(kw.items()):
             params[k] = v
 
         self.processDirectives(params, directives)
-        
+
         url = self.urlHelper.getUrl(self.urlHelper.UPLOAD)
         return self.uploadMultipart(url, params)
 
@@ -113,21 +113,21 @@ class FileApiV2(ApiV2):
         uri = self.urlHelper.getUrl(self.urlHelper.DELETE)
 
         return self.command(ReqMethod.POST, uri, kw)
-        
+
     def commandStatus(self, fileUri):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Status/All-Locales/ """
         kw = {}
         kw[Params.FILE_URI] = fileUri
         url = self.urlHelper.getUrl(self.urlHelper.STATUS_ALL)
         return self.command(ReqMethod.GET, url, kw)
-        
+
     def commandStatusLocale(self, fileUri, localeId):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Status/Single-Locale/ """
         kw = {}
         kw[Params.FILE_URI] = fileUri
         url = self.urlHelper.getUrl(self.urlHelper.STATUS_LOCALE, localeId = localeId)
-        return self.command(ReqMethod.GET, url, kw)     
-            
+        return self.command(ReqMethod.GET, url, kw)
+
     def commandRename(self, fileUri, newFileUrl):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Rename/ """
         kw = {}
@@ -140,13 +140,13 @@ class FileApiV2(ApiV2):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Last-Modified/Single-Locale/ """
         kw[Params.FILE_URI] = fileUri
         url = self.urlHelper.getUrl(self.urlHelper.LAST_MODIFIED, localeId = localeId)
-        return self.command(ReqMethod.GET, url, kw) 
+        return self.command(ReqMethod.GET, url, kw)
 
     def commandLastModifiedAll(self, fileUri, **kw):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Last-Modified/All-Locales/ """
         kw[Params.FILE_URI] = fileUri
         url = self.urlHelper.getUrl(self.urlHelper.LAST_MODIFIED_ALL)
-        return self.command(ReqMethod.GET, url, kw) 
+        return self.command(ReqMethod.GET, url, kw)
 
     def commandImport(self, fileUriOriginal, filePathTranslated, fileType, localeId, directives={}, **kw):
         self.validateFileTypes({"fileTypes":fileType})
@@ -156,11 +156,11 @@ class FileApiV2(ApiV2):
         params[Params.FILE_PATH] = filePathTranslated
         params["file"] = filePathTranslated + ";type=text/plain"
 
-        for k,v in kw.items():
+        for k,v in list(kw.items()):
             params[k] = v
-        
+
         self.processDirectives(params, directives)
-        
+
         url = self.urlHelper.getUrl(self.urlHelper.IMPORT, localeId = localeId)
         return self.uploadMultipart(url, params)
 
@@ -169,7 +169,7 @@ class FileApiV2(ApiV2):
         kw = {}
         kw[Params.FILE_URI] = fileUri
         url = self.urlHelper.getUrl(self.urlHelper.LIST_AUTHORIZED_LOCALES)
-        return self.command(ReqMethod.GET, url, kw) 
+        return self.command(ReqMethod.GET, url, kw)
 
     def commandAuthorize(self, fileUri, localeIds):
         """ http://docs.smartling.com/pages/API/v2/FileAPI/Authorize-Content/Authorize/ """
@@ -178,7 +178,7 @@ class FileApiV2(ApiV2):
         kw[Params.LOCALE_IDS_BRACKET] = ",".join(localeIds)
         url = self.urlHelper.getUrl(self.urlHelper.AUTHORIZE)
         return self.command(ReqMethod.POST, url, kw)
-        
+
     def commandUnauthorize(self, fileUri, localeIds):
         """  http://docs.smartling.com/pages/API/v2/FileAPI/Authorize-Content/Unauthorize/ """
         kw = {}
@@ -186,15 +186,14 @@ class FileApiV2(ApiV2):
         kw[Params.LOCALE_IDS_BRACKET] = ",".join(localeIds)
         url = self.urlHelper.getUrl(self.urlHelper.UNAUTHORIZE)
         return self.command(ReqMethod.DELETE, url, kw)
-        
+
     def commandGetTranslations(self, fileUri, filePath, localeId, directives={}, **kw):
         """  http://docs.smartling.com/pages/API/v2/FileAPI/Get-Translations/ """
         kw[Params.FILE_URI]  = fileUri
         kw[Params.FILE_PATH] = filePath
         kw["file"] = filePath + ";type=text/plain"
-        
+
         self.processDirectives(kw, directives)
 
         url = self.urlHelper.getUrl(self.urlHelper.GET_TRANSLATIONS, localeId = localeId)
-        return self.uploadMultipart(url, kw, response_as_string=True)       
-       
+        return self.uploadMultipart(url, kw, response_as_string=True)

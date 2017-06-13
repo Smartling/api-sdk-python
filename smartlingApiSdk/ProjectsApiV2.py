@@ -19,9 +19,9 @@
 
 #FileApi class implementation
 
-from Constants import ReqMethod
-from UrlV2Helper import UrlV2Helper
-from ApiV2 import ApiV2
+from .Constants import ReqMethod
+from .UrlV2Helper import UrlV2Helper
+from .ApiV2 import ApiV2
 
 class ProjectsApiV2(ApiV2):
     """ basic class implementing Projects/Accounts api calls """

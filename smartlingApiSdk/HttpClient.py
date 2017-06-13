@@ -17,17 +17,29 @@
  * limitations under the License.
 '''
 
-import urllib, urllib2
 import sys
-from Constants import ReqMethod
 
-from MultipartPostHandler import MultipartPostHandler
-from version import version
+isVersion3Python =  sys.version_info[:2] >= (3,0)
+
+if isVersion3Python:
+    import ssl
+    import urllib.request as urllib2, urllib.error
+    HTTPError = urllib.error.HTTPError
+    from urllib.parse import urlencode
+else:
+    import urllib, urllib2
+    HTTPError = urllib2.HTTPError
+    from urllib import urlencode
+
+from .Constants import ReqMethod
+
+from .MultipartPostHandler import MultipartPostHandler
+from .version import version
 
 class HttpClient:
     headers = {"Content-Type": "application/x-www-form-urlencoded", "User-Agent":"Python SDK client v"+ version}
     protocol = 'https://'
-    
+
     def __init__(self, host, proxySettings=None):
        self.host = host
        self.proxySettings = proxySettings
@@ -36,7 +48,7 @@ class HttpClient:
         if self.proxySettings:
             if self.proxySettings.username:
                 proxy_str = 'http://%s:%s@%s:%s' % (self.proxySettings.username, self.proxySettings.passwd, self.proxySettings.host, self.proxySettings.port)
-            else: 
+            else:
                 proxy_str = 'http://%s:%s' % (self.proxySettings.host, self.proxySettings.port)
 
             opener = urllib2.build_opener(
@@ -47,45 +59,58 @@ class HttpClient:
         elif handler:
             opener = urllib2.build_opener(MultipartPostHandler)
             urllib2.install_opener(opener)
-        
+
+
+
         if not handler:
             params = self.encodeParametersAsString(params)
         else:
             prarms = self.encodeListParams(params)
-        
+
         headers = {}
-        for k,v in self.headers.items():
+        for k,v in list(self.headers.items()):
             headers[k] = v
 
-        for k,v in extraHeaders.items():
+        for k,v in list(extraHeaders.items()):
             headers[k] = v
-        
+
         url = self.protocol + self.host + uri
         if method in (ReqMethod.GET, ReqMethod.DELETE) and params: url += "?" + params
         req = urllib2.Request(url, params, headers=headers)
         req.get_method = lambda: method
 
+        if sys.version_info[:2] >= (3,0):
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context.verify_mode = ssl.CERT_NONE
+        else:
+            context = None
+
         try:
             if requestBody:
-                response = urllib2.urlopen(req, requestBody)
+                response = urllib2.urlopen(req, requestBody, context=context)
             else:
-                response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
+                if handler:
+                    multipartHandler = MultipartPostHandler();
+                    req = multipartHandler.http_request(req)
+                else :
+                    req.data = req.data.encode()
+                response = urllib2.urlopen(req, context=context)
+        except HTTPError as e:
             response = e
         if sys.version_info[:2] >= (2,6):
-            status_code = response.getcode() 
+            status_code = response.getcode()
         else:
             status_code = response.code
-            
+
         response_data = response.read()
         if 200!=status_code:
-            print "Non 200 response:",url, status_code, "response=", response_data
+            print("Non 200 response:",url, status_code, "response=", response_data)
         return response_data, status_code
 
     def encodeParametersAsString(self, params):
         #processes lits parameters separately i.e. {key:[v1, v2]} is encoded as 'key[]=v1&key[]=v2'
         result = ""
-        for k, v in params.items():
+        for k, v in list(params.items()):
             if type(v) == bool: params[k] = str(v).lower()
             if type(v) == type([]) or type(v) == type(()):
                 del params[k]
@@ -93,19 +118,19 @@ class HttpClient:
                     if len(result)>0:
                         result += "&"
                     key_list = k+"[]"
-                    dct = {key_list: single} 
-                    result += urllib.urlencode( dct )
+                    dct = {key_list: single}
+                    result += urlencode( dct )
 
-        if params:    
+        if params:
             if len(result)>0:
                 result += "&"
 
-            result +=  urllib.urlencode(params)
+            result +=  urlencode(params)
 
         return result
 
     def encodeListParams(self, params):
-         for k, v in params.items():
+         for k, v in list(params.items()):
             if type(v) == bool: params[k] = str(v).lower()
             if type(v) == type([]) or type(v) == type(()):
                 del params[k]

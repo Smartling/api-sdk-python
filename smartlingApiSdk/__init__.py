@@ -18,6 +18,6 @@
 '''
 
 #module initialization
-from version import version
+from .version import version
 __version__ = version
 
