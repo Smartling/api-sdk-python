@@ -49,37 +49,38 @@ else:
 fapi = SmartlingFileApiV2( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, proxySettings)
         
 #Upload file to Smartling
-print "\nUploading ..."
-path = FILE_PATH + FILE_NAME
-resp, code = fapi.upload(path, FILE_TYPE, authorize=True)
-print resp, code
-if 200!=code:
-    raise "failed"
+if 1:
+    print("\nUploading ...")
+    path = FILE_PATH + FILE_NAME
+    resp, code = fapi.upload(path, FILE_TYPE, authorize=True)
+    print(resp, code)
+    if 200!=code:
+        raise Exception("failed")
 
 #List uploaded files
-print "\nList ..."
+print("\nList ...")
 resp, code = fapi.list()
-print "items size= ", len(resp.data.items)
-print code, resp
+print("items size= ", len(resp.data.items))
+print(code, resp)
 
-
-#check file status
-print "\nFile status ..."
-resp, code = fapi.status(path)
-print code, resp
-print resp.data.fileUri
-print "items size=", len(resp.data.items)
-
-#read uplaoded file
-print "\nRead file from server ..."
-resp, code = fapi.get(path, MY_LOCALE)
-print resp, code
-
-#delete file
-print "\nDelete file ..."
-resp, code = fapi.delete(path)
-print resp, code
-
-
-
-
+if 1:
+    #check file status
+    print("\nFile status ...")
+    resp, code = fapi.status(path)
+    print(code, resp)
+    print(resp.data.fileUri)
+    print("items size=", len(resp.data.items))
+    
+    #read uplaoded file
+    print("\nRead file from server ...")
+    resp, code = fapi.get(path, MY_LOCALE)
+    print(resp, code)
+    
+    #delete file
+    print("\nDelete file ...")
+    resp, code = fapi.delete(path)
+    print(resp, code)
+    
+    
+    
+    

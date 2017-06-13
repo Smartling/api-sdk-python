@@ -19,10 +19,10 @@
 
 #FileApi class implementation
 
-from HttpClient import HttpClient
-from MultipartPostHandler import MultipartPostHandler
-from Constants import Uri, Params, ReqMethod
-from ApiResponse import ApiResponse
+from .HttpClient import HttpClient
+from .MultipartPostHandler import MultipartPostHandler
+from .Constants import Uri, Params, ReqMethod
+from .ApiResponse import ApiResponse
 
 class FileApiBase:
     """ basic class implementing low-level api calls """

@@ -17,11 +17,11 @@
  * limitations under the License.
 '''
 
-from HttpClient import HttpClient
-from ApiResponse import ApiResponse
+from .HttpClient import HttpClient
+from .ApiResponse import ApiResponse
 import time
-from Constants import ReqMethod
-import pdb
+from .Constants import ReqMethod
+
 class AuthClient:
     host = "api.smartling.com"
     authUri = "/auth-api/v2/authenticate"
@@ -34,39 +34,40 @@ class AuthClient:
         self.userSecret = userSecret
         self.accessExpiresAt = 0
         self.refreshExpiresAt = 0
-        
+
     def request(self, uri, body):
         header = {"Content-Type": "application/json"}
+        body = body.encode()
         response_data, status_code = self.httpClient.getHttpResponseAndStatus(ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
         apiResponse = ApiResponse(response_data, status_code)
-        
+
         now = time.time()
         try:
             self.accessToken = apiResponse.data.accessToken
             self.refreshToken = apiResponse.data.refreshToken
             self.accessExpiresAt = now + apiResponse.data.expiresIn - self.timeJitter
             self.refreshExpiresAt = now + apiResponse.data.refreshExpiresIn - self.timeJitter
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             self.accessToken = None
-        
+
     def authenticate(self):
         body = '{"userIdentifier": "%s", "userSecret": "%s"}' % (self.userIdentifier, self.userSecret)
         self.request(self.authUri, body)
-        
+
     def refresh(self):
-        body = '{"refreshToken":"%s"}' % self.refreshToken 
+        body = '{"refreshToken":"%s"}' % self.refreshToken
         self.request(self.refreshUri, body)
-        
+
     def getToken(self):
         if not getattr(self,'accessToken', None):
             self.authenticate()
             return self.accessToken
-        
+
         now = time.time()
         if now >= self.accessExpiresAt:
             if now >= self.refreshExpiresAt:
                self.refresh()
             else:
                 self.authenticate()
-        return self.accessToken 
+        return self.accessToken
