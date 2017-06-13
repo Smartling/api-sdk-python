@@ -19,7 +19,7 @@
 
 #FileApi class implementation
 
-from FileApiBase import FileApiBase
+from .FileApiBase import FileApiBase
 
 
 class SmartlingFileApi(FileApiBase):

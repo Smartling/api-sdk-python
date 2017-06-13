@@ -19,9 +19,9 @@
 
 import sys
 
-isVersion3Python =  sys.version_info[:2] >= (3,0)
+isPython3 =  sys.version_info[:2] >= (3,0)
 
-if isVersion3Python:
+if isPython3:
     import email.generator as mimetools
     import urllib.request as urllib2
     from urllib.parse import urlencode
@@ -47,13 +47,13 @@ class MultipartPostHandler(urllib2.BaseHandler):
     doseq = 1
 
     def ifFileInstance(self, value):
-        if isVersion3Python:
+        if isPython3:
             return isinstance(value, IOBase)
         else:
             return type(value) == file
 
     def http_request(self, request):
-        if isVersion3Python:
+        if isPython3:
             data = request.data
         else:
             data = request.get_data()
@@ -82,7 +82,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 request.add_unredirected_header('Content-Type', contenttype)
                 request.headers["Content-type"] = contenttype
 
-            if isVersion3Python:
+            if isPython3:
                 request.data = data
             else:
                 request.add_data(data)
@@ -90,7 +90,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
 
     def multipart_encode(self, vars, files, boundary=None, buffer=None):
         if boundary is None:
-            if isVersion3Python:
+            if isPython3:
                 boundary = mimetools._make_boundary()
                 boundary = boundary.replace("=", "-")
             else:
@@ -109,12 +109,12 @@ class MultipartPostHandler(urllib2.BaseHandler):
             buffer += 'Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename)
             buffer += 'Content-Type: %s\r\n' % contenttype
             fd.seek(0)
-            if isVersion3Python:
+            if isPython3:
                 buffer = buffer.encode() + b'\r\n' + fd.read() + b'\r\n'
             else:
                 buffer += '\r\n' + fd.read() + '\r\n'
 
-        if isVersion3Python:
+        if isPython3:
             buffer += b'--%b--\r\n\r\n' % boundary.encode()
         else:
             buffer += '--%s--\r\n\r\n' % boundary

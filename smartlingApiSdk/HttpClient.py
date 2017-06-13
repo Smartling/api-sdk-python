@@ -19,9 +19,9 @@
 
 import sys
 
-isVersion3Python =  sys.version_info[:2] >= (3,0)
+isPython3 =  sys.version_info[:2] >= (3,0)
 
-if isVersion3Python:
+if isPython3:
     import ssl
     import urllib.request as urllib2, urllib.error
     HTTPError = urllib.error.HTTPError

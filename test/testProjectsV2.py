@@ -21,7 +21,7 @@ import os
 import sys
 import time
 import zipfile
-import StringIO
+import io
 from datetime import date
 
 lib_path = os.path.abspath('../')
@@ -55,24 +55,24 @@ class testProjectsV2(object):
             proxySettings = None
         self.papi = SmartlingProjectsApiV2(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, proxySettings)
 
-        print "setUp", "OK", "\n\n\n"
+        print("setUp", "OK", "\n\n\n")
 
     def tearDown(self):        
-        print "tearDown", "OK"
+        print("tearDown", "OK")
 
     def testProjects(self):
         if self.MY_ACCOUNT_UID == "CHANGE_ME":
-            print "can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********"
+            print("can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********")
             return
         res, status = self.papi.projects(self.MY_ACCOUNT_UID)
 
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 
-        projects = map(lambda x:x['projectId'], res.data.items)
+        projects = [x['projectId'] for x in res.data.items]
 
         assert_equal(True, self.MY_PROJECT_ID in projects)
-        print "testProjects", "OK"
+        print("testProjects", "OK")
 
     def testProjectDetails(self):
         res, status = self.papi.project_details(self.MY_PROJECT_ID)
@@ -81,5 +81,5 @@ class testProjectsV2(object):
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
         assert_equal(self.MY_PROJECT_ID, res.data.projectId)
 
-        print "testProjectDetails", "OK"
+        print("testProjectDetails", "OK")
 

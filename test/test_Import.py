@@ -62,7 +62,7 @@ class testImport(object):
             proxySettings = None        
         self.fapi = SmartlingFileApi(self.HOST, self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
         self.locale =  os.environ.get('SL_LOCALE', self.SL_LOCALE)
-        timestamp = `time.time()`
+        timestamp = repr(time.time())
         self.uri = self.FILE_NAME + timestamp
         self.doUpload(self.uri)
 
@@ -74,7 +74,7 @@ class testImport(object):
         return self.fapi.upload(uploadData)
 
     def tearDown(self):
-        print self.fapi.delete(self.uri)
+        print(self.fapi.delete(self.uri))
         
     def testImport(self):
         uploadData = UploadData(self.FILE_PATH, self.FILE_NAME, self.FILE_TYPE)
