@@ -27,12 +27,12 @@ from smartlingApiSdk.SmartlingProjectsApiV2 import SmartlingProjectsApiV2
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
-isVersion3Python =  sys.version_info[:2] >= (3,0)
+isPython3 =  sys.version_info[:2] >= (3,0)
 
 def assert_equal(a,b):
     if a != b :
         err = "Assertion Failed: '%s' != '%s'" % (a,b)
-        if not isVersion3Python and type(err) == str:
+        if not isPython3 and type(err) == str:
             err = err.decode('utf-8', 'ignore')
         raise Exception(repr(err))
 

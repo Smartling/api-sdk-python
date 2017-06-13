@@ -21,6 +21,13 @@ import os
 import sys
 import time
 
+isPython3 =  sys.version_info[:2] >= (3,0)
+
+if isPython3:
+    newline = b"\n"
+else:
+    newline = "\n"
+
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
@@ -48,7 +55,7 @@ class testFapi(object):
 
     CALLBACK_URL = "http://google.com/?q=hello"
 
-    CODE_SUCCESS_TOKEN = '"code":"SUCCESS"'
+    SUCCESS_TOKEN = 'SUCCESS'
 
     def setUp(self):
         self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
@@ -63,7 +70,7 @@ class testFapi(object):
             proxySettings = None        
         self.fapi = SmartlingFileApiFactory().getSmartlingTranslationApi(self.MY_API_KEY, self.MY_PROJECT_ID, proxySettings)
         self.locale =  os.environ.get('SL_LOCALE', "ru-RU")
-        timestamp = `time.time()`
+        timestamp = repr(time.time())
         self.uri = self.FILE_NAME + timestamp 
         self.doUpload(self.FILE_NAME, self.uri)
 
@@ -84,55 +91,53 @@ class testFapi(object):
 
     def testFileList(self):
         res, status = self.fapi.list()
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
 
     def testFileStatus(self):
         res, status = self.fapi.status(self.uri, self.locale)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
         
         res, status = self.fapi.status(self.uri16, self.locale)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
 
     def testGetFileFromServer(self):
         res, status = self.fapi.get(self.uri, self.locale)
         lines = open(self.FILE_PATH + self.FILE_NAME, "rb").readlines()
-        assert_equal(len(res.split("\n")), len(lines))
+        assert_equal(len(res.split(newline)), len(lines))
 
         res, status = self.fapi.get(self.uri16, self.locale)
         lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines()
-        assert_equal(len(res.split("\n")), len(lines))
+        assert_equal(len(res.split(newline)), len(lines))
         
     def testGetFileWithTypeFromServer(self):
         res, status = self.fapi.get(self.uri, self.locale, retrievalType='pseudo')
         lines = open(self.FILE_PATH + self.FILE_NAME, "rb").readlines()
-        assert_equal(len(res.split("\n")), len(lines))
+        assert_equal(len(res.split(newline)), len(lines))
         
         res, status = self.fapi.get(self.uri16, self.locale, retrievalType='pseudo')
         lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines()
-        assert_equal(len(res.split("\n")), len(lines))
+        assert_equal(len(res.split(newline)), len(lines))
 
     def testFileDelete(self):
-        res, status = self.fapi.list(uriMask="*"+self.uri)
-        count_old = res.count('"fileUri":')
         res, status = self.fapi.delete(self.uri)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
         
         res, status = self.fapi.delete(self.uri16)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
  
     def testFileRename(self):
         res, status = self.fapi.rename(self.uri, self.FILE_NAME_NEW)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
         
         res, status = self.fapi.rename(self.FILE_NAME_NEW, self.uri)
-        assert_equal(True, res.find(self.CODE_SUCCESS_TOKEN) > 0) 
+        assert_equal(self.SUCCESS_TOKEN, res.code)
         
     def testLastModified(self):
-        resp, status = self.fapi.last_modified(self.uri)
-        assert_equal(True, resp.find(self.CODE_SUCCESS_TOKEN) > 0)
-        assert_equal(True, len(resp.data.items)>0)
+        res, status = self.fapi.last_modified(self.uri)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
+        assert_equal(True, len(res.data.items)>0)
 
-        resp, status = self.fapi.last_modified(self.uri16)
-        assert_equal(True, resp.find(self.CODE_SUCCESS_TOKEN) > 0)
-        assert_equal(True, len(resp.data.items)>0)
+        res, status = self.fapi.last_modified(self.uri16)
+        assert_equal(self.SUCCESS_TOKEN, res.code)
+        assert_equal(True, len(res.data.items)>0)
 

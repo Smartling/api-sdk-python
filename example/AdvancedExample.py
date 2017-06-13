@@ -25,9 +25,9 @@ import io
 from datetime import date
 
 
-isVersion3Python =  sys.version_info[:2] >= (3,0)
+isPython3 =  sys.version_info[:2] >= (3,0)
 
-if isVersion3Python:
+if isPython3:
     newline = b"\n"
 else:
     newline = "\n"
@@ -45,7 +45,7 @@ from smartlingApiSdk.Constants import FileTypes
 def assert_equal(a,b):
     if a != b :
         err = "Assertion Failed: '%s' != '%s'" % (a,b)
-        if not isVersion3Python and type(err) == str:
+        if not isPython3 and type(err) == str:
             err = err.decode('utf-8', 'ignore')
         raise Exception(repr(err))
 
@@ -161,7 +161,7 @@ class testFapiV2(object):
         res, status = self.fapi.get_multiple_locales([self.uri,self.uri16], [self.MY_LOCALE])
         assert_equal(200, status)
 
-        if isVersion3Python:
+        if isPython3:
             zfile = zipfile.ZipFile(io.BytesIO(res))
         else:
             zfile = zipfile.ZipFile(StringIO.StringIO(res))
@@ -178,7 +178,7 @@ class testFapiV2(object):
         assert_equal(200, status)
 
 
-        if isVersion3Python:
+        if isPython3:
             zfile = zipfile.ZipFile(io.BytesIO(res))
         else:
             zfile = zipfile.ZipFile(StringIO.StringIO(res))
