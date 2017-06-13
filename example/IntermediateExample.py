@@ -49,7 +49,7 @@ class SmartlingApiExample:
         self.new_name = new_name
         
     def printMarker(self, caption):
-        print "--" + caption + "-" * 40
+        print("--" + caption + "-" * 40)
 
     def test_import(self, name_to_import):
         """ this method tests `import` command """
@@ -59,14 +59,14 @@ class SmartlingApiExample:
         path = FILE_PATH + self.file_name
         resp, code = self.fapi.upload(path, self.file_type)
         if 200!=code:
-            raise "failed"
+            raise Exception("failed")
    
-        print resp, code
+        print(resp, code)
     
         self.printMarker("files list")
         #list all files to ensure upload worked
         resp, code = self.fapi.list()
-        print resp, code
+        print(resp, code)
 
         self.printMarker("importing uploaded")
         #set correct uri/name for file to be imported
@@ -76,21 +76,20 @@ class SmartlingApiExample:
         resp, code = self.fapi.import_call(path, path_to_import, 
                     self.file_type, self.MY_LOCALE, 
                      translationState="PUBLISHED")
-        print resp, code
+        print(resp, code)
 
         if 200!=code:
-            raise "failed"
+            raise Exception("failed")
 
         #perform `last_modified` command
         self.printMarker("last modified")
         resp, code = self.fapi.last_modified(path, self.MY_LOCALE)
-        print "resp.code=", resp.code
-        print "resp.data", resp.data
+        print(resp, code)
         
         self.printMarker("delete from server goes here")
         #delete test file imported in the beginning of test
         resp, code = self.fapi.delete(path)
-        print resp, code
+        print(resp, code)
 
     def test(self):
         """ simple illustration for set of API commands: upload, list, status, get, rename, delete """
@@ -98,33 +97,33 @@ class SmartlingApiExample:
         path = FILE_PATH + self.file_name
         directives={"placeholder_format_custom" : "\[.+?\]"}
         resp, code = self.fapi.upload(path, self.file_type, authorize="true", callbackUrl=CALLBACK_URL, directives=directives)
-        print resp, code
+        print(resp, code)
         if 200!=code:
-            raise "failed"
+            raise Exception("failed")
 
         self.printMarker("files list")
         resp, code = self.fapi.list()
-        print resp, code
+        print(resp, code)
 
         self.printMarker("file status")
         resp, code = self.fapi.status(path)
-        print resp, code
+        print(resp, code)
 
         self.printMarker("file from server goes here")
         resp, code = self.fapi.get(path, self.MY_LOCALE)
-        print resp, code
+        print(resp, code)
 
         self.printMarker("renaming file")
         resp, code = self.fapi.rename(path, self.new_name)
-        print resp, code
+        print(resp, code)
 
         self.printMarker("delete from server goes here")
         resp, code = self.fapi.delete(self.new_name)
-        print resp, code
+        print(resp, code)
 
         self.printMarker("doing list again to see if it's deleted")
         resp, code = self.fapi.list()
-        print resp, code
+        print(resp, code)
 
 
 FILE_NAME = "java.properties"
