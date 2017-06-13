@@ -27,12 +27,14 @@ from smartlingApiSdk.SmartlingProjectsApiV2 import SmartlingProjectsApiV2
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
+isVersion3Python =  sys.version_info[:2] >= (3,0)
+
 def assert_equal(a,b):
     if a != b :
         err = "Assertion Failed: '%s' != '%s'" % (a,b)
-        if type(err) == unicode:
+        if not isVersion3Python and type(err) == str:
             err = err.decode('utf-8', 'ignore')
-        raise `err`
+        raise Exception(repr(err))
 
 class testProjetcsV2(object):
 
@@ -54,26 +56,26 @@ class testProjetcsV2(object):
             proxySettings = None        
         self.papi = SmartlingProjectsApiV2(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, proxySettings)
         
-        print "setUp", "OK", "\n\n\n"
+        print("setUp", "OK", "\n\n\n")
 
 
     def tearDown(self):
-        print "tearDown", "OK"
+        print("tearDown", "OK")
 
 
     def testProjects(self, projectIdToCheck):
         if self.MY_ACCOUNT_UID == "CHANGE_ME":
-            print "can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********"
+            print("can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********")
             return
         res, status = self.papi.projects(self.MY_ACCOUNT_UID)
         
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
         
-        projects = map(lambda x:x['projectId'], res.data.items)
+        projects = [x['projectId'] for x in res.data.items]
 
         assert_equal(True, projectIdToCheck in projects)
-        print "testProjects", "OK"
+        print("testProjects", "OK")
 
     def testProjectDetails(self, projectId):
         res, status = self.papi.project_details(projectId)
@@ -82,7 +84,7 @@ class testProjetcsV2(object):
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
         assert_equal(projectId, res.data.projectId)
         
-        print "testProjectDetails", "OK"
+        print("testProjectDetails", "OK")
         
         
 t = testProjetcsV2()
