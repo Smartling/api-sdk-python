@@ -52,7 +52,12 @@ fapi = SmartlingFileApiV2( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, pr
 
 print("\nUploading ...")
 path = FILE_PATH + FILE_NAME
-resp, code = fapi.upload(path, FILE_TYPE, authorize=True)
+
+customFileUri = "/simple/test"
+#parameter `fileUri` is optional, if not set - value of `path` is be used as fiel uri here and
+#should be used in all requests that need file uri
+#like fapi.status, fapi.get, fapi.delete
+resp, code = fapi.upload(path, FILE_TYPE, fileUri=customFileUri, authorize=True)
 print(resp, code)
 if 200!=code:
     raise Exception("failed")
@@ -65,19 +70,19 @@ print(code, resp)
 
 #check file status
 print("\nFile status ...")
-resp, code = fapi.status(path)
+resp, code = fapi.status(customFileUri)
 print(code, resp)
 print(resp.data.fileUri)
 print("items size=", len(resp.data.items))
 
 #read uplaoded file
 print("\nRead file from server ...")
-resp, code = fapi.get(path, MY_LOCALE)
+resp, code = fapi.get(customFileUri, MY_LOCALE)
 print(resp, code)
 
 #delete file
 print("\nDelete file ...")
-resp, code = fapi.delete(path)
+resp, code = fapi.delete(customFileUri)
 print(resp, code)
     
     
