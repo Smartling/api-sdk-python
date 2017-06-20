@@ -18,7 +18,7 @@
 '''
 
 from setuptools import setup
-from .smartlingApiSdk.version import version
+from smartlingApiSdk.version import version
 
 setup(
     name="SmartlingApiSdk",

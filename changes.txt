@@ -1,3 +1,6 @@
+June 20, 2017 - 2.2.2
+    - fixed auto version create for pypi upload
+
 June 20, 2017 - 2.2.1
     - added directive client_lib_id to upload api call parameters
 
