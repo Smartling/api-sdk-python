@@ -25,6 +25,8 @@ from .Constants import Params, ReqMethod
 from .ApiResponse import ApiResponse
 from .AuthClient import AuthClient
 from .Constants import FileTypes
+from .version import version
+from .SmartlingDirective import SmartlingDirective
 
 """
 Upload File - /files-api/v2/projects/{projectId}/file (POST)
@@ -52,6 +54,7 @@ class ApiV2:
     """ basic class implementing low-level api calls """
     host = 'api.smartling.com'
     response_as_string = False
+    clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
     def __init__(self, userIdentifier, userSecret, proxySettings=None):
         self.userIdentifier = userIdentifier
@@ -109,4 +112,8 @@ class ApiV2:
 
     def processDirectives(self, params, directives):
         for name, value in list(directives.items()):
-           params["smartling." + name] = value
+           params[SmartlingDirective.sl_prefix + name] = value
+
+    def addLibIdDirective(self, params):
+        name = "client_lib_id"
+        params[SmartlingDirective.sl_prefix + name] = self.clientUid

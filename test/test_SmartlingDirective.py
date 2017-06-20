@@ -24,6 +24,9 @@ lib_path = os.path.abspath('../')
 sys.path.append(lib_path)
 
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
+from smartlingApiSdk.version import version
+from smartlingApiSdk.ApiV2 import ApiV2
+
 from nose.tools import assert_equal
 from nose.tools import raises
 
@@ -55,3 +58,11 @@ class test_SmartlingDirective(object):
 
         d3 = SmartlingDirective("smartling.placeholder_format_custom smartling.none", "%s")
         assert_equal(d3.name, "placeholder_format_custom smartling.none")
+
+    def test_lib_id_directive(self):
+        apiV2 = ApiV2("1", "2", "3")
+        apiV2.clientUid = "test_test"
+        params = {}
+        apiV2.addLibIdDirective(params)
+        assert_equal(True, SmartlingDirective.sl_prefix + 'client_lib_id' in params)
+        assert_equal(params[SmartlingDirective.sl_prefix + 'client_lib_id'], "test_test")

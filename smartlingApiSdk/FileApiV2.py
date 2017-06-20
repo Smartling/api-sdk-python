@@ -102,6 +102,7 @@ class FileApiV2(ApiV2):
         for k,v in list(kw.items()):
             params[k] = v
 
+        self.addLibIdDirective(params)
         self.processDirectives(params, directives)
 
         url = self.urlHelper.getUrl(self.urlHelper.UPLOAD)

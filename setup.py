@@ -18,10 +18,11 @@
 '''
 
 from setuptools import setup
+from .smartlingApiSdk.version import version
 
 setup(
     name="SmartlingApiSdk",
-    version = "2.0.4",
+    version = version,
     author="Smartling, Inc.",
     author_email="aartamonov@smartling.com",
     description="Smartling python library for file translations",
@@ -34,5 +35,4 @@ setup(
     package_data = {
         '': ['*.properties', '*.xml'],
     },
-   
 )
