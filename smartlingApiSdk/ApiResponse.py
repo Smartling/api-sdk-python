@@ -54,7 +54,7 @@ class ApiResponse:
     def __getattr__(self, key):
         """ provides string object methods to be available for response to behave like a string """
         if hasattr(self.response_dict, key):
-            return getattr(self.response_string, key)
+            return getattr(self.response_dict, key)
 
         try:
             return getattr(self, key)
