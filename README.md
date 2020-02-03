@@ -73,7 +73,7 @@ Greg Jones
 Copyright and license
 ---------------------
 
-Copyright 2012-2018 Smartling, Inc.
+Copyright 2012-2020 Smartling, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this work except in compliance with the License.
