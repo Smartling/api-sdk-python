@@ -1,3 +1,7 @@
+Feb 03, 2020 - 2.2.3
+    - fix in ApiClient
+    - HttpClient support for python3 versions < 3.4.3
+
 June 20, 2017 - 2.2.2
     - fixed auto version create for pypi upload
 

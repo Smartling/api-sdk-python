@@ -1,24 +1,32 @@
-[Smartling Translation API](https://docs.smartling.com/display/docs/Smartling+Translation+API)
+[Smartling File Translation API](https://developer.smartling.com/docs/sdks-2)
 =================
 
-This repository contains the Python sdk for accessing the Smartling Translation API.
+This repository contains the Python SDK for accessing the Smartling Translation API.
 
-The Smartling Translation API allows developers to seamlessly internationalize their website by automating the translation and integration of their site content.
-Developers can upload resource files and download the translated file(s) in a locale of their choosing. There are options to allow for professional translation, community translation and machine translation.
+Smartling is cloud-based software and translation services solution prioritizes process automation and intelligent collaboration.
+The Smartling File Translation API allows developers to seamlessly internationalize their website 
+or application by automating the translation and integration of content.
+Developers can upload resource files and download the translated file(s) in a locale of their choosing.
+There are options allowing to use professional translation, community translation or machine translation.
 
-For a full description of the Smartling Translation API, please read the docs at: https://docs.smartling.com/display/docs/Smartling+Translation+API
+For a full description of the Smartling File Translation API, please read File API section of the docs at: https://developer.smartling.com/docs/sdks-2 
 
 
 Quick start
 -----------
 
-Clone the repo, `git clone git@github.com:Smartling/api-sdk-python.git`.
-Use examples in ./example directory to see how to work with SDK.
+Clone the repo: `git clone git@github.com:Smartling/api-sdk-python.git`.
+You may start with examples in ./example directory.
 There are 4 examples:
-SimpleExample.py - basic file API SDK operartions
-IntermediateExample.py - a bit more advanced file API example: introduces rename, import and SmartlingDirectives
-AdvancedExample.py - calls every file API call and tests response for a proper value
-ProjectsExample.py - calls projects API and tests response for a proper value
+
+SimpleExample.py - contains basic file API SDK operartions
+
+IntermediateExample.py - introduces a bit more advanced file API example: rename, import and SmartlingDirectives
+
+AdvancedExample.py - calls every file API call and tests response values
+
+ProjectsExample.py - calls projects API and tests response values
+
 
 Versioning
 ----------
@@ -65,7 +73,7 @@ Greg Jones
 Copyright and license
 ---------------------
 
-Copyright 2012 Smartling, Inc.
+Copyright 2012-2020 Smartling, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this work except in compliance with the License.

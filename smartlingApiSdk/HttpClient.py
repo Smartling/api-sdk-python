@@ -79,7 +79,7 @@ class HttpClient:
         req = urllib2.Request(url, params, headers=headers)
         req.get_method = lambda: method
 
-        if sys.version_info[:2] >= (3,0):
+        if sys.version_info[:2] >= (3,4,3):
             context = ssl.SSLContext(ssl.PROTOCOL_TLS)
             context.verify_mode = ssl.CERT_NONE
         else:
@@ -87,14 +87,22 @@ class HttpClient:
 
         try:
             if requestBody:
-                response = urllib2.urlopen(req, requestBody, context=context)
+                if context:
+                    response = urllib2.urlopen(req, requestBody, context=context)
+                else:
+                    response = urllib2.urlopen(req, requestBody)
             else:
                 if handler:
                     multipartHandler = MultipartPostHandler();
                     req = multipartHandler.http_request(req)
                 else :
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req, context=context)
+
+                if context:
+                    response = urllib2.urlopen(req, context=context)
+                else:
+                    response = urllib2.urlopen(req)
+
         except HTTPError as e:
             response = e
         if sys.version_info[:2] >= (2,6):
