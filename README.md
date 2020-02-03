@@ -17,6 +17,7 @@ Quick start
 
 Clone the repo: `git clone git@github.com:Smartling/api-sdk-python.git`.
 You may start with examples in ./example directory.
+Set your credentials as described in smartlingApiSdk/Credentials.py file.
 There are 4 examples:
 
 SimpleExample.py - contains basic file API SDK operartions
