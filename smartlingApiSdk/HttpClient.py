@@ -82,8 +82,6 @@ class HttpClient:
         if sys.version_info[:2] >= (3,0):
             context = ssl.SSLContext(ssl.PROTOCOL_TLS)
             context.verify_mode = ssl.CERT_NONE
-        else:
-            context = None
 
         try:
             if requestBody:
@@ -94,7 +92,13 @@ class HttpClient:
                     req = multipartHandler.http_request(req)
                 else :
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req, context=context)
+
+                skip_context = (sys.version_info[0] == 2 and sys.version_info < (2,7,9)) or sys.version_info < (3,4,3)
+
+                if skip_context:
+                    response = urllib2.urlopen(req)
+                else:
+                    response = urllib2.urlopen(req, context=context)
         except HTTPError as e:
             response = e
         if sys.version_info[:2] >= (2,6):
