@@ -118,6 +118,10 @@ class FileApiBase:
         kw[Params.LOCALE] = locale
         self.addApiKeys(kw)
 
+        if (uploadData.directives):
+            for index, directive in enumerate(uploadData.directives):
+                kw[directive.sl_prefix + directive.name] = directive.value
+
         return self.uploadMultipart(Uri.IMPORT, kw)
 
     def commandStatus(self, fileUri, locale, **kw):
