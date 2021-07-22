@@ -136,7 +136,7 @@ class testFapiV2(object):
         assert_equal(200, status)
         
         resp_lines_count = len(res.split(newline))
-        file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
+        file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").read().split(newline) )
         assert_equal(resp_lines_count, file_lines_count)
         
         print("testGet", "OK")
@@ -145,7 +145,7 @@ class testFapiV2(object):
         assert_equal(200, status)
 
         resp_lines_count = len(res.split(newline))
-        file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines() )
+        file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME_16, "rb").read().split(newline) )
         assert_equal(resp_lines_count, file_lines_count)
         print("testGet Utf16", "OK")
         

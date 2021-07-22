@@ -59,9 +59,11 @@ class testFapi(object):
 
     def setUp(self):
         self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
+        if self.MY_API_KEY == "YOUR_API_KEY":
+            raise Exception(noKeymessage)
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         if self.MY_PROJECT_ID == "YOUR_PROJECT_ID":
-            raise noKeymessage 
+            raise Exception(noKeymessage)
         
         useProxy = False
         if useProxy :
@@ -102,20 +104,20 @@ class testFapi(object):
 
     def testGetFileFromServer(self):
         res, status = self.fapi.get(self.uri, self.locale)
-        lines = open(self.FILE_PATH + self.FILE_NAME, "rb").readlines()
+        lines = open(self.FILE_PATH + self.FILE_NAME, "rb").read().split(newline)
         assert_equal(len(res.split(newline)), len(lines))
 
         res, status = self.fapi.get(self.uri16, self.locale)
-        lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines()
+        lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").read().split(newline)
         assert_equal(len(res.split(newline)), len(lines))
         
     def testGetFileWithTypeFromServer(self):
         res, status = self.fapi.get(self.uri, self.locale, retrievalType='pseudo')
-        lines = open(self.FILE_PATH + self.FILE_NAME, "rb").readlines()
+        lines = open(self.FILE_PATH + self.FILE_NAME, "rb").read().split(newline)
         assert_equal(len(res.split(newline)), len(lines))
         
         res, status = self.fapi.get(self.uri16, self.locale, retrievalType='pseudo')
-        lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").readlines()
+        lines = open(self.FILE_PATH + self.FILE_NAME_16, "rb").read().split(newline)
         assert_equal(len(res.split(newline)), len(lines))
 
     def testFileDelete(self):
