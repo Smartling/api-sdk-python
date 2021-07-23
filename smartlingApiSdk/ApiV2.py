@@ -19,15 +19,12 @@
 
 #FileApi class implementation
 
-from .HttpClient import HttpClient
-from .MultipartPostHandler import MultipartPostHandler
-from .Constants import Params, ReqMethod
-from .ApiResponse import ApiResponse
 from .AuthClient import AuthClient
 from .Constants import FileTypes
-from .version import version
-from .SmartlingDirective import SmartlingDirective
+from .Constants import Params
 from .FileApiBase import FileApiBase
+from .SmartlingDirective import SmartlingDirective
+from .version import version
 
 """
 Upload File - /files-api/v2/projects/{projectId}/file (POST)

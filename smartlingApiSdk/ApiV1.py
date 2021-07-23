@@ -19,10 +19,7 @@
 
 #FileApi V1 class implementation
 
-from .HttpClient import HttpClient
-from .MultipartPostHandler import MultipartPostHandler
 from .Constants import Uri, Params, ReqMethod
-from .ApiResponse import ApiResponse
 from .FileApiBase import FileApiBase
 
 class ApiV1(FileApiBase):
