@@ -24,7 +24,7 @@ lib_path = os.path.abspath('../')
 sys.path.append(lib_path)
 
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
-from smartlingApiSdk.FileApiBase import FileApiBase
+from smartlingApiSdk.ObsoleteApiV1 import ObsoleteApiV1
 from smartlingApiSdk.UploadData import UploadData
 from smartlingApiSdk.Constants import Params
 from nose.tools import assert_equal
@@ -37,7 +37,7 @@ class test_UploadData(object):
     def test_commandUpload(self):
         ud = UploadData("path", "name", "type")
 
-        api = FileApiBase("host", "apiKey", "projectId")
+        api = ObsoleteApiV1("host", "apiKey", "projectId")
         api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
 
@@ -52,7 +52,7 @@ class test_UploadData(object):
         ud.setApproveContent("true")
         ud.setCallbackUrl("smartling.com")
 
-        api = FileApiBase("host", "apiKey", "projectId")
+        api = ObsoleteApiV1("host", "apiKey", "projectId")
         api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
 
@@ -67,7 +67,7 @@ class test_UploadData(object):
         ud.addDirective(SmartlingDirective("placeholder_format_custom", "\[.+?\]"))
         ud.addDirective(SmartlingDirective("placeholder_format", "IOS"))
 
-        api = FileApiBase("host", "apiKey", "projectId")
+        api = ObsoleteApiV1("host", "apiKey", "projectId")
         api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
 

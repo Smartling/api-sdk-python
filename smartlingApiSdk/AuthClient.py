@@ -26,7 +26,7 @@ class AuthClient:
     host = "api.smartling.com"
     authUri = "/auth-api/v2/authenticate"
     refreshUri = "/auth-api/v2/authenticate/refresh"
-    timeJitter = 5 #seconds off server expires time
+    timeJitter = 5 #seconds off server expiration time
 
     def __init__(self, userIdentifier, userSecret, proxySettings=None):
         self.httpClient = HttpClient(self.host, proxySettings)

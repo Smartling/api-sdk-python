@@ -19,11 +19,12 @@
 
 #FileApi class implementation
 
-from .FileApiBase import FileApiBase
+from .ObsoleteApiV1 import ObsoleteApiV1
 
 
-class SmartlingFileApi(FileApiBase):
-    """ Wrapper class providing access to all file API commands, all methods below represent API commands.
+class ObsoleteSmartlingFileApi(ObsoleteApiV1):
+    """ Is obsolete, new API calls are missing here, please use ApiV2 !
+        Wrapper class providing access to all file API commands, all methods below represent API commands.
         Each command returns tuple = (response, status_code) 
         where response is ApiResponse object and status code = HTTP response status code
         
@@ -46,7 +47,7 @@ class SmartlingFileApi(FileApiBase):
         """
 
     def __init__(self, host, apiKey, projectId, proxySettings=None):
-        FileApiBase.__init__(self, host, apiKey, projectId, proxySettings)
+        ObsoleteApiV1.__init__(self, host, apiKey, projectId, proxySettings)
 
     def upload(self, uploadData):
         """ implements `upload` api command
@@ -104,4 +105,4 @@ class SmartlingFileApiFactory:
     api_host = 'api.smartling.com'
 
     def getSmartlingTranslationApi(self, apiKey, projectId, proxySettings=None):
-        return SmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
+        return ObsoleteSmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
