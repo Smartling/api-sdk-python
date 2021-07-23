@@ -19,10 +19,10 @@
 
 #FileApi class implementation
 
-from .FileApiBase import FileApiBase
+from .ApiV1 import ApiV1
 
 
-class SmartlingFileApi(FileApiBase):
+class SmartlingFileApi(ApiV1):
     """ Wrapper class providing access to all file API commands, all methods below represent API commands.
         Each command returns tuple = (response, status_code) 
         where response is ApiResponse object and status code = HTTP response status code
@@ -46,7 +46,7 @@ class SmartlingFileApi(FileApiBase):
         """
 
     def __init__(self, host, apiKey, projectId, proxySettings=None):
-        FileApiBase.__init__(self, host, apiKey, projectId, proxySettings)
+        ApiV1.__init__(self, host, apiKey, projectId, proxySettings)
 
     def upload(self, uploadData):
         """ implements `upload` api command

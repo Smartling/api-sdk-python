@@ -27,6 +27,7 @@ from .AuthClient import AuthClient
 from .Constants import FileTypes
 from .version import version
 from .SmartlingDirective import SmartlingDirective
+from .FileApiBase import FileApiBase
 
 """
 Upload File - /files-api/v2/projects/{projectId}/file (POST)
@@ -50,50 +51,20 @@ Unauthorize - /files-api/v2/projects/{projectId}/file/authorized-locales (DELETE
 Get Translations - /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations (POST)
 """
 
-class ApiV2:
-    """ basic class implementing low-level api calls """
+class ApiV2(FileApiBase):
+    """ Api v2 basic functionality """
     host = 'api.smartling.com'
-    response_as_string = False
     clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
     def __init__(self, userIdentifier, userSecret, proxySettings=None):
-        self.userIdentifier = userIdentifier
-        self.userSecret = userSecret
-        self.proxySettings = proxySettings
-        self.httpClient = HttpClient(self.host, proxySettings)
+        FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings)
         self.authClient = AuthClient(userIdentifier, userSecret, proxySettings)
 
-    def uploadMultipart(self, uri, params, response_as_string=False):
-        if Params.FILE_PATH in params:
-            params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
-            del params[Params.FILE_PATH]  # no need in extra field in POST
-
-        authHeader = self.getAuthHeader()  
-        response_data, status_code = self.getHttpResponseAndStatus(ReqMethod.POST ,uri, params, MultipartPostHandler, extraHeaders = authHeader)
-        response_data = response_data.strip()
-        if self.response_as_string or response_as_string:
-            return response_data, status_code
-        return ApiResponse(response_data, status_code), status_code
-
-    def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = None):
-        return self.httpClient.getHttpResponseAndStatus(method, uri, params, handler, extraHeaders = extraHeaders)
-
-    def getAuthHeader(self):
+    def addAuth(self, params):
         token = self.authClient.getToken()
         if token is None:
             raise Exception("Error getting token, check you credentials")
-
         return {"Authorization" : "Bearer "+ token} 
-
-    def command_raw(self, method, uri, params):
-        authHeader = self.getAuthHeader()
-        return self.getHttpResponseAndStatus(method, uri, params, extraHeaders = authHeader)
-
-    def command(self, method, uri, params):
-        data, code = self.command_raw(method, uri, params)
-        if self.response_as_string:
-            return data, code
-        return  ApiResponse(data, code), code
 
     def validateFileTypes(self, kw):
         fileTypes = kw.get("fileTypes",[])
