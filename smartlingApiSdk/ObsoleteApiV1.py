@@ -22,8 +22,8 @@
 from .Constants import Uri, Params, ReqMethod
 from .FileApiBase import FileApiBase
 
-class ApiV1(FileApiBase):
-    """ Api v1 basic functionality """
+class ObsoleteApiV1(FileApiBase):
+    """ Api v1 basic functionality, is obsolete, new API calls are missing here, please use ApiV2 """
 
     def commandUpload(self, uploadData):
         params = {
