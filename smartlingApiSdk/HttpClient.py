@@ -45,9 +45,60 @@ class HttpClient:
        self.proxySettings = proxySettings
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = {}, requestBody=""):
+        self.installOpenerWithProxy(handler)
+        if handler:
+            prarms = self.encodeListParams(params)
+        else:
+            params = self.encodeParametersAsString(params)
+
+        headers = {}
+        for k,v in list(self.headers.items())+list(extraHeaders.items()):
+            headers[k] = v
+
+        url = self.protocol + self.host + uri
+        if method in (ReqMethod.GET, ReqMethod.DELETE) and params: url += "?" + params
+        req = urllib2.Request(url, params, headers=headers)
+        req.get_method = lambda: method
+
+        context = self.getSslContext()
+
+        try:
+            if requestBody:
+                response = urllib2.urlopen(req, requestBody, context=context)
+            else:
+                if handler:
+                    multipartHandler = MultipartPostHandler();
+                    req = multipartHandler.http_request(req)
+                else:
+                    req.data = req.data.encode()
+                response = urllib2.urlopen(req, context=context)
+        except HTTPError as e:
+            response = e
+
+        if sys.version_info[:2] >= (2,6):
+            status_code = response.getcode()
+        else:
+            status_code = response.code
+
+        response_data = response.read()
+        if 200!=status_code:
+            print("Non 200 response:",url, status_code, "response=", response_data)
+        return response_data, status_code
+
+    def getSslContext(self):
+        if sys.version_info[:2] >= (3, 4, 3):
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context.verify_mode = ssl.CERT_NONE
+        else:
+            context = None
+        return context
+
+    def installOpenerWithProxy(self, handler):
         if self.proxySettings:
             if self.proxySettings.username:
-                proxy_str = 'http://%s:%s@%s:%s' % (self.proxySettings.username, self.proxySettings.passwd, self.proxySettings.host, self.proxySettings.port)
+                proxy_str = 'http://%s:%s@%s:%s' % (
+                self.proxySettings.username, self.proxySettings.passwd, self.proxySettings.host,
+                self.proxySettings.port)
             else:
                 proxy_str = 'http://%s:%s' % (self.proxySettings.host, self.proxySettings.port)
 
@@ -59,61 +110,6 @@ class HttpClient:
         elif handler:
             opener = urllib2.build_opener(MultipartPostHandler)
             urllib2.install_opener(opener)
-
-
-
-        if not handler:
-            params = self.encodeParametersAsString(params)
-        else:
-            prarms = self.encodeListParams(params)
-
-        headers = {}
-        for k,v in list(self.headers.items()):
-            headers[k] = v
-
-        for k,v in list(extraHeaders.items()):
-            headers[k] = v
-
-        url = self.protocol + self.host + uri
-        if method in (ReqMethod.GET, ReqMethod.DELETE) and params: url += "?" + params
-        req = urllib2.Request(url, params, headers=headers)
-        req.get_method = lambda: method
-
-        if sys.version_info[:2] >= (3,4,3):
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-            context.verify_mode = ssl.CERT_NONE
-        else:
-            context = None
-
-        try:
-            if requestBody:
-                if context:
-                    response = urllib2.urlopen(req, requestBody, context=context)
-                else:
-                    response = urllib2.urlopen(req, requestBody)
-            else:
-                if handler:
-                    multipartHandler = MultipartPostHandler();
-                    req = multipartHandler.http_request(req)
-                else :
-                    req.data = req.data.encode()
-
-                if context:
-                    response = urllib2.urlopen(req, context=context)
-                else:
-                    response = urllib2.urlopen(req)
-
-        except HTTPError as e:
-            response = e
-        if sys.version_info[:2] >= (2,6):
-            status_code = response.getcode()
-        else:
-            status_code = response.code
-
-        response_data = response.read()
-        if 200!=status_code:
-            print("Non 200 response:",url, status_code, "response=", response_data)
-        return response_data, status_code
 
     def encodeParametersAsString(self, params):
         #processes lits parameters separately i.e. {key:[v1, v2]} is encoded as 'key[]=v1&key[]=v2'
