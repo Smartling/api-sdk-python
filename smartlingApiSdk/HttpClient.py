@@ -18,6 +18,7 @@
 '''
 
 import sys
+import ssl
 
 isPython3 =  sys.version_info[:2] >= (3,0)
 
@@ -60,20 +61,23 @@ class HttpClient:
         req = urllib2.Request(url, params, headers=headers)
         req.get_method = lambda: method
 
-        context = self.getSslContext()
-
         try:
             if requestBody:
-                response = urllib2.urlopen(req, requestBody, context=context)
+                response = urllib2.urlopen(req, requestBody)
             else:
                 if handler:
                     multipartHandler = MultipartPostHandler();
                     req = multipartHandler.http_request(req)
                 else:
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req, context=context)
+                response = urllib2.urlopen(req)
         except HTTPError as e:
             response = e
+
+        except Exception as e:
+            if type(getattr(e, "reason", None)) == ssl.SSLCertVerificationError:
+                raise Exception("\nSome python3 versions require installation of local ssl certificate!\nuse command:\npip install certifi\nor on macos run command:\nopen /Applications/Python*/Install\ Certificates.command")
+            raise e
 
         if sys.version_info[:2] >= (2,6):
             status_code = response.getcode()
@@ -84,14 +88,6 @@ class HttpClient:
         if 200!=status_code:
             print("Non 200 response:",url, status_code, "response=", response_data)
         return response_data, status_code
-
-    def getSslContext(self):
-        if sys.version_info[:2] >= (3, 4, 3):
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-            context.verify_mode = ssl.CERT_NONE
-        else:
-            context = None
-        return context
 
     def installOpenerWithProxy(self, handler):
         if self.proxySettings:

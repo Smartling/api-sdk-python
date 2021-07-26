@@ -52,7 +52,8 @@ class MultipartPostHandler(urllib2.BaseHandler):
             data = request.data
         else:
             data = request.get_data()
-        if data is not None and type(data) != str:
+
+        if data is not None and type(data) != str and type(data) != bytes:
             v_files = []
             v_vars = []
             try:
