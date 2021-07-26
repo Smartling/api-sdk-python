@@ -33,11 +33,6 @@ else:
 import mimetypes
 from io import IOBase
 
-class Callable:
-    def __init__(self, anycallable):
-        self.__call__ = anycallable
-
-
 class MultipartPostHandler(urllib2.BaseHandler):
     """ handler for multipart HTTP POST, helper object to provide POST functionality """
 
@@ -57,7 +52,8 @@ class MultipartPostHandler(urllib2.BaseHandler):
             data = request.data
         else:
             data = request.get_data()
-        if data is not None and type(data) != str:
+
+        if data is not None and type(data) != str and type(data) != bytes:
             v_files = []
             v_vars = []
             try:
@@ -73,7 +69,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
             if len(v_files) == 0:
                 data = urlencode(v_vars, self.doseq)
             else:
-                boundary, data = self.multipart_encode(v_vars, v_files)
+                boundary, data = self.multipartEncode(v_vars, v_files)
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
 
                 if(request.has_header('Content-Type')
@@ -88,16 +84,10 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 request.add_data(data)
         return request
 
-    def multipart_encode(self, vars, files, boundary=None, buffer=None):
-        if boundary is None:
-            if isPython3:
-                boundary = mimetools._make_boundary()
-                boundary = boundary.replace("=", "-")
-            else:
-                boundary = mimetools.choose_boundary()
+    def multipartEncode(self, vars, files):
+        boundary = self.createBoundary()
 
-        if buffer is None:
-            buffer = ''
+        buffer = ''
         for(key, value) in vars:
             buffer += '--%s\r\n' % boundary
             buffer += 'Content-Disposition: form-data; name="%s"' % key
@@ -119,5 +109,13 @@ class MultipartPostHandler(urllib2.BaseHandler):
         else:
             buffer += '--%s--\r\n\r\n' % boundary
         return boundary, buffer
+
+    def createBoundary(self):
+        if isPython3:
+            boundary = mimetools._make_boundary()
+            boundary = boundary.replace("=", "-")
+        else:
+            boundary = mimetools.choose_boundary()
+        return boundary
 
     https_request = http_request
