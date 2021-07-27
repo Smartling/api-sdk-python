@@ -23,6 +23,8 @@ from .HttpClient import HttpClient
 from .MultipartPostHandler import MultipartPostHandler
 from .Constants import Uri, Params, ReqMethod
 from .ApiResponse import ApiResponse
+from .Logger import Logger
+import sys
 
 class FileApiBase:
     """ basic class implementing low-level api calls """
@@ -34,6 +36,9 @@ class FileApiBase:
         self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings)
+
+        logger = Logger()
+        sys.stdout = logger
 
     def addAuth(self, params):
         params[Params.API_KEY] = self.apiKey

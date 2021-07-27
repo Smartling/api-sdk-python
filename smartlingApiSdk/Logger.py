@@ -1,0 +1,56 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
+''' Copyright 2012-2021 Smartling, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License in the LICENSE file, or at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+'''
+
+import sys
+import logging
+
+isPython3 =  sys.version_info[:2] >= (3,0)
+
+class Logger(object):
+    collected = []
+    def __init__(self):
+        logfile = '/tmp/api-sdk-python.log'
+        # Define the log format
+        log_format = (
+            '[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
+
+        logging.basicConfig(filename=logfile, filemode='a', format=log_format, level=logging.DEBUG)
+        self.stdout_write = sys.stdout.write
+        self.logger = logging.getLogger("sdk-python")
+
+    def write(self, message):
+        self.stdout_write(message)
+
+        has_newline = '\n' in message
+        if message.startswith("\n"): message = message[1:]
+        if not message: return
+
+        if isPython3:
+            self.collected.append(message)
+            if not has_newline:
+                return
+            message = ''.join(self.collected)
+            self.collected = []
+
+        self.logger.info(message)
+
+    def flush(self):
+        if self.collected:
+            message = ''.join(self.collected)
+            self.logger.info(message)
