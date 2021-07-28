@@ -19,27 +19,33 @@
 
 import sys
 import logging
+import threading
 
 isPython3 =  sys.version_info[:2] >= (3,0)
 
 class Logger(object):
     collected = []
-    def __init__(self):
+    def __init__(self, name, loglevel):
         logfile = '/tmp/api-sdk-python.log'
-        # Define the log format
-        log_format = (
-            '[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
+        log_format = ('[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
 
         logging.basicConfig(filename=logfile, filemode='a', format=log_format, level=logging.DEBUG)
         self.stdout_write = sys.stdout.write
-        self.logger = logging.getLogger("sdk-python")
+        self.loglevel = loglevel
+        name = self.addThreadName(name)
+        self.logger = logging.getLogger(name)
+
+    def addThreadName(self, name):
+        thread_name = threading.current_thread().name
+        if 'MainThread' != thread_name:
+            name += "-" + thread_name
+        return name
 
     def write(self, message):
         self.stdout_write(message)
 
         has_newline = '\n' in message
         if message.startswith("\n"): message = message[1:]
-        if not message: return
 
         if isPython3:
             self.collected.append(message)
@@ -48,7 +54,7 @@ class Logger(object):
             message = ''.join(self.collected)
             self.collected = []
 
-        self.logger.info(message)
+        self.logger.log(self.loglevel, message)
 
     def flush(self):
         if self.collected:

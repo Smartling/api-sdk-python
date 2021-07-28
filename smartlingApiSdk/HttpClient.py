@@ -38,7 +38,8 @@ from .MultipartPostHandler import MultipartPostHandler
 from .version import version
 
 class HttpClient:
-    headers = {"Content-Type": "application/x-www-form-urlencoded", "User-Agent":"Python SDK client v"+ version}
+    headers = {"Content-Type": "application/x-www-form-urlencoded", \
+               "User-Agent": "Python SDK client v%s py:%s" % (version,sys.version.split()[0])}
     protocol = 'https://'
 
     def __init__(self, host, proxySettings=None):
