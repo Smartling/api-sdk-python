@@ -23,6 +23,11 @@ from .HttpClient import HttpClient
 from .MultipartPostHandler import MultipartPostHandler
 from .Constants import Uri, Params, ReqMethod
 from .ApiResponse import ApiResponse
+from .Logger import Logger
+import sys
+import logging
+
+isPython3 =  sys.version_info[:2] >= (3,0)
 
 class FileApiBase:
     """ basic class implementing low-level api calls """
@@ -34,6 +39,8 @@ class FileApiBase:
         self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings)
+        sys.stdout = Logger('python-sdk', logging.INFO)
+        sys.stderr = Logger('STDERR', logging.ERROR)
 
     def addAuth(self, params):
         params[Params.API_KEY] = self.apiKey
