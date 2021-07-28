@@ -44,8 +44,8 @@ class SmartlingFileApiV2(FileApiV2):
              api.list(limit=100, offset=50)
         """
         
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):
-        FileApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings)
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}):
+        FileApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders)
 
     def upload(self, filePath, fileType, **kw):
         """ Uploads original source content to Smartling

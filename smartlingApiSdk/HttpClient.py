@@ -42,9 +42,10 @@ class HttpClient:
                "User-Agent": "Python SDK client v%s py:%s" % (version,sys.version.split()[0])}
     protocol = 'https://'
 
-    def __init__(self, host, proxySettings=None):
+    def __init__(self, host, proxySettings=None, permanentHeaders={}):
        self.host = host
        self.proxySettings = proxySettings
+       self.permanentHeaders = permanentHeaders
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = {}, requestBody=""):
         self.installOpenerWithProxy(handler)
@@ -54,7 +55,7 @@ class HttpClient:
             params = self.encodeParametersAsString(params)
 
         headers = {}
-        for k,v in list(self.headers.items())+list(extraHeaders.items()):
+        for k,v in list(self.headers.items())+list(extraHeaders.items())+list(self.permanentHeaders.items()):
             headers[k] = v
 
         url = self.protocol + self.host + uri

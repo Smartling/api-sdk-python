@@ -54,7 +54,7 @@ class testProjetcsV2(object):
             proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
         else:
             proxySettings = None        
-        self.papi = SmartlingProjectsApiV2(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, proxySettings)
+        self.papi = SmartlingProjectsApiV2(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, proxySettings, permanentHeaders={'Oh':'my'})
         
         print("setUp", "OK", "\n\n\n")
 

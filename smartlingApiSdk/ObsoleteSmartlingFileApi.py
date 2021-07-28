@@ -46,8 +46,8 @@ class ObsoleteSmartlingFileApi(ObsoleteApiV1):
              api.list(locale='es-ES', offset=50)
         """
 
-    def __init__(self, host, apiKey, projectId, proxySettings=None):
-        ObsoleteApiV1.__init__(self, host, apiKey, projectId, proxySettings)
+    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}):
+        ObsoleteApiV1.__init__(self, host, apiKey, projectId, proxySettings, permanentHeaders=permanentHeaders)
 
     def upload(self, uploadData):
         """ implements `upload` api command

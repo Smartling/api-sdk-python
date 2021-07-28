@@ -26,8 +26,8 @@ from .ApiV2 import ApiV2
 class ProjectsApiV2(ApiV2):
     """ basic class implementing Projects/Accounts api calls """
 
-    def __init__(self, userIdentifier, userSecret, proxySettings=None):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)
+    def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}):
+        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
         self.urlHelper = UrlV2Helper(None)
 
     def commandProjectDetails(self, projectId):    

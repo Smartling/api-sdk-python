@@ -26,8 +26,8 @@ from .ApiV2 import ApiV2
 class FileApiV2(ApiV2):
     """ basic class implementing file api calls """
 
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}):
+        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
         self.urlHelper = UrlV2Helper(projectId)
 
     def commandGet(self, fileUri, locale, directives={}, **kw):
