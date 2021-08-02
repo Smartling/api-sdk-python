@@ -3,10 +3,23 @@ import json
 class Parameter():
     def __init__(self, param_dict):
         for name in ['name', 'description', 'in', 'required', 'schema']:
-            n = param_dict.get(name, 'NoEsta')
+            n = param_dict.get(name, None)
             if 'name' == name:
                 n = n.replace('[]','List')
             setattr(self, '_'+name, n)
+
+    def getParamForName(self):
+        if self._required:
+            return self._name
+        else:
+            return "%s=%s" % (self._name, self.getDefault())
+
+    def getDefault(self):
+        if 'array' == self._schema['type']:
+            return '[]'
+        if 'integer' == self._schema['type']:
+            return '0'
+        return "''"
 
 class Method():
     indent = '    '
@@ -20,18 +33,24 @@ class Method():
         self.method = method
         self.path = path
         self.parameters = []
+        self.oldSource = open('smartlingApiSdk/FileApiV2.py').read().split('\n')
+        self.UrlV2Helper = open('smartlingApiSdk/UrlV2Helper.py').read().split('\n')
         for p in description_dict['parameters']:
             if 'projectId' == p['name'] : continue
             self.parameters .append( Parameter(p) )
 
     def build(self):
         rows = []
-        rows.append(self.buildName())
-        rows.append(self.buildDoc())
+
         if self.requestBody:
+            rows.append(self.buildName())
+            rows.append(self.buildDoc())
             rows.append(self.buildMultipart())
         else:
-            rows.append(self.buildBody())
+            if 1:
+                rows.append(self.buildName())
+                rows.append(self.buildDoc())
+                rows.append(self.buildBody())
         rows.append('')
         return '\n'.join(rows)
 
@@ -48,7 +67,34 @@ class Method():
 
     def buildPrarams(self):
          if not self.parameters: return ''
-         return ", " + ", ".join(x._name for x in self.parameters)
+         return ", " + ", ".join(x.getParamForName() for x in self.parameters)
+
+    def getOldMethod(self):
+        UHMethod = ''
+        result = ['-'*120]
+        pt = self.path + '"'
+        for line in self.UrlV2Helper:
+            if not pt in line: continue
+            UHMethod = line.split(' = ')[0].strip()
+            UHMethod = 'urlHelper.' + UHMethod
+        if not UHMethod:
+            result.append(self.indent+'Not FOUND')
+            result.append('-'*120)
+            return self.joinWithIndent(result, self.indent2)
+        old_method_lines = []
+        start = end = 0
+        for i in range(len(self.oldSource)):
+            if UHMethod in self.oldSource[i]:
+                end = i+2
+                start = i
+                while not 'def ' in self.oldSource[start]:
+                    start -= 1
+                result +=  self.oldSource[start:end]
+                break
+        if start == end :
+            result.append(self.indent+'Unable to get old method body')
+        result.append('-'*120)
+        return self.joinWithIndent(result, self.indent2)
 
     def buildDoc(self):
         return '\n'.join([
@@ -56,9 +102,14 @@ class Method():
             self.indent3 + self.method,
             self.indent3 + self.path,
             self.indent3 + 'for details check: https://api-reference.smartling.com/#operation/'+self.operationId,
+            self.getOldMethod(),
             self.indent2 + '"""'
             ]
         )
+
+    def joinWithIndent(self, lst, indent):
+        newline_plus_indent = '\n'+indent
+        return indent + newline_plus_indent.join(lst)
 
     def buildPathParamsStr(self):
         path_params = [x for x in self.parameters if x._in == 'path']
@@ -79,11 +130,21 @@ class Method():
         body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
         body_lines.append("return self.command('%s', url, kw)" % self.method.upper())
 
-        newline_plus_indent = '\n'+self.indent2
-        return self.indent2 + newline_plus_indent.join(body_lines)
+        return self.joinWithIndent(body_lines, self.indent2)
 
     def buildMultipart(self):
-        return str(self.requestBody)
+        mp_lines = []
+        type = list(self.requestBody['content'].keys())[0]
+        if 'application/json' == type:
+            return self.indent2 + 'Cant process:' + type
+
+        schema = self.requestBody['content'][type]['schema']
+        #properties
+        #required
+        #type
+        for k in schema['properties'].keys():
+            mp_lines.append(k)
+        return self.joinWithIndent(mp_lines, self.indent2)
 
 class ApiSource():
     def __init__(self, name):
@@ -116,6 +177,7 @@ class ApiSource():
 
 def main():
     dict = json.loads(open('builder/openapi3.json', 'rb').read())
+
     #apisrc = ApiSource("Jobs")
     apisrc = ApiSource("Files")
     apisrc.collectMethods(dict)
