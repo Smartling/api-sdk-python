@@ -2,11 +2,17 @@ import json
 
 class Parameter():
     def __init__(self, param_dict):
-        for name in ['name', 'description', 'in', 'required', 'schema']:
+        param_names = ['name', 'description', 'in', 'required', 'schema']
+        self.processParams(param_names, param_dict)
+        if self._schema:
+            self._type = self._schema['type']
+
+    def processParams(self, param_names, param_dict):
+        for name in param_names:
             n = param_dict.get(name, None)
             if 'name' == name:
-                n = n.replace('[]','List')
-            setattr(self, '_'+name, n)
+                n = n.replace('[]', 'List')
+            setattr(self, '_' + name, n)
 
     def getParamForName(self):
         if self._required:
@@ -15,11 +21,25 @@ class Parameter():
             return "%s=%s" % (self._name, self.getDefault())
 
     def getDefault(self):
-        if 'array' == self._schema['type']:
+        if 'array' == self._type:
             return '[]'
-        if 'integer' == self._schema['type']:
+        if 'integer' == self._type:
             return '0'
         return "''"
+
+class MuptipartProperty(Parameter):
+    def __init__(self, name, param_dict):
+        param_names = ['type', 'description', 'format']
+        self.processParams(param_names, param_dict)
+        self._required = False
+        self._name = name
+        self._type =self._format
+
+    def setRequired(self):
+        self._required = True
+
+    def __str__(self):
+        return "%s : %s" % (self._name, self._required)
 
 class Method():
     indent = '    '
@@ -38,6 +58,7 @@ class Method():
         for p in description_dict['parameters']:
             if 'projectId' == p['name'] : continue
             self.parameters .append( Parameter(p) )
+        self.getMultipartProps()
 
     def build(self):
         rows = []
@@ -47,7 +68,7 @@ class Method():
             rows.append(self.buildDoc())
             rows.append(self.buildMultipart())
         else:
-            if 1:
+            if 0:
                 rows.append(self.buildName())
                 rows.append(self.buildDoc())
                 rows.append(self.buildBody())
@@ -66,8 +87,13 @@ class Method():
         )
 
     def buildPrarams(self):
-         if not self.parameters: return ''
-         return ", " + ", ".join(x.getParamForName() for x in self.parameters)
+        result = ''
+        #params = self.parameters +
+        if self.parameters:
+            result += ", " + ", ".join(x.getParamForName() for x in self.parameters)
+        if self.mp_params:
+            result += ", " + ", ".join(x.getParamForName() for x in self.mp_params)
+        return result
 
     def getOldMethod(self):
         UHMethod = ''
@@ -85,10 +111,12 @@ class Method():
         start = end = 0
         for i in range(len(self.oldSource)):
             if UHMethod in self.oldSource[i]:
-                end = i+2
+                end = i
                 start = i
                 while not 'def ' in self.oldSource[start]:
                     start -= 1
+                while not 'return ' in self.oldSource[end]:
+                    end += 1
                 result +=  self.oldSource[start:end]
                 break
         if start == end :
@@ -132,19 +160,27 @@ class Method():
 
         return self.joinWithIndent(body_lines, self.indent2)
 
-    def buildMultipart(self):
-        mp_lines = []
+    def getMultipartProps(self):
+        self.mp_params = []
+        if not self.requestBody: return
         type = list(self.requestBody['content'].keys())[0]
-        if 'application/json' == type:
-            return self.indent2 + 'Cant process:' + type
+        if "multipart/form-data" != type:
+            return #self.indent2 + 'Cant process:' + type
 
         schema = self.requestBody['content'][type]['schema']
-        #properties
-        #required
-        #type
+
         for k in schema['properties'].keys():
-            mp_lines.append(k)
-        return self.joinWithIndent(mp_lines, self.indent2)
+            prop_dict = schema['properties'][k]
+            self.mp_params.append(MuptipartProperty(k, prop_dict))
+
+        for req in schema['required']:
+            for mp in self.mp_params:
+                if req == mp._name:
+                    mp.setRequired()
+
+    def buildMultipart(self):
+        self.mp_params_str = [str(x) for x in self.mp_params]
+        return self.joinWithIndent(self.mp_params_str, self.indent2)
 
 class ApiSource():
     def __init__(self, name):
