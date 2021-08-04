@@ -47,6 +47,20 @@ class FileApiBase:
         params[Params.PROJECT_ID] = self.projectId
         return {}
 
+    def processFile(self, file):
+        """"
+            returns file-like object form string or file
+            tries to treat string as file path or make it file-like object to be uploaded
+        """
+        if not file or file==type(file):
+            return file
+        try:
+            f = open(file, 'rb')
+        except:
+            f = io.StringIO(file)
+            f.seek(0)
+        return f
+
     def uploadMultipart(self, uri, params, response_as_string=False):
         authHeader = self.addAuth(params)
 
