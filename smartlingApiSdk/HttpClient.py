@@ -85,10 +85,12 @@ class HttpClient:
         else:
             status_code = response.code
 
+        headers = dict(response.info())
+
         response_data = response.read()
         if 200!=status_code:
             print("Non 200 response:",url, status_code, "response=", response_data)
-        return response_data, status_code
+        return response_data, status_code, headers
 
     def installOpenerWithProxy(self, handler):
         if self.proxySettings:

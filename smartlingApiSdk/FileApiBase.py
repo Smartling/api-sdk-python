@@ -61,14 +61,18 @@ class FileApiBase:
             f.seek(0)
         return f
 
-    def uploadMultipart(self, uri, params, response_as_string=False):
-        authHeader = self.addAuth(params)
+    def filterOutDefaults(self, params):
+        for k, v in list(params.items()):
+            if not v: del params[k]
 
+    def uploadMultipart(self, uri, params, response_as_string=False):
+        self.filterOutDefaults(params)
+        authHeader = self.addAuth(params)
         if Params.FILE_PATH in params:
             params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
             del params[Params.FILE_PATH]  # no need in extra field in POST
 
-        response_data, status_code = self.getHttpResponseAndStatus(ReqMethod.POST ,uri, params, MultipartPostHandler, extraHeaders = authHeader)
+        response_data, status_code, headers = self.getHttpResponseAndStatus(ReqMethod.POST ,uri, params, MultipartPostHandler, extraHeaders = authHeader)
         response_data = response_data.strip()
         if self.response_as_string or response_as_string:
             return response_data, status_code
@@ -81,8 +85,16 @@ class FileApiBase:
         authHeader = self.addAuth(params)
         return self.getHttpResponseAndStatus(method, uri, params, extraHeaders = authHeader)
 
+    def isJsonResponse(self, headers):
+        if isPython3:
+            hdr = 'Content-Type'
+        else:
+            hdr = 'content-type'
+        return 'json' in headers.get(hdr,'')
+
     def command(self, method, uri, params):
-        data, code = self.getResponseAndStatus(method, uri, params)
-        if self.response_as_string:
+        self.filterOutDefaults(params)
+        data, code, headers = self.getResponseAndStatus(method, uri, params)
+        if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
         return  ApiResponse(data, code), code
