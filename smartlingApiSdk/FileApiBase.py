@@ -24,6 +24,7 @@ from .MultipartPostHandler import MultipartPostHandler
 from .Constants import Uri, Params, ReqMethod
 from .ApiResponse import ApiResponse
 from .Logger import Logger
+import io
 import sys
 import logging
 
@@ -74,7 +75,7 @@ class FileApiBase:
 
         response_data, status_code, headers = self.getHttpResponseAndStatus(ReqMethod.POST ,uri, params, MultipartPostHandler, extraHeaders = authHeader)
         response_data = response_data.strip()
-        if self.response_as_string or response_as_string:
+        if self.response_as_string or response_as_string or not self.isJsonResponse(headers):
             return response_data, status_code
         return ApiResponse(response_data, status_code), status_code
 

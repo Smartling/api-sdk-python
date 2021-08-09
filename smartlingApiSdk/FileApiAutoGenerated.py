@@ -408,7 +408,7 @@ class FilesApiAuto(ApiV2):
 
 
 
-    def exportFileTranslations(self, localeId, fileUri, retrievalType='', includeOriginalStrings=''):
+    def exportFileTranslations(self, localeId, file, fileUri, retrievalType='', includeOriginalStrings=''):
         """
             post
             /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations
@@ -428,12 +428,13 @@ class FilesApiAuto(ApiV2):
                 return self.uploadMultipart(url, kw, response_as_string=True)
         """
         kw = {
+            'file':self.processFile(file),
             'fileUri':fileUri,
             'retrievalType':retrievalType,
             'includeOriginalStrings':includeOriginalStrings,
         }
         url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations', localeId=localeId)
-        return self.command('POST', url, kw)
+        return self.uploadMultipart(url, kw)
 
 
 
