@@ -19,6 +19,8 @@
 
 import os
 import sys
+import threading
+
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
@@ -44,47 +46,55 @@ if useProxy :
     proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port")
 else:
     proxySettings = None
+def testOne():
+    #initializa api object
+    #import pdb; pdb.set_trace()
+    fapi = SmartlingFileApiV2( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, proxySettings)
 
-#initializa api object
-fapi = SmartlingFileApiV2( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, proxySettings)
-        
-#Upload file to Smartling
+    #Upload file to Smartling
 
-print("\nUploading ...")
-path = FILE_PATH + FILE_NAME
+    print("\nUploading ...")
+    path = FILE_PATH + FILE_NAME
 
-customFileUri = "/simple/test"
-#parameter `fileUri` is optional, if not set - value of `path` is be used as fiel uri here and
-#should be used in all requests that need file uri
-#like fapi.status, fapi.get, fapi.delete
-resp, code = fapi.upload(path, FILE_TYPE, fileUri=customFileUri, authorize=True)
-print(resp, code)
-if 200!=code:
-    raise Exception("failed")
+    customFileUri = "/simple/test"
+    #parameter `fileUri` is optional, if not set - value of `path` is be used as fiel uri here and
+    #should be used in all requests that need file uri
+    #like fapi.status, fapi.get, fapi.delete
+    resp, code = fapi.upload(path, FILE_TYPE, fileUri=customFileUri, authorize=True)
+    print(resp, code)
+    if 200!=code:
+        raise Exception("failed")
 
-#List uploaded files
-print("\nList ...")
-resp, code = fapi.list()
-print("items size= ", len(resp.data.items))
-print(code, resp)
+    #List uploaded files
+    print("\nList ...")
+    resp, code = fapi.list()
+    print("items size= ", len(resp.data.items))
+    #print(code, resp)
 
-#check file status
-print("\nFile status ...")
-resp, code = fapi.status(customFileUri)
-print(code, resp)
-print(resp.data.fileUri)
-print("items size=", len(resp.data.items))
+    #check file status
+    print("\nFile status ...")
+    resp, code = fapi.status(customFileUri)
+    #print(code, resp)
+    print(resp.data.fileUri)
+    print("items size=", len(resp.data.items))
 
-#read uplaoded file
-print("\nRead file from server ...")
-resp, code = fapi.get(customFileUri, MY_LOCALE)
-print(resp, code)
+    #read uplaoded file
+    print("\nRead file from server ...")
+    #resp, code = fapi.get(customFileUri, MY_LOCALE)
+    print(resp, code)
 
-#delete file
-print("\nDelete file ...")
-resp, code = fapi.delete(customFileUri)
-print(resp, code)
-    
-    
-    
-    
+    #delete file
+    print("\nDelete file ...")
+    resp, code = fapi.delete(customFileUri)
+    print(resp, code)
+
+
+def threadOne():
+    thr = threading.Thread( None, testOne, None, () )
+    thr.start()
+
+def runTwoThreads():
+    threadOne()
+    threadOne()
+
+runTwoThreads()
