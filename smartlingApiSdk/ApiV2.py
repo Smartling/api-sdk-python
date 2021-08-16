@@ -53,15 +53,15 @@ class ApiV2(FileApiBase):
     host = 'api.smartling.com'
     clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
-    def __init__(self, userIdentifier, userSecret, proxySettings=None):
-        FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings)
+    def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}):
+        FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
         self.authClient = AuthClient(userIdentifier, userSecret, proxySettings)
 
     def addAuth(self, params):
         token = self.authClient.getToken()
         if token is None:
             raise Exception("Error getting token, check you credentials")
-        return {"Authorization" : "Bearer "+ token} 
+        return {"Authorization" : "Bearer "+ token}
 
     def validateFileTypes(self, kw):
         fileTypes = kw.get("fileTypes",[])

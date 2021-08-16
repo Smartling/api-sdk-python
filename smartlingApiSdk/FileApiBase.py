@@ -27,18 +27,17 @@ from .Logger import Logger
 import sys
 import logging
 
-isPython3 =  sys.version_info[:2] >= (3,0)
 
 class FileApiBase:
     """ basic class implementing low-level api calls """
     response_as_string = False
 
-    def __init__(self, host, apiKey, projectId, proxySettings=None):
+    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}):
         self.host = host
         self.apiKey = apiKey
         self.projectId = projectId
         self.proxySettings = proxySettings
-        self.httpClient = HttpClient(host, proxySettings)
+        self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
         sys.stdout = Logger('python-sdk', logging.INFO)
         sys.stderr = Logger('STDERR', logging.ERROR)
 

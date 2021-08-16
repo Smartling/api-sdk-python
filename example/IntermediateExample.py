@@ -43,7 +43,7 @@ class SmartlingApiExample:
         else:
             proxySettings = None
 
-        self.fapi = SmartlingFileApiV2( self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
+        self.fapi = SmartlingFileApiV2( self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, permanentHeaders={'Oh':'my'})
         self.file_type = file_type
         self.file_name = file_name
         self.new_name = new_name

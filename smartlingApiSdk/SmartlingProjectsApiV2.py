@@ -44,8 +44,8 @@ class SmartlingProjectsApiV2(ProjectsApiV2):
              api.list(limit=100, offset=50)
         """
 
-    def __init__(self, userIdentifier, userSecret, proxySettings=None):
-        ProjectsApiV2.__init__(self, userIdentifier, userSecret, proxySettings)
+    def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}):
+        ProjectsApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
 
     def projects(self, accountUid):
         """
