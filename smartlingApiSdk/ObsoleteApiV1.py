@@ -64,7 +64,8 @@ class ObsoleteApiV1(FileApiBase):
                                                                              Params.RETRIEVAL_TYPE,
                                                                              Params.allowedRetrievalTypes)
 
-        return self.getResponseAndStatus(ReqMethod.POST, Uri.GET, kw)
+        resp, code, headers = self.getResponseAndStatus(ReqMethod.POST, Uri.GET, kw)
+        return resp, code
 
     def commandDelete(self, fileUri, **kw):
         kw[Params.FILE_URI] = fileUri

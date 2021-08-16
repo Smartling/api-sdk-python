@@ -37,7 +37,9 @@ class FileApiV2(ApiV2):
         self.checkRetrievalType(kw)
         self.processDirectives(kw, directives)
         url = self.urlHelper.getUrl(self.urlHelper.GET, localeId=locale)
-        return self.getResponseAndStatus(ReqMethod.GET, url, kw)
+
+        resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, url, kw)
+        return resp, code
 
     def commandGetMultipleLocalesAsZip(self, fileUri, localeIds, directives={}, **kw):
         """ https://developer.smartling.com/v1.0/reference#get_projects-projectid-files-zip """
@@ -47,7 +49,8 @@ class FileApiV2(ApiV2):
         self.checkRetrievalType(kw)
         self.processDirectives(kw, directives)
 
-        return self.getResponseAndStatus(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.GET_MULTIPLE_LOCALES), kw)
+        resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.GET_MULTIPLE_LOCALES), kw)
+        return resp, code
 
     def commandGetAllLocalesZip(self, fileUri, directives={}, **kw):
          """ http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales """
@@ -58,7 +61,8 @@ class FileApiV2(ApiV2):
 
          url = self.urlHelper.getUrl(self.urlHelper.GET_ALL_LOCALES_ZIP)
 
-         return self.getResponseAndStatus(ReqMethod.GET, url, kw)
+         resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, url, kw)
+         return resp, code
 
 
     def commandGetAllLocalesCsv(self, fileUri, directives={}, **kw):
@@ -69,16 +73,18 @@ class FileApiV2(ApiV2):
          self.processDirectives(kw, directives)
 
          url = self.urlHelper.getUrl(self.urlHelper.GET_ALL_LOCALES_CSV)
-         return self.getResponseAndStatus(ReqMethod.GET, url, kw)
+         resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, url, kw)
+         return resp, code
 
 
     def commandGetOriginal(self, fileUri):
-         """  https://developer.smartling.com/v1.0/reference#get_projects-projectid-file """
-         kw = {}
-         kw[Params.FILE_URI] = fileUri
+        """  https://developer.smartling.com/v1.0/reference#get_projects-projectid-file """
+        kw = {}
+        kw[Params.FILE_URI] = fileUri
 
-         url = self.urlHelper.getUrl(self.urlHelper.GET_ORIGINAL)
-         return self.getResponseAndStatus(ReqMethod.GET, url, kw)
+        url = self.urlHelper.getUrl(self.urlHelper.GET_ORIGINAL)
+        resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, url, kw)
+        return resp, code
 
     def commandList(self, **kw):
         """ https://developer.smartling.com/v1.0/reference#list """

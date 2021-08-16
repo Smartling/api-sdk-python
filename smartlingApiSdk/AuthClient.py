@@ -38,7 +38,7 @@ class AuthClient:
     def request(self, uri, body):
         header = {"Content-Type": "application/json"}
         body = body.encode()
-        response_data, status_code = self.httpClient.getHttpResponseAndStatus(ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
+        response_data, status_code, headers = self.httpClient.getHttpResponseAndStatus(ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
         apiResponse = ApiResponse(response_data, status_code)
 
         now = time.time()
