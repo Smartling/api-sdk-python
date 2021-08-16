@@ -19,7 +19,7 @@
 
 #FileApi class implementation
 
-from .HttpClient import HttpClient
+from .HttpClient import HttpClient, isPython3
 from .MultipartPostHandler import MultipartPostHandler
 from .Constants import Uri, Params, ReqMethod
 from .ApiResponse import ApiResponse
