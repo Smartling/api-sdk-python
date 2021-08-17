@@ -53,7 +53,6 @@ class AccountProjectsApiAuto(ApiV2):
             for details check: https://api-reference.smartling.com/#operation/addLocaleToProject
 
             ------------------------------------------------------------------------------------------------------------------------
-            Not FOUND
         """
         kw = {
             'defaultWorkflowUid':defaultWorkflowUid,
@@ -72,7 +71,6 @@ class AccountProjectsApiAuto(ApiV2):
             for details check: https://api-reference.smartling.com/#operation/copyProject
 
             ------------------------------------------------------------------------------------------------------------------------
-            Not FOUND
         """
         kw = {
             'projectName':projectName,
@@ -91,7 +89,6 @@ class AccountProjectsApiAuto(ApiV2):
             for details check: https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
 
             ------------------------------------------------------------------------------------------------------------------------
-            Not FOUND
         """
         kw = {
         }

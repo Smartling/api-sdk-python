@@ -53,7 +53,7 @@ class Parameter():
 
 class MuptipartProperty(Parameter):
     def __init__(self, name, param_dict):
-        param_names = ['description', 'format', 'type', 'default']
+        param_names = ['description', 'format', 'type', 'default', 'example']
         self.processParams(param_names, param_dict)
         self._required = False
         self._name = name.replace('[]','')

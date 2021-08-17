@@ -33,9 +33,9 @@ class ApiSource():
         for k,v  in opaDict['paths'].items():
             for method, descr in v.items():
                 if method == '$ref': continue
-                #if descr['operationId'] != 'uploadSourceFile': continue
+                #if descr['operationId'] != 'updateCustomField': continue
                 if self.name in descr['tags']:
-                    m = Method(k, method, descr)
+                    m = Method(k, method, descr, opaDict)
                     self.patchExportTranslations(descr, m)
                     self.methods.append(m)
 

@@ -37,6 +37,7 @@ class ApiBuilder:
         if 200 != status_code:
             raise Exception('Can not load openapi description')
 
+        open("openapi3.json",'w').write(response_data.decode('utf8'))
         json_string = response_data
         json_dict = json.loads(json_string, object_pairs_hook=collections.OrderedDict)
         return json_dict
@@ -57,6 +58,7 @@ class ApiBuilder:
 def main():
     builder = ApiBuilder("Files")
     #builder = ApiBuilder("Account & Projects")
+    #builder = ApiBuilder("Jobs")
     builder.build()
 
 
