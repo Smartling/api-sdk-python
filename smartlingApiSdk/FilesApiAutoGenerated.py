@@ -447,7 +447,6 @@ class FilesApiAuto(ApiV2):
             curl -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/published-files-api/v2/projects/$smartlingProjectId/files/list/recently-published?publishedAfter=2019-11-21T11:51:17Z&fileUris[]=files/example1.json&localeIds[]=fr-CA&limit=10&offset=100'
 
             ------------------------------------------------------------------------------------------------------------------------
-            Not FOUND
         """
         kw = {
             'publishedAfter':publishedAfter,

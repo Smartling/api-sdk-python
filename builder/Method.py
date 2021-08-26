@@ -25,8 +25,9 @@ class Method():
     indent = '    '
     indent2 = indent*2
     indent3 = indent*3
+    indent4 = indent*4
 
-    def __init__(self, path, method, description_dict):
+    def __init__(self, path, method, description_dict, opa_dict):
         for name in ['summary', 'description', 'tags', 'operationId', 'responses', 'x-code-samples', 'requestBody']:
             setattr(self, name, description_dict.get(name, None))
         self.method = method
@@ -34,6 +35,7 @@ class Method():
         self.parameters = []
         self.oldSource = open('../smartlingApiSdk/FileApiV2.py').read().split('\n')
         self.UrlV2Helper = open('../smartlingApiSdk/UrlV2Helper.py').read().split('\n')
+        self.opa_dict = opa_dict
         for p in description_dict['parameters']:
             if 'projectId' == p['name'] : continue
             self.parameters .append( Parameter(p) )
@@ -54,6 +56,26 @@ class Method():
         rows.append('')
         return '\n'.join(rows)
 
+    def buildExample(self):
+        rows = []
+
+        rows.append(self.buildTestName())
+        rows.append(self.buildDoc())
+
+
+        rows.append(self.buildTestBody())
+        rows.append('')
+        return '\n'.join(rows)
+
+    def buildTestName(self):
+        return ''.join([
+            self.indent,
+            'def test',
+            self.operationId[0].capitalize() + self.operationId[1:],
+            '(self',
+            '):',
+            ]
+        )
     def buildName(self):
         return ''.join([
             self.indent,
@@ -85,7 +107,6 @@ class Method():
             UHMethod = line.split(' = ')[0].strip()
             UHMethod = 'urlHelper.' + UHMethod
         if not UHMethod:
-            result.append(self.indent+'Not FOUND')
             return self.joinWithIndent(result, self.indent2)
         old_method_lines = []
         start = end = 0
@@ -109,16 +130,20 @@ class Method():
         return res_str.replace('"""', "'''")
 
     def buildDoc(self):
-        return '\n'.join([
+        doc_lines = [
             self.indent2 + '"""',
             self.indent3 + self.method,
             self.indent3 + self.path,
             self.indent3 + 'for details check: https://api-reference.smartling.com/#operation/'+self.operationId,
             self.getCurlExample(),
             self.getOldMethod(),
-            self.indent2 + '"""'
         ]
-        )
+        nested = self.listNestedValues()
+        if nested:
+            doc_lines.append(nested)
+        doc_lines.append(self.indent2 + '"""')
+
+        return '\n'.join(doc_lines)
 
     def getCurlExample(self):
         result = []
@@ -129,6 +154,29 @@ class Method():
         for d in samples:
             result.append( self.indent + d['source'] )
         return self.joinWithIndent(result, self.indent2)
+
+    def getPropertyDescription(self, prop):
+        prop_dict = {}
+        for m in prop.prop_list:
+            prop_dict[m._name] = getattr(m, '_example', '') or m.getDefault()
+
+        result = [ self.indent + 'Parameters example:'
+        ]
+        hdr = self.indent +  '%s: ' % prop._name
+        dumped = json.dumps(prop_dict, indent=16)
+        dumped = dumped.replace('}', self.indent4+'}')
+        result.append( hdr + dumped)
+        return result
+
+    def listNestedValues(self):
+        result = []
+        for prop in self.mp_params:
+            if not getattr(prop, 'prop_list', None):
+                continue
+            result += self.getPropertyDescription(prop)
+        if result:
+            return self.joinWithIndent(result, self.indent2)
+        return ''
 
     def joinWithIndent(self, lst, indent):
         newline_plus_indent = '\n'+indent
@@ -158,31 +206,104 @@ class Method():
 
         return self.joinWithIndent(body_lines, self.indent2)
 
+    def buildTestBody(self):
+        body_lines = []
+
+        parameters = []
+        if self.parameters:
+            for p in self.parameters:
+                if not p._required: continue
+                parameters.append(p.getParamForMethodCall())
+        if self.mp_params:
+            for p in self.mp_params:
+                if not p._required: continue
+                parameters.append(p.getParamForMethodCall())
+
+        kw_params = [x for x in self.parameters if x._in == 'query']
+        for p in kw_params:
+            if not p._required: continue
+            body_lines.append(p.getParamInit())
+        for m in self.mp_params:
+            if not m._required: continue
+            body_lines.append(m.getParamInit())
+
+        call_params = ', '.join(parameters)
+        body_lines.append('res, status = self.papi.%s(%s)' % (self.operationId, call_params))
+        body_lines.append('')
+        body_lines.append('assert_equal(200, status)')
+        body_lines.append('assert_equal(self.CODE_SUCCESS_TOKEN, res.code)')
+        body_lines.append('print("%s", "OK")' % self.operationId)
+
+        return self.joinWithIndent(body_lines, self.indent2)
+
+    def resolveRef(self, ref):
+        #import pdb; pdb.set_trace()
+        if not ref.startswith('#/'):
+            raise Exception('Unknown $ref:%s' % ref)
+        pth = ref[2:].split('/')
+        dct = self.opa_dict
+        lastname = ''
+        for p in pth:
+            dct = dct[p]
+            lastname = p
+        return dct, lastname
+
+    def listPrtoperty(self, name, array):
+        if not name:
+            raise Exception("Can't determine property name")
+        mp = MuptipartProperty(name, {'type':'array'})
+        mp.setRequired()
+        self.mp_params.insert(0, mp)
+
     def getMultipartProps(self):
         self.mp_params = []
         self.hasDirectives = False
         if not self.requestBody: return
         self.type = list(self.requestBody['content'].keys())[0]
 
+        print (self.type)
         schema = self.requestBody['content'][self.type]['schema']
-        for k in schema['properties'].keys():
-            prop_dict = schema['properties'][k]
-            if k.startswith('smartling.'):
-                self.hasDirectives = True
-                continue
-            mp = MuptipartProperty(k, prop_dict)
-            self.mp_params.append(mp)
 
-            if 'application/json' == self.type:
-                mp.setRequired()
+        refname = ''
+        if '$ref' == list(schema.keys())[0]:
+            schema, refname = self.resolveRef(schema['$ref'])
 
-            if mp._format == 'binary':
-                self.need_multipart = True
+        props = schema.get('properties', None)
+        if props is None:
+            type = schema['type']
+            if 'array' == type:
+                self.listPrtoperty(refname, schema['items'])
+                return
+            else:
+                print (schema)
+
+        self.mp_params = self.parseProperties(props)
 
         for req in schema.get('required',[]):
             for mp in self.mp_params:
                 if req == mp._name:
                     mp.setRequired()
+
+    def parseProperties(self, props):
+        prop_list = []
+        for k in props.keys():
+            prop_dict = props[k]
+            if k.startswith('smartling.'):
+                self.hasDirectives = True
+                continue
+
+            mp = MuptipartProperty(k, prop_dict)
+            prop_list.append(mp)
+
+            if 'application/json' == self.type:
+                mp.setRequired()
+
+            if prop_dict.get('properties', None):
+                mp.prop_list = self.parseProperties(prop_dict['properties'])
+
+            if mp._format == 'binary':
+                self.need_multipart = True
+        return prop_list
 
     def buildMultipart(self):
         body_lines = []
