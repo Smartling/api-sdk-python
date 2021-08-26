@@ -38,7 +38,16 @@ class Parameter():
         if self._required:
             return self._name
         else:
-            return "%s=%s" % (self._name, self.getDefault())
+            return self.getParamInit()
+
+    def getParamInit(self):
+        return "%s=%s" % (self._name, self.getDefault())
+
+    def getParamForMethodCall(self):
+        value = self._name
+        if 'accountUid' == self._name:
+            value = 'self.MY_ACCOUNT_UID'
+        return "%s=%s" % (self._name, value)
 
     def getDefault(self):
         default = getattr(self, '_default', None)

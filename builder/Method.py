@@ -56,6 +56,26 @@ class Method():
         rows.append('')
         return '\n'.join(rows)
 
+    def buildExample(self):
+        rows = []
+
+        rows.append(self.buildTestName())
+        rows.append(self.buildDoc())
+
+
+        rows.append(self.buildTestBody())
+        rows.append('')
+        return '\n'.join(rows)
+
+    def buildTestName(self):
+        return ''.join([
+            self.indent,
+            'def test',
+            self.operationId[0].capitalize() + self.operationId[1:],
+            '(self',
+            '):',
+            ]
+        )
     def buildName(self):
         return ''.join([
             self.indent,
@@ -183,6 +203,36 @@ class Method():
         body_lines.append('}')
         body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
         body_lines.append("return self.command('%s', url, kw)" % self.method.upper())
+
+        return self.joinWithIndent(body_lines, self.indent2)
+
+    def buildTestBody(self):
+        body_lines = []
+
+        parameters = []
+        if self.parameters:
+            for p in self.parameters:
+                if not p._required: continue
+                parameters.append(p.getParamForMethodCall())
+        if self.mp_params:
+            for p in self.mp_params:
+                if not p._required: continue
+                parameters.append(p.getParamForMethodCall())
+
+        kw_params = [x for x in self.parameters if x._in == 'query']
+        for p in kw_params:
+            if not p._required: continue
+            body_lines.append(p.getParamInit())
+        for m in self.mp_params:
+            if not m._required: continue
+            body_lines.append(m.getParamInit())
+
+        call_params = ', '.join(parameters)
+        body_lines.append('res, status = self.papi.%s(%s)' % (self.operationId, call_params))
+        body_lines.append('')
+        body_lines.append('assert_equal(200, status)')
+        body_lines.append('assert_equal(self.CODE_SUCCESS_TOKEN, res.code)')
+        body_lines.append('print("%s", "OK")' % self.operationId)
 
         return self.joinWithIndent(body_lines, self.indent2)
 
