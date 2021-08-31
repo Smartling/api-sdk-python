@@ -27,6 +27,7 @@ from .Logger import Logger
 import io
 import sys
 import logging
+import json
 
 
 class FileApiBase:
@@ -77,6 +78,17 @@ class FileApiBase:
         if self.response_as_string or response_as_string or not self.isJsonResponse(headers):
             return response_data, status_code
         return ApiResponse(response_data, status_code), status_code
+
+    def commandJson(self, method, uri, params):
+        authHeader = self.addAuth(params)
+        authHeader['Content-Type'] = 'application/json'
+        self.filterOutDefaults(params)
+        jsonBody = json.dumps(params).encode('utf8')
+        print ("jsonBody=", jsonBody,'\n\n')
+        data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
+        if self.response_as_string or not self.isJsonResponse(headers):
+            return data, code
+        return  ApiResponse(data, code), code
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = None):
         return self.httpClient.getHttpResponseAndStatus(method, uri, params, handler, extraHeaders = extraHeaders)

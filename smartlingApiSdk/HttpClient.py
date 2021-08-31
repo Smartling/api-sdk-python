@@ -89,7 +89,7 @@ class HttpClient:
         headers = dict(response.info())
 
         response_data = response.read()
-        if 200!=status_code:
+        if not status_code in [200, 202]:
             print("Non 200 response:",url, status_code, "response=", response_data)
         return response_data, status_code, headers
 
