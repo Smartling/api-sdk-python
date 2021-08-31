@@ -20,6 +20,7 @@
 import json
 import collections
 from Parameters import Parameter, MuptipartProperty
+from JobsTestData import JobsTests
 
 class Method():
     indent = '    '
@@ -40,8 +41,9 @@ class Method():
             if 'projectId' == p['name'] : continue
             self.parameters .append( Parameter(p) )
         self.need_multipart = False
+        self.is_json = False
         self.getMultipartProps()
-        self.newMethodName = '.'+self.operationId+'('
+        self.test_is_runnable = False
 
     def build(self):
         rows = []
@@ -202,7 +204,11 @@ class Method():
             body_lines.append(self.indent + "'%s':%s," % (m._name, m._name))
         body_lines.append('}')
         body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
-        body_lines.append("return self.command('%s', url, kw)" % self.method.upper())
+        cmd = "return self.command('%s', url, kw)" % self.method.upper()
+        if 'POST' == self.method.upper()  and self.is_json:
+            cmd = "return self.commandJson('%s', url, kw)" % self.method.upper()
+
+        body_lines.append(cmd)
 
         return self.joinWithIndent(body_lines, self.indent2)
 
@@ -210,22 +216,31 @@ class Method():
         body_lines = []
 
         parameters = []
+        initializers = {}
+
+        jobs_test_data = None
+        if self.operationId in JobsTests.keys():
+            jobs_test_data = JobsTests[self.operationId]
+            initializers = jobs_test_data.fields
+            self.test_is_runnable = jobs_test_data.runnable
+            for line in jobs_test_data.pre_calls:
+                body_lines.append(line)
         if self.parameters:
             for p in self.parameters:
-                if not p._required: continue
+                if (not p._required): continue
                 parameters.append(p.getParamForMethodCall())
         if self.mp_params:
             for p in self.mp_params:
                 if not p._required: continue
                 parameters.append(p.getParamForMethodCall())
 
-        kw_params = [x for x in self.parameters if x._in == 'query']
+        kw_params = [x for x in self.parameters if x._in == 'query' or x._in == 'path']
         for p in kw_params:
             if not p._required: continue
-            body_lines.append(p.getParamInit())
+            body_lines.append(p.getParamForMethodCall(initializers))
         for m in self.mp_params:
             if not m._required: continue
-            body_lines.append(m.getParamInit())
+            body_lines.append(m.getParamForMethodCall(initializers))
 
         call_params = ', '.join(parameters)
         body_lines.append('res, status = self.papi.%s(%s)' % (self.operationId, call_params))
@@ -233,6 +248,9 @@ class Method():
         body_lines.append('assert_equal(200, status)')
         body_lines.append('assert_equal(self.CODE_SUCCESS_TOKEN, res.code)')
         body_lines.append('print("%s", "OK")' % self.operationId)
+        if jobs_test_data:
+            for line in jobs_test_data.post_calls:
+                body_lines.append(line)
 
         return self.joinWithIndent(body_lines, self.indent2)
 
@@ -261,7 +279,6 @@ class Method():
         if not self.requestBody: return
         self.type = list(self.requestBody['content'].keys())[0]
 
-        print (self.type)
         schema = self.requestBody['content'][self.type]['schema']
 
         refname = ''
@@ -297,6 +314,7 @@ class Method():
 
             if 'application/json' == self.type:
                 mp.setRequired()
+                self.is_json = True
 
             if prop_dict.get('properties', None):
                 mp.prop_list = self.parseProperties(prop_dict['properties'])

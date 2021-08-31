@@ -10,7 +10,7 @@ class JobsApiAuto(ApiV2):
     def getJobsByAccount(self, accountUid, jobName='', projectIds=[], translationJobStatus=[], withPriority='', limit=0, offset=0, sortBy='', sortDirection=''):
         """
             get
-            /jobs-api/v3/account/{accountUid}/jobs
+            /jobs-api/v3/accounts/{accountUid}/jobs
             for details check: https://api-reference.smartling.com/#operation/getJobsByAccount
             curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/accounts/$smartlingAccountId/jobs
 
@@ -77,7 +77,7 @@ class JobsApiAuto(ApiV2):
             'customFields':customFields,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs')
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -95,7 +95,7 @@ class JobsApiAuto(ApiV2):
             'localeIds':localeIds,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings')
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -133,7 +133,7 @@ class JobsApiAuto(ApiV2):
             'targetLocaleIds':targetLocaleIds,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -151,7 +151,7 @@ class JobsApiAuto(ApiV2):
             'localeIds':localeIds,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -184,7 +184,7 @@ class JobsApiAuto(ApiV2):
             'reason':reason,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -201,7 +201,7 @@ class JobsApiAuto(ApiV2):
             'localeWorkflows':localeWorkflows,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -275,7 +275,7 @@ class JobsApiAuto(ApiV2):
             'translationJobUids':translationJobUids,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/search')
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -309,7 +309,7 @@ class JobsApiAuto(ApiV2):
             'targetLocaleIds':targetLocaleIds,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -326,7 +326,7 @@ class JobsApiAuto(ApiV2):
             'fileUri':fileUri,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -361,7 +361,7 @@ class JobsApiAuto(ApiV2):
             'syncContent':syncContent,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -460,7 +460,7 @@ class JobsApiAuto(ApiV2):
             'schedules':schedules,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 
@@ -540,7 +540,7 @@ class JobsApiAuto(ApiV2):
             'data':data,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid)
-        return self.command('POST', url, kw)
+        return self.commandJson('POST', url, kw)
 
 
 

@@ -94,6 +94,7 @@ class ApiSource():
 
 import os
 import sys
+import time, datetime
 
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
@@ -123,6 +124,8 @@ class test{API_NAME}(object):
 
         #needed for testProjects
         self.MY_ACCOUNT_UID = credentials.MY_ACCOUNT_UID
+        self.MY_LOCALE = credentials.MY_LOCALE
+        self.jobname = 'test_job_'+str(int(time.time()))
 
         if self.MY_ACCOUNT_UID == "CHANGE_ME":
             print("can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********")
@@ -142,6 +145,21 @@ class test{API_NAME}(object):
     def tearDown(self):
         print("tearDown", "OK")
 
+    def deleteAllJobs(self):
+        response,code = self.papi.getJobsByProject()
+        c = 0
+        sz = len(response.data.items)
+        for job in response.data.items:
+            c += 1
+            uid = job['translationJobUid']
+
+            cres, cstatus = self.papi.cancelJob(uid, 'test reason')
+            res, status = self.papi.deleteJob(uid)
+            print (c, 'of', sz, uid, cstatus, status)
+
+    def dateTimeStr(self, offset):
+        return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 """
     exampleFooter = """
 t = test{API_NAME}()
@@ -157,13 +175,15 @@ t.tearDown()
         hdr = self.exampleHeader.replace('{API_NAME}', myname)
 
         rows.append(hdr)
-        testCalls = []
+        test_calls = []
         for m in self.methods[:]:
             built = m.buildExample()
             capitalized = m.operationId[0].capitalize() + m.operationId[1:]
+            allowed = ['addJob','deleteJob']
+            if not m.operationId in allowed: continue
             test_call = 't.test%s()' % capitalized
-            if self.methods.index(m) >= 2 : test_call = '#'+test_call
-            testCalls.append(test_call)
+            if m.test_is_runnable:
+                test_calls.append(test_call)
             if built:
                 rows.append(built)
                 rows.append('')
@@ -171,7 +191,7 @@ t.tearDown()
                 rows.append('')
 
         ftr = self.exampleFooter.replace('{API_NAME}', myname)
-        rows.append(ftr % "\n".join(testCalls))
+        rows.append(ftr % "\n".join(test_calls))
         return '\n'.join(rows)
 
 

@@ -17,6 +17,12 @@
  * limit
  '''
 
+class Code:
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return self.value
+
 class Parameter():
     def __init__(self, param_dict):
         param_names = ['name', 'description', 'in', 'required', 'schema']
@@ -43,8 +49,12 @@ class Parameter():
     def getParamInit(self):
         return "%s=%s" % (self._name, self.getDefault())
 
-    def getParamForMethodCall(self):
-        value = self._name
+    def getParamForMethodCall(self, values={}):
+        value = values.get(self._name, self._name)
+        if value.__class__ == Code.__class__:
+            pass
+        elif value != self._name and type(value) == str:
+            value = "'" + value + "'"
         if 'accountUid' == self._name:
             value = 'self.MY_ACCOUNT_UID'
         return "%s=%s" % (self._name, value)

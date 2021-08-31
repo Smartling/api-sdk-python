@@ -23,6 +23,8 @@ import json
 import collections
 from ApiSource import ApiSource
 from smartlingApiSdk.HttpClient import HttpClient
+from smartlingApiSdk.Logger import Logger
+import logging
 
 class ApiBuilder:
     """
@@ -66,6 +68,7 @@ class ApiBuilder:
 def main():
     #builder = ApiBuilder("Files")
     #builder = ApiBuilder("Account & Projects")
+    sys.stdout = Logger('python-sdk', logging.INFO)
     builder = ApiBuilder("Jobs")
     #builder.build()
     builder.buildExample()

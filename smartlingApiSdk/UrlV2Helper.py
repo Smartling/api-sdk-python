@@ -44,7 +44,7 @@ class UrlV2Helper:
     def __init__(self, projectId):
         self.projectId = projectId
 
-    def getUrl(self, urlWithPlaceholders, localeId="", accountUid="", projectId=""):
+    def getUrl(self, urlWithPlaceholders, localeId="", accountUid="", projectId="", **kw):
         
         url = urlWithPlaceholders
         if self.projectId:
@@ -57,6 +57,9 @@ class UrlV2Helper:
         
         if accountUid : 
             url = url.replace("{accountUid}", accountUid)
+
+        for k in kw:
+            url = url.replace("{%s}" % k , kw[k])
         
         if "{localeId}" in url:
             raise "Unhandled localeId placeholder:" + url
