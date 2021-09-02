@@ -20,7 +20,6 @@
 import json
 import collections
 from Parameters import Parameter, MuptipartProperty
-from JobsTestData import JobsTests
 
 class Method():
     indent = '    '
@@ -28,9 +27,10 @@ class Method():
     indent3 = indent*3
     indent4 = indent*4
 
-    def __init__(self, path, method, description_dict, opa_dict):
+    def __init__(self, api_name, path, method, description_dict, opa_dict):
         for name in ['summary', 'description', 'tags', 'operationId', 'responses', 'x-code-samples', 'requestBody']:
             setattr(self, name, description_dict.get(name, None))
+        self.api_name = api_name
         self.method = method
         self.path = path
         self.parameters = []
@@ -43,7 +43,7 @@ class Method():
         self.need_multipart = False
         self.is_json = False
         self.getMultipartProps()
-        self.test_is_runnable = False
+        self.custom_test_check = ""
 
     def build(self):
         rows = []
@@ -72,7 +72,7 @@ class Method():
     def buildTestName(self):
         return ''.join([
             self.indent,
-            'def test',
+            'def check',
             self.operationId[0].capitalize() + self.operationId[1:],
             '(self',
             '):',
@@ -194,19 +194,24 @@ class Method():
     def buildBody(self):
         body_lines = []
 
+        values_to_pass = "kw"
         body_lines.append('kw = {')
+        #import pdb; pdb.set_trace()
         kw_params = [x for x in self.parameters if x._in == 'query']
         for p in kw_params:
             body_lines.append(self.indent + "'%s':%s," % (p._name, p._name))
         for m in self.mp_params:
+            if m.is_request_body:
+                values_to_pass = m._name
+                continue
             if 'binary' == m._format:
                 raise Exception("Uncomaptible parameter format for command")
             body_lines.append(self.indent + "'%s':%s," % (m._name, m._name))
         body_lines.append('}')
         body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
-        cmd = "return self.command('%s', url, kw)" % self.method.upper()
-        if 'POST' == self.method.upper()  and self.is_json:
-            cmd = "return self.commandJson('%s', url, kw)" % self.method.upper()
+        cmd = "return self.command('%s', url, %s)" % (self.method.upper(), values_to_pass)
+        if self.method.upper() in ('POST', 'PUT') and self.is_json:
+            cmd = "return self.commandJson('%s', url, %s)" % (self.method.upper(), values_to_pass)
 
         body_lines.append(cmd)
 
@@ -218,35 +223,41 @@ class Method():
         parameters = []
         initializers = {}
 
+        testDataModule = __import__(self.api_name+'TestData')
+        testData = getattr(testDataModule, 'TestDecorators')
+
         jobs_test_data = None
-        if self.operationId in JobsTests.keys():
-            jobs_test_data = JobsTests[self.operationId]
+        if self.operationId in testData.keys():
+            jobs_test_data = testData[self.operationId]
             initializers = jobs_test_data.fields
-            self.test_is_runnable = jobs_test_data.runnable
+            self.custom_test_check = jobs_test_data.custom_test_check
             for line in jobs_test_data.pre_calls:
                 body_lines.append(line)
         if self.parameters:
             for p in self.parameters:
-                if (not p._required): continue
-                parameters.append(p.getParamForMethodCall())
+                if p._required or p._name in initializers:
+                    parameters.append(p.getParamForMethodCall())
         if self.mp_params:
             for p in self.mp_params:
-                if not p._required: continue
-                parameters.append(p.getParamForMethodCall())
+                if p._required or p._name in initializers:
+                    parameters.append(p.getParamForMethodCall())
 
         kw_params = [x for x in self.parameters if x._in == 'query' or x._in == 'path']
         for p in kw_params:
-            if not p._required: continue
-            body_lines.append(p.getParamForMethodCall(initializers))
+            if p._required or p._name in initializers:
+                body_lines.append(p.getParamForMethodCall(initializers))
         for m in self.mp_params:
-            if not m._required: continue
-            body_lines.append(m.getParamForMethodCall(initializers))
+            if p._required or p._name in initializers:
+                body_lines.append(m.getParamForMethodCall(initializers))
 
         call_params = ', '.join(parameters)
         body_lines.append('res, status = self.papi.%s(%s)' % (self.operationId, call_params))
         body_lines.append('')
-        body_lines.append('assert_equal(200, status)')
-        body_lines.append('assert_equal(self.CODE_SUCCESS_TOKEN, res.code)')
+        if self.custom_test_check:
+            body_lines += self.custom_test_check.split('\n')
+        else:
+            body_lines.append('assert_equal(True, status in [200,202])')
+            body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])')
         body_lines.append('print("%s", "OK")' % self.operationId)
         if jobs_test_data:
             for line in jobs_test_data.post_calls:
@@ -271,6 +282,7 @@ class Method():
             raise Exception("Can't determine property name")
         mp = MuptipartProperty(name, {'type':'array'})
         mp.setRequired()
+        mp.is_request_body = True
         self.mp_params.insert(0, mp)
 
     def getMultipartProps(self):
@@ -278,6 +290,8 @@ class Method():
         self.hasDirectives = False
         if not self.requestBody: return
         self.type = list(self.requestBody['content'].keys())[0]
+        if 'application/json' == self.type:
+            self.is_json = True
 
         schema = self.requestBody['content'][self.type]['schema']
 
@@ -314,7 +328,6 @@ class Method():
 
             if 'application/json' == self.type:
                 mp.setRequired()
-                self.is_json = True
 
             if prop_dict.get('properties', None):
                 mp.prop_list = self.parseProperties(prop_dict['properties'])
