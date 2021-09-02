@@ -240,7 +240,7 @@ class JobsApiAuto(ApiV2):
             'customFields':customFields,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid)
-        return self.commandJson('PUT', url, kw)
+        return self.command('PUT', url, kw)
 
 
 
@@ -490,9 +490,10 @@ class JobsApiAuto(ApiV2):
             ------------------------------------------------------------------------------------------------------------------------
         """
         kw = {
+            'CustomFieldAssignmentList':CustomFieldAssignmentList,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields')
-        return self.commandJson('POST', url, CustomFieldAssignmentList)
+        return self.command('POST', url, kw)
 
 
 
@@ -515,24 +516,28 @@ class JobsApiAuto(ApiV2):
 
 
 
-    def createCustomField(self, accountUid, type, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description):
+    def createCustomField(self, accountUid, data):
         """
             post
             /jobs-api/v3/accounts/{accountUid}/custom-fields
             for details check: https://api-reference.smartling.com/#operation/createCustomField
 
             ------------------------------------------------------------------------------------------------------------------------
+            Parameters example:
+            data: {
+                "type": "SHORT_TEXT | LONG_TEXT | SELECTBOX | CHECKBOX",
+                "fieldName": "field-name",
+                "enabled": true,
+                "required": true,
+                "searchable": true,
+                "displayToTranslators": true,
+                "options": "[]",
+                "defaultValue": "default field value",
+                "description": "Custom field example"
+                }
         """
         kw = {
-            'type':type,
-            'fieldName':fieldName,
-            'enabled':enabled,
-            'required':required,
-            'searchable':searchable,
-            'displayToTranslators':displayToTranslators,
-            'options':options,
-            'defaultValue':defaultValue,
-            'description':description,
+            'data':data,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid)
         return self.commandJson('POST', url, kw)
@@ -540,26 +545,30 @@ class JobsApiAuto(ApiV2):
 
 
 
-    def updateCustomField(self, accountUid, fieldUid, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description):
+    def updateCustomField(self, accountUid, fieldUid, data):
         """
             put
             /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
             for details check: https://api-reference.smartling.com/#operation/updateCustomField
 
             ------------------------------------------------------------------------------------------------------------------------
+            Parameters example:
+            data: {
+                "fieldName": "field-name",
+                "enabled": true,
+                "required": true,
+                "searchable": true,
+                "displayToTranslators": true,
+                "options": "[]",
+                "defaultValue": "default field value",
+                "description": "Custom field example"
+                }
         """
         kw = {
-            'fieldName':fieldName,
-            'enabled':enabled,
-            'required':required,
-            'searchable':searchable,
-            'displayToTranslators':displayToTranslators,
-            'options':options,
-            'defaultValue':defaultValue,
-            'description':description,
+            'data':data,
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}', accountUid=accountUid, fieldUid=fieldUid)
-        return self.commandJson('PUT', url, kw)
+        return self.command('PUT', url, kw)
 
 
 

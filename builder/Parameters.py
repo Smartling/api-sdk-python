@@ -76,7 +76,6 @@ class MuptipartProperty(Parameter):
         self.processParams(param_names, param_dict)
         self._required = False
         self._name = name.replace('[]','')
-        self.is_request_body = False
 
     def setRequired(self):
         self._required = True

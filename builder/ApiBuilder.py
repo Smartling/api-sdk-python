@@ -66,12 +66,12 @@ class ApiBuilder:
 
 
 def main():
+    #builder = ApiBuilder("Files")
+    #builder = ApiBuilder("Account & Projects")
     sys.stdout = Logger('python-sdk', logging.INFO)
-    ApiBuilder("Files").build()
-    ApiBuilder("Account & Projects").build()
-    ApiBuilder("Jobs").build()
-    ApiBuilder("Jobs").buildExample()
-
+    builder = ApiBuilder("Jobs")
+    #builder.build()
+    builder.buildExample()
 
 
 main()

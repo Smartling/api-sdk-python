@@ -59,7 +59,7 @@ class AccountProjectsApiAuto(ApiV2):
             'localeId':localeId,
         }
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/targetLocales')
-        return self.commandJson('POST', url, kw)
+        return self.command('POST', url, kw)
 
 
 
@@ -77,7 +77,7 @@ class AccountProjectsApiAuto(ApiV2):
             'targetLocaleIds':targetLocaleIds,
         }
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy')
-        return self.commandJson('POST', url, kw)
+        return self.command('POST', url, kw)
 
 
 

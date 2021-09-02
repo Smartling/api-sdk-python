@@ -46,7 +46,6 @@ class HttpClient:
        self.host = host
        self.proxySettings = proxySettings
        self.permanentHeaders = permanentHeaders
-       self.ignore_errors = False
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = {}, requestBody=""):
         self.installOpenerWithProxy(handler)
@@ -90,7 +89,7 @@ class HttpClient:
         headers = dict(response.info())
 
         response_data = response.read()
-        if not status_code in [200, 202] and not self.ignore_errors:
+        if not status_code in [200, 202]:
             print("Non 200 response:",url, status_code, "response=", response_data)
         return response_data, status_code, headers
 
