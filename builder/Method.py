@@ -251,7 +251,7 @@ class Method():
                 body_lines.append(m.getParamForMethodCall(initializers))
 
         call_params = ', '.join(parameters)
-        body_lines.append('res, status = self.papi.%s(%s)' % (self.operationId, call_params))
+        body_lines.append('res, status = self.api.%s(%s)' % (self.operationId, call_params))
         body_lines.append('')
         if self.custom_test_check:
             body_lines += self.custom_test_check.split('\n')

@@ -59,15 +59,15 @@ tests_order = [
 
 extra_initializations = '''
     def deleteAllJobs(self):
-        response,code = self.papi.getJobsByProject()
+        response,code = self.api.getJobsByProject()
         c = 0
         sz = len(response.data.items)
         for job in response.data.items:
             c += 1
             uid = job['translationJobUid']
 
-            cres, cstatus = self.papi.cancelJob(uid, 'test reason')
-            res, status = self.papi.deleteJob(uid)
+            cres, cstatus = self.api.cancelJob(uid, 'test reason')
+            res, status = self.api.deleteJob(uid)
             print (c, 'of', sz, uid, cstatus, status)
 
     def dateTimeStr(self, offset):
@@ -118,7 +118,7 @@ TestDecorators = {
      'CustomFieldAssignmentList': Code('[{"fieldUid":self.fieldUid},]')
     },
 '''
-resp, code = self.papi.getAccountCustomFields(self.MY_ACCOUNT_UID)
+resp, code = self.api.getAccountCustomFields(self.MY_ACCOUNT_UID)
 self.fieldUid=None
 for fld in resp.data.items:
     if 'python-sdk-test' == fld['fieldName']:
@@ -155,8 +155,8 @@ for fld in resp.data.items:
       "description": "Custom field example"
 
     },
-    ['self.papi.httpClient.ignore_errors=True'],
-    ['self.papi.httpClient.ignore_errors=False'],
+    ['self.api.httpClient.ignore_errors=True'],
+    ['self.api.httpClient.ignore_errors=False'],
     custom_test_check = '''
 if 400 == status:
     assert_equal(True, 'Field name must be unique within account' in str(res))
@@ -191,7 +191,10 @@ else:
     'moveEnabled': Code('False'),
     'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
     'translationJobUid': jobUidCode,
-}, [], ['print("Sleeping for 10 seconds till string is processed")','time.sleep(10)']
+}, [], [
+    'print()',
+    'assert_equal(1, res.data.successCount, "addStringsToJob will fail if string was already in other job")',
+]
 ),
 
 'removeStringsFromJob' : TestData({

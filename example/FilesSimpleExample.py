@@ -24,7 +24,7 @@ import threading
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingFileApiV2 import SmartlingFileApiV2
+from api.FilesApi import FilesApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -46,10 +46,9 @@ if useProxy :
     proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port")
 else:
     proxySettings = None
-def testOne():
+def single_thread():
     #initializa api object
-    #import pdb; pdb.set_trace()
-    fapi = SmartlingFileApiV2( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, proxySettings)
+    fapi = FilesApi( MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID, proxySettings)
 
     #Upload file to Smartling
 
@@ -60,20 +59,20 @@ def testOne():
     #parameter `fileUri` is optional, if not set - value of `path` is be used as fiel uri here and
     #should be used in all requests that need file uri
     #like fapi.status, fapi.get, fapi.delete
-    resp, code = fapi.upload(path, FILE_TYPE, fileUri=customFileUri, authorize=True)
+    resp, code = fapi.uploadSourceFile(file=path, fileType=FILE_TYPE, fileUri = customFileUri, authorize=True)
     print(resp, code)
     if 200!=code:
         raise Exception("failed")
 
     #List uploaded files
     print("\nList ...")
-    resp, code = fapi.list()
+    resp, code = fapi.getFileTypesList()
     print("items size= ", len(resp.data.items))
     #print(code, resp)
 
     #check file status
     print("\nFile status ...")
-    resp, code = fapi.status(customFileUri)
+    resp, code = fapi.getFileTranslationStatusAllLocales(customFileUri)
     #print(code, resp)
     print(resp.data.fileUri)
     print("items size=", len(resp.data.items))
@@ -85,16 +84,17 @@ def testOne():
 
     #delete file
     print("\nDelete file ...")
-    resp, code = fapi.delete(customFileUri)
+    resp, code = fapi.deleteUploadedSourceFile(customFileUri)
     print(resp, code)
 
-
-def threadOne():
-    thr = threading.Thread( None, testOne, None, () )
+def start_thread():
+    thr = threading.Thread( None, single_thread, None, () )
     thr.start()
 
-def runTwoThreads():
-    threadOne()
-    threadOne()
+single_threaded = True
+if single_threaded:
+    single_thread()
+else:
+    start_thread()
+    start_thread()
 
-runTwoThreads()
