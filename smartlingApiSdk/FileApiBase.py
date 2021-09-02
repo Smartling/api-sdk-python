@@ -63,8 +63,9 @@ class FileApiBase:
         return f
 
     def filterOutDefaults(self, params):
-        for k, v in list(params.items()):
-            if not v: del params[k]
+        if hasattr(params, 'items'):
+            for k, v in list(params.items()):
+                if not v: del params[k]
 
     def uploadMultipart(self, uri, params, response_as_string=False):
         self.filterOutDefaults(params)
@@ -84,7 +85,8 @@ class FileApiBase:
         authHeader['Content-Type'] = 'application/json'
         self.filterOutDefaults(params)
         jsonBody = json.dumps(params).encode('utf8')
-        print ("jsonBody=", jsonBody,'\n\n')
+        #print ("jsonBody=", jsonBody,'\n\n')
+
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
