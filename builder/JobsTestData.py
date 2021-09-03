@@ -58,17 +58,21 @@ tests_order = [
 ]
 
 extra_initializations = '''
-    def deleteAllJobs(self):
+        # setUp code add-on #
+        self.jobname = 'test_job_'+str(int(time.time()))
+        self.deleteTestJobs()
+
+    def deleteTestJobs(self):
         response,code = self.api.getJobsByProject()
         c = 0
         sz = len(response.data.items)
         for job in response.data.items:
             c += 1
-            uid = job['translationJobUid']
-
-            cres, cstatus = self.api.cancelJob(uid, 'test reason')
-            res, status = self.api.deleteJob(uid)
-            print (c, 'of', sz, uid, cstatus, status)
+            if job['jobName'].startswith('test_job_'):
+                uid = job['translationJobUid']
+                cres, cstatus = self.api.cancelJob(uid, 'test reason')
+                res, status = self.api.deleteJob(uid)
+                print (c, 'of', sz, uid, cstatus, status)
 
     def dateTimeStr(self, offset):
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -187,18 +191,17 @@ else:
 ),
 
 'addStringsToJob' : TestData({
-    'hashcodes' : Code('["551b36d64c4b862b43c1e37b734d54d7", ] # use your string hashcodes list here'),
+    'hashcodes' : Code('["5760794264f7f1f2bd80ee9bfd646869", ] # use your string hashcodes list here'),
     'moveEnabled': Code('False'),
     'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
     'translationJobUid': jobUidCode,
 }, [], [
-    'print()',
     'assert_equal(1, res.data.successCount, "addStringsToJob will fail if string was already in other job")',
 ]
 ),
 
 'removeStringsFromJob' : TestData({
-    'hashcodes' : Code('["551b36d64c4b862b43c1e37b734d54d7", ] # use your string hashcodes list here'),
+    'hashcodes' : Code('["5760794264f7f1f2bd80ee9bfd646869", ] # use your string hashcodes list here'),
     'localeIds' : Code('[self.MY_LOCALE,]'),
     'translationJobUid': jobUidCode,
 }

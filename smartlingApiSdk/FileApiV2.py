@@ -27,6 +27,12 @@ class FileApiV2(ApiV2):
     """ basic class implementing file api calls """
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}):
+        outdated = '''
+This api is outdated and is not supported anymore!
+You still can use it by commenting this exception.
+But it is advised to use new api version.
+Please check examples for current api usage.'''
+        raise Exception(outdated)
         ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
         self.urlHelper = UrlV2Helper(projectId)
 

@@ -65,7 +65,7 @@ class ApiBuilder:
     def buildTest(self):
         built = self.apisrc.buildTest()
 
-        outPath = '../test/%sTest.py' % self.api_name
+        outPath = '../test/test%s.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
         print ("stored as:",outPath)

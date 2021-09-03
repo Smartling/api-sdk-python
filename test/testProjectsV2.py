@@ -19,31 +19,26 @@
 
 import os
 import sys
-import time
-import zipfile
-import io
-from datetime import date
+from nose.tools import assert_equal
 
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApiSdk.SmartlingProjectsApiV2 import SmartlingProjectsApiV2
+from api.AccountProjectsApi import AccountProjectsApi
 from smartlingApiSdk.ProxySettings import ProxySettings
-from nose.tools import assert_equal
-from smartlingApiSdk.version import version
 from smartlingApiSdk.Credentials import Credentials
-from smartlingApiSdk.Constants import FileTypes
 
-class testProjectsV2(object):
+
+class testProjetcsV2(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
+
 
     def setUp(self):
         credentials = Credentials() #Gets your Smartling credetnials from environment variables
         self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
         self.MY_USER_SECRET = credentials.MY_USER_SECRET
         self.MY_PROJECT_ID = credentials.MY_PROJECT_ID
-        self.MY_LOCALE = credentials.MY_LOCALE
 
         #needed for testProjects
         self.MY_ACCOUNT_UID = credentials.MY_ACCOUNT_UID
@@ -53,18 +48,18 @@ class testProjectsV2(object):
             proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
         else:
             proxySettings = None
-        self.papi = SmartlingProjectsApiV2(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, proxySettings)
+        self.papi = AccountProjectsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
 
         print("setUp", "OK", "\n\n\n")
 
-    def tearDown(self):        
+    def tearDown(self):
         print("tearDown", "OK")
 
     def testProjects(self):
         if self.MY_ACCOUNT_UID == "CHANGE_ME":
             print("can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********")
             return
-        res, status = self.papi.projects(self.MY_ACCOUNT_UID)
+        res, status = self.papi.getProjectsByAccount(self.MY_ACCOUNT_UID)
 
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
@@ -75,11 +70,10 @@ class testProjectsV2(object):
         print("testProjects", "OK")
 
     def testProjectDetails(self):
-        res, status = self.papi.project_details(self.MY_PROJECT_ID)
+        res, status = self.papi.getProjectDetails()
 
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
         assert_equal(self.MY_PROJECT_ID, res.data.projectId)
 
         print("testProjectDetails", "OK")
-

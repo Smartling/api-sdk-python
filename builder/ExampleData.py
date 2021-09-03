@@ -62,6 +62,9 @@ class test{API_NAME}(object):
     CODE_SUCCESS_TOKEN = 'SUCCESS'
     ACCEPTED_TOKED = 'ACCEPTED'
 
+    def tearDown(self):
+        print("tearDown", "OK")
+
     def setUp(self):
         credentials = Credentials() #Gets your Smartling credetnials from environment variables
         self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
@@ -71,7 +74,6 @@ class test{API_NAME}(object):
         #needed for testProjects
         self.MY_ACCOUNT_UID = credentials.MY_ACCOUNT_UID
         self.MY_LOCALE = credentials.MY_LOCALE
-        self.jobname = 'test_job_'+str(int(time.time()))
 
         if self.MY_ACCOUNT_UID == "CHANGE_ME":
             print("can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********")
@@ -86,11 +88,6 @@ class test{API_NAME}(object):
         self.api = {API_NAME}(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
 
         print("setUp", "OK", "\\n")
-
-
-    def tearDown(self):
-        print("tearDown", "OK")
-
 """
 exampleFooter = """
 def example():
