@@ -607,42 +607,38 @@ class testJobsApi(object):
 
 
 
-def example():
-    t = testJobsApi()
-    t.setUp()
-    t.checkAddJob()
-    t.checkAddLocaleToJob()
-    t.checkAddStringsToJob()
-    t.checkAddFileToJob()
-    t.checkGetJobFilesList()
-    t.checkGetJobFileProgress()
-    t.checkAuthorizeJob()
-    t.checkModifyScheduleItemsForTranslationJob()
-    t.checkCreateCustomField()
-    t.checkAssignCustomFieldsToProject()
-    t.checkUpdateCustomField()
-    t.checkRemoveFileFromJob()
-    t.checkRemoveStringsFromJob()
-    t.checkGetJobLastCompletionDatesPerLocale()
-    t.checkFindScheduleForTranslationJob()
-    t.checkRemoveLocaleFromJob()
-    t.checkGetJobsByProject()
-    t.checkUpdateJob()
-    t.checkGetJobProgress()
-    t.checkGetJobDetails()
-    t.checkGetStringsForTranslationJob()
-    t.checkFindJobsByStrings()
-    t.checkSearchForJob()
-    t.checkCancelJob()
-    t.checkDeleteJob()
-    t.checkGetProjectCustomFields()
-    t.checkGetAccountCustomFields()
-    t.checkGetJobsByAccount()
-    # not covered by tests #
-    '''
-    closeJob
-    getJobAsyncProcessStatus
-    '''
-    t.tearDown()
-
-example()
+    def test_all(self):
+        t = self
+        t.checkAddJob()
+        t.checkAddLocaleToJob()
+        t.checkAddStringsToJob()
+        t.checkAddFileToJob()
+        t.checkGetJobFilesList()
+        t.checkGetJobFileProgress()
+        t.checkAuthorizeJob()
+        t.checkModifyScheduleItemsForTranslationJob()
+        t.checkCreateCustomField()
+        t.checkAssignCustomFieldsToProject()
+        t.checkUpdateCustomField()
+        t.checkRemoveFileFromJob()
+        t.checkRemoveStringsFromJob()
+        t.checkGetJobLastCompletionDatesPerLocale()
+        t.checkFindScheduleForTranslationJob()
+        t.checkRemoveLocaleFromJob()
+        t.checkGetJobsByProject()
+        t.checkUpdateJob()
+        t.checkGetJobProgress()
+        t.checkGetJobDetails()
+        t.checkGetStringsForTranslationJob()
+        t.checkFindJobsByStrings()
+        t.checkSearchForJob()
+        t.checkCancelJob()
+        t.checkDeleteJob()
+        t.checkGetProjectCustomFields()
+        t.checkGetAccountCustomFields()
+        t.checkGetJobsByAccount()
+        # not covered by tests #
+        '''
+        closeJob
+        getJobAsyncProcessStatus
+        '''

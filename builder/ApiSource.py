@@ -21,13 +21,13 @@ import json
 import collections
 from Parameters import Parameter, MuptipartProperty
 from Method import Method
-from ExampleData import exampleHeader, exampleFooter
+from ExampleData import exampleHeader, exampleFooter, testsFooter
 
 class ApiSource():
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, full_name, api_name):
+        self.full_name = full_name
         self.methods = []
-        self.api_name = name.replace(' ','').replace('&','')
+        self.api_name = api_name
 
     def collectMethods(self, opaDict):
         pt = opaDict['paths']
@@ -36,7 +36,7 @@ class ApiSource():
             for method, descr in v.items():
                 if method == '$ref': continue
                 #if descr['operationId'] != 'assignCustomFieldsToProject': continue
-                if self.name in descr['tags']:
+                if self.full_name in descr['tags']:
                     m = Method(self.api_name, k, method, descr, opaDict)
                     self.patchExportTranslations(descr, m)
                     self.methods.append(m)
@@ -55,10 +55,10 @@ class ApiSource():
 
     def build(self):
         rows = []
-        rows.append('from .UrlV2Helper import UrlV2Helper')
+        rows.append('from smartlingApiSdk.UrlV2Helper import UrlV2Helper')
         rows.append('from .ApiV2 import ApiV2')
         rows.append('')
-        rows.append('class %sApiAuto(ApiV2):' % self.api_name)
+        rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
         rows.append('    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):')
         rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)')
@@ -87,10 +87,10 @@ class ApiSource():
         tests_order = getattr(testDataModule, 'tests_order')
         return extra_initializations, tests_order
 
-    def buildExample(self):
+    def buildTestOrExample(self, footer, indent):
         rows = []
 
-        myname = self.api_name + "ApiAuto"
+        myname = self.api_name + "Api"
 
         extra_initializations, tests_order = self.importTestData()
         hdr = exampleHeader.replace('{API_NAME}', myname)
@@ -118,9 +118,14 @@ class ApiSource():
 
         mnmes.append("'''")
 
-        ftr = exampleFooter.replace('{API_NAME}', myname)
-        rows.append(ftr % "\n    ".join(test_calls + mnmes))
+        ftr = footer.replace('{API_NAME}', myname)
+        newline_w_indent = '\n'+ '    ' * indent
+        rows.append(ftr % newline_w_indent.join(test_calls + mnmes))
         return '\n'.join(rows)
 
+    def buildExample(self):
+        return self.buildTestOrExample(exampleFooter, indent=1)
 
+    def buildTest(self):
+        return self.buildTestOrExample(testsFooter, indent=2)
 

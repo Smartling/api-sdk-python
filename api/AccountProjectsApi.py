@@ -1,7 +1,7 @@
-from .UrlV2Helper import UrlV2Helper
-from .ApiV2 import ApiV2
+from smartlingApiSdk.UrlV2Helper import UrlV2Helper
+from smartlingApiSdk.ApiV2 import ApiV2
 
-class AccountProjectsApiAuto(ApiV2):
+class AccountProjectsApi(ApiV2):
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):
         ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)
