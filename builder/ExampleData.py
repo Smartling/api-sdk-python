@@ -101,3 +101,9 @@ def example():
 
 example()
 """
+
+testsFooter = """
+    def test_all(self):
+        t = self
+        %s
+"""

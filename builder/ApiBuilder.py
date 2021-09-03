@@ -62,14 +62,23 @@ class ApiBuilder:
         print (built)
         print ("stored as:",outPath)
 
+    def buildTest(self):
+        built = self.apisrc.buildTest()
+
+        outPath = '../test/%sTest.py' % self.api_name
+        open(outPath,'w').write(built)
+        print (built)
+        print ("stored as:",outPath)
+
 
 
 def main():
     sys.stdout = Logger('python-sdk', logging.INFO)
-    ApiBuilder("Files").build()
-    ApiBuilder("Account & Projects").build()
-    ApiBuilder("Jobs").build()
+    #ApiBuilder("Files").build()
+    #ApiBuilder("Account & Projects").build()
+    #ApiBuilder("Jobs").build()
     ApiBuilder("Jobs").buildExample()
+    ApiBuilder("Jobs").buildTest()
 
 
 
