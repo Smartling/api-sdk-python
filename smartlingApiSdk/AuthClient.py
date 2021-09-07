@@ -19,17 +19,18 @@
 
 from .HttpClient import HttpClient
 from .ApiResponse import ApiResponse
-import time
 from .Constants import ReqMethod
 
+import time
+import os
+
 class AuthClient:
-    host = "api.smartling.com"
     authUri = "/auth-api/v2/authenticate"
     refreshUri = "/auth-api/v2/authenticate/refresh"
     timeJitter = 5 #seconds off server expiration time
 
-    def __init__(self, userIdentifier, userSecret, proxySettings=None):
-        self.httpClient = HttpClient(self.host, proxySettings)
+    def __init__(self, host, userIdentifier, userSecret, proxySettings=None):
+        self.httpClient = HttpClient(host, proxySettings)
         self.userIdentifier = userIdentifier
         self.userSecret = userSecret
         self.accessExpiresAt = 0

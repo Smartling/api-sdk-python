@@ -50,17 +50,22 @@ Get Translations - /files-api/v2/projects/{projectId}/locales/{localeId}/file/ge
 
 class ApiV2(FileApiBase):
     """ Api v2 basic functionality """
-    host = 'api.smartling.com'
+    host_prod = 'api.smartling.com'
+    host_stg = 'api.stg.smartling.net'
     clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
-    def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}):
+    def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}, env='prod'):
+        self.host = self.host_prod
+        self.userIdentifier = userIdentifier
+        if 'stg'==env:
+            self.host = self.host_stg
         FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
-        self.authClient = AuthClient(userIdentifier, userSecret, proxySettings)
+        self.authClient = AuthClient(self.host, userIdentifier, userSecret, proxySettings)
 
     def addAuth(self, params):
         token = self.authClient.getToken()
         if token is None:
-            raise Exception("Error getting token, check you credentials")
+            raise Exception("Error getting token, check your credentials for userIdentifier:%s" % (self.userIdentifier))
         return {"Authorization" : "Bearer "+ token}
 
     def validateFileTypes(self, kw):

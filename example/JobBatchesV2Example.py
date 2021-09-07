@@ -1,0 +1,195 @@
+
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+
+''' Copyright 2012-2021 Smartling, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this work except in compliance with the License.
+ * You may obtain a copy of the License in the LICENSE file, or at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+'''
+
+import os
+import sys
+import time, datetime
+
+lib_path = os.path.abspath('../')
+sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+
+from api.JobBatchesV2Api import JobBatchesV2Api
+from smartlingApiSdk.ProxySettings import ProxySettings
+from smartlingApiSdk.Credentials import Credentials
+
+isPython3 =  sys.version_info[:2] >= (3,0)
+
+def assert_equal(a,b, comment=''):
+    if a != b :
+        err = "Assertion Failed: '%s' != '%s' %s" % (a,b, comment)
+        if not isPython3 and type(err) == str:
+            err = err.decode('utf-8', 'ignore')
+        raise Exception(repr(err))
+
+class testJobBatchesV2Api(object):
+
+    CODE_SUCCESS_TOKEN = 'SUCCESS'
+    ACCEPTED_TOKED = 'ACCEPTED'
+
+    def tearDown(self):
+        print("tearDown", "OK")
+
+    def setUp(self):
+        credentials = Credentials('stg') #Gets your Smartling credetnials from environment variables
+        self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
+        self.MY_USER_SECRET = credentials.MY_USER_SECRET
+        self.MY_PROJECT_ID = credentials.MY_PROJECT_ID
+
+        #needed for testProjects
+        self.MY_ACCOUNT_UID = credentials.MY_ACCOUNT_UID
+        self.MY_LOCALE = credentials.MY_LOCALE
+
+        if self.MY_ACCOUNT_UID == "CHANGE_ME":
+            print("can't test projects api call, set self.MY_ACCOUNT_UID or export SL_ACCOUNT_UID=*********")
+            return
+
+        useProxy = False
+        if useProxy :
+            proxySettings = ProxySettings("login", "password", "proxy_host", "proxy_port or None")
+        else:
+            proxySettings = None
+
+        self.api = JobBatchesV2Api(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+
+        print("setUp", "OK", "\n")
+
+
+    def checkCreateJobBatchV2(self):
+        """
+            post
+            /job-batches-api/v2/projects/{projectId}/batches
+            for details check: https://api-reference.smartling.com/#operation/createJobBatchV2
+            curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"]}'
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        self.file_uri = "java.properties.jb2.%d" % time.time()
+        authorize=False
+        translationJobUid="c4e4b14773bd"  #use real batch job here
+        fileUris=[self.file_uri, "file_to_cancel_later"]
+        localeWorkflows= [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]
+        res, status = self.api.createJobBatchV2(authorize=authorize, translationJobUid=translationJobUid, fileUris=fileUris, localeWorkflows=localeWorkflows)
+        
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        print("createJobBatchV2", "OK")
+        self.batch_uid = res.data.batchUid
+
+
+    def checkGetJobBatchesListV2(self):
+        """
+            get
+            /job-batches-api/v2/projects/{projectId}/batches
+            for details check: https://api-reference.smartling.com/#operation/getJobBatchesListV2
+            curl -X GET \
+'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches?translationJobUid={translationJobUid}&status={status}&sortBy=createdDate&orderBy=desc&offset=0&limit=20' \
+-H "Authorization: Bearer $smartlingToken"
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        res, status = self.api.getJobBatchesListV2()
+        
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        print("getJobBatchesListV2", "OK")
+
+
+    def checkGetJobBatchStatusV2(self):
+        """
+            get
+            /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
+            for details check: https://api-reference.smartling.com/#operation/getJobBatchStatusV2
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        batchUid=self.batch_uid
+        res, status = self.api.getJobBatchStatusV2(batchUid=batchUid)
+        
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        print("getJobBatchStatusV2", "OK")
+
+
+    def checkUploadFileToJobBatchV2(self):
+        """
+            post
+            /job-batches-api/v2/projects/{projectId}/batches/{batchUid}/file
+            for details check: https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
+            curl -X POST \
+'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/{batchUid}/file' \
+-H "Authorization: Bearer $smartlingToken" \
+-F "file=@file.properties;type=text/plain" \
+-F "fileUri=file.properties" \
+-F "fileType=javaProperties" \
+-F "localeIdsToAuthorize[]=fr-FR" \
+-F "localeIdsToAuthorize[]=ru-RU"
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        batchUid=self.batch_uid
+        file='../resources/java.properties'
+        fileUri=self.file_uri
+        fileType='javaProperties'
+        authorize=False
+        localeIdsToAuthorize=["zh-TW",]
+        callbackUrl='https://www.callback.com/smartling/python/sdk/jb2.test'
+        res, status = self.api.uploadFileToJobBatchV2(batchUid=batchUid, file=file, fileUri=fileUri, fileType=fileType, authorize=authorize, localeIdsToAuthorize=localeIdsToAuthorize, callbackUrl=callbackUrl)
+        
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        print("uploadFileToJobBatchV2", "OK")
+
+
+    def checkProcessBatchActionV2(self):
+        """
+            put
+            /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
+            for details check: https://api-reference.smartling.com/#operation/processBatchActionV2
+            curl -X PUT \
+'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/$batchUid' \
+-H "Authorization: Bearer $smartlingToken" \
+-H "Content-Type: application/json" \
+-d '{ "action": "CANCEL_FILE", "fileUri": "file1.xml", "reason": "Requested asset doesn't exist in Zendesk" }'
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        batchUid=self.batch_uid
+        action='CANCEL_FILE'
+        fileUri='file_to_cancel_later'
+        reason='test reason'
+        res, status = self.api.processBatchActionV2(batchUid=batchUid, action=action, fileUri=fileUri, reason=reason)
+        
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        print("processBatchActionV2", "OK")
+
+
+
+def example():
+    t = testJobBatchesV2Api()
+    t.setUp()
+    t.checkCreateJobBatchV2()
+    t.checkGetJobBatchesListV2()
+    t.checkGetJobBatchStatusV2()
+    t.checkUploadFileToJobBatchV2()
+    t.checkProcessBatchActionV2()
+    t.tearDown()
+
+example()

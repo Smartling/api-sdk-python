@@ -39,7 +39,7 @@ class Method():
         self.opa_dict = opa_dict
         for p in description_dict['parameters']:
             if 'projectId' == p['name'] : continue
-            self.parameters .append( Parameter(p) )
+            self.parameters .append( Parameter(p, opa_dict) )
         self.need_multipart = False
         self.is_json = False
         self.getMultipartProps()
@@ -280,7 +280,7 @@ class Method():
     def listPrtoperty(self, name, array):
         if not name:
             raise Exception("Can't determine property name")
-        mp = MuptipartProperty(name, {'type':'array'})
+        mp = MuptipartProperty(name, {'type':'array'}, self.opa_dict)
         mp.setRequired()
         mp.is_request_body = True
         self.mp_params.insert(0, mp)
@@ -323,7 +323,7 @@ class Method():
                 self.hasDirectives = True
                 continue
 
-            mp = MuptipartProperty(k, prop_dict)
+            mp = MuptipartProperty(k, prop_dict, self.opa_dict)
             prop_list.append(mp)
 
             if 'application/json' == self.type:

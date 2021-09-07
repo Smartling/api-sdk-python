@@ -24,7 +24,7 @@ from Method import Method
 from ExampleData import exampleHeader, exampleFooter, testsFooter
 
 class ApiSource():
-    def __init__(self, full_name, api_name):
+    def __init__(self, full_name, api_name, test_evnironment='prod'):
         self.full_name = full_name
         self.methods = []
         self.api_name = api_name
@@ -35,20 +35,20 @@ class ApiSource():
         for k,v  in opaDict['paths'].items():
             for method, descr in v.items():
                 if method == '$ref': continue
-                #if descr['operationId'] != 'assignCustomFieldsToProject': continue
+                #if descr['operationId'] != 'getJobBatchesListV2': continue
                 if self.full_name in descr['tags']:
                     m = Method(self.api_name, k, method, descr, opaDict)
-                    self.patchExportTranslations(descr, m)
+                    self.patchExportTranslations(descr, m, opaDict)
                     self.methods.append(m)
 
-    def patchExportTranslations(self, descr, m):
+    def patchExportTranslations(self, descr, m, opa_dict):
         if descr['operationId'] == 'exportFileTranslations':
             prop_dict = {
                 "type": "string",
                 "format": "binary",
                 "description": "The file contents to upload."
             }
-            mp = MuptipartProperty('file', prop_dict)
+            mp = MuptipartProperty('file', prop_dict, opa_dict)
             mp.setRequired()
             m.need_multipart = True
             m.mp_params.insert(0, mp)
@@ -56,12 +56,16 @@ class ApiSource():
     def build(self):
         rows = []
         rows.append('from smartlingApiSdk.UrlV2Helper import UrlV2Helper')
-        rows.append('from .ApiV2 import ApiV2')
+        rows.append('from smartlingApiSdk.ApiV2 import ApiV2')
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
-        rows.append('    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):')
-        rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)')
+        if 'JobBatchesV2'==self.api_name:
+            rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
+            rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
+        else:
+            rows.append('    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):')
+            rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)')
         rows.append('        self.urlHelper = UrlV2Helper(projectId)')
         rows.append('')
 
@@ -85,26 +89,30 @@ class ApiSource():
         testDataModule = __import__(self.api_name+'TestData')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
         tests_order = getattr(testDataModule, 'tests_order')
-        return extra_initializations, tests_order
+        test_evnironment = getattr(testDataModule, 'test_evnironment', 'prod')
+        return extra_initializations, tests_order, test_evnironment
 
     def buildTestOrExample(self, footer, indent):
         rows = []
 
         myname = self.api_name + "Api"
 
-        extra_initializations, tests_order = self.importTestData()
+        extra_initializations, tests_order, test_evnironment = self.importTestData()
         hdr = exampleHeader.replace('{API_NAME}', myname)
+        if 'stg' == test_evnironment:
+            hdr = hdr.replace('Credentials()', "Credentials('stg')")
+            hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
         hdr += extra_initializations
 
-        mnmes = [m.operationId for m in self.methods]
-        mnmes.insert(0, "'''")
-        mnmes.insert(0, '# not covered by tests #')
+        not_tested_calls = [m.operationId for m in self.methods]
+        not_tested_calls.insert(0, "'''")
+        not_tested_calls.insert(0, '# not covered by tests #')
         rows.append(hdr)
         test_calls = []
 
         for name in tests_order:
             m = self.methodByName(name)
-            mnmes.remove(name)
+            not_tested_calls.remove(name)
 
             built = m.buildExample()
             capitalized = m.operationId[0].capitalize() + m.operationId[1:]
@@ -116,11 +124,13 @@ class ApiSource():
                 rows.append(built)
                 rows.append('')
 
-        mnmes.append("'''")
+        not_tested_calls.append("'''")
+        if len(not_tested_calls) > 3:
+            test_calls += not_tested_calls
 
         ftr = footer.replace('{API_NAME}', myname)
         newline_w_indent = '\n'+ '    ' * indent
-        rows.append(ftr % newline_w_indent.join(test_calls + mnmes))
+        rows.append(ftr % newline_w_indent.join(test_calls))
         return '\n'.join(rows)
 
     def buildExample(self):

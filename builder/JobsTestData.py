@@ -18,13 +18,7 @@
  '''
 
 from Parameters import Code
-
-class TestData:
-    def __init__(self, fields, pre = [], post = [], custom_test_check = ''):
-        self.fields = fields
-        self.pre_calls = pre
-        self.post_calls = post
-        self.custom_test_check = custom_test_check
+from ExampleData import TestData
 
 tests_order = [
    'addJob',
@@ -86,7 +80,7 @@ TestDecorators = {
         'jobName' : Code('self.jobname'),
         'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
         'description' : 'testDescription',
-        'dueDate' : Code('self.dateTimeStr(2022)'),
+        'dueDate' : Code('self.dateTimeStr(3600*24*30)'),
         'referenceNumber' : 'testReferenceNumber',
         'callbackUrl' : 'https://www.callback.com/smartling/job',
         'callbackMethod': 'GET',
@@ -101,7 +95,7 @@ TestDecorators = {
         'translationJobUid':Code('self.test_job_uid'),
         'jobName' : Code('"new name" + self.jobname'),
         'description' : 'new Description',
-        'dueDate' : Code('self.dateTimeStr(3031)'),
+        'dueDate' : Code('self.dateTimeStr(3600*24*120)'),
         'referenceNumber' : 'new ReferenceNumber',
         'callbackUrl' : 'https://www.callback.com/smartling/new_job',
         'callbackMethod': 'POST',
@@ -185,7 +179,7 @@ else:
 ),
 
 'modifyScheduleItemsForTranslationJob' : TestData({
-    'schedules': Code(' [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(2021)} ]'),
+    'schedules': Code(' [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(3600*24*30)} ]'),
     'translationJobUid': jobUidCode,
 }
 ),

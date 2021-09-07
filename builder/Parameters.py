@@ -24,13 +24,28 @@ class Code:
         return self.value
 
 class Parameter():
-    def __init__(self, param_dict):
+    def __init__(self, param_dict, opa_dict):
         param_names = ['name', 'description', 'in', 'required', 'schema']
         self.processParams(param_names, param_dict)
         self._type = "string"
+        self.opa_dict = opa_dict
         if self._schema:
+            if '$ref' == list(self._schema.keys())[0]:
+                self._schema, refname = self.resolveRef(self._schema['$ref'])
             self._type = self._schema['type']
             self._default = self._schema.get('default', None)
+
+    def resolveRef(self, ref):
+        #import pdb; pdb.set_trace()
+        if not ref.startswith('#/'):
+            raise Exception('Unknown $ref:%s' % ref)
+        pth = ref[2:].split('/')
+        dct = self.opa_dict
+        lastname = ''
+        for p in pth:
+            dct = dct[p]
+            lastname = p
+        return dct, lastname
 
     def processParams(self, param_names, param_dict):
 
@@ -63,7 +78,8 @@ class Parameter():
         default = getattr(self, '_default', None)
         if default is None:
             default = "''"
-
+        if "string" == self._type and  default != "''":
+            default = "'"+default+"'"
         if 'array' == self._type:
             return '[]'
         if 'integer' == self._type:
@@ -71,12 +87,13 @@ class Parameter():
         return default
 
 class MuptipartProperty(Parameter):
-    def __init__(self, name, param_dict):
+    def __init__(self, name, param_dict, opa_dict):
         param_names = ['description', 'format', 'type', 'default', 'example']
         self.processParams(param_names, param_dict)
         self._required = False
         self._name = name.replace('[]','')
         self.is_request_body = False
+        self.opa_dict = opa_dict
 
     def setRequired(self):
         self._required = True
