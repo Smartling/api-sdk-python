@@ -86,7 +86,7 @@ TestDecorators = {
         'jobName' : Code('self.jobname'),
         'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
         'description' : 'testDescription',
-        'dueDate' : Code('self.dateTimeStr(2)'),
+        'dueDate' : Code('self.dateTimeStr(2022)'),
         'referenceNumber' : 'testReferenceNumber',
         'callbackUrl' : 'https://www.callback.com/smartling/job',
         'callbackMethod': 'GET',
@@ -101,7 +101,7 @@ TestDecorators = {
         'translationJobUid':Code('self.test_job_uid'),
         'jobName' : Code('"new name" + self.jobname'),
         'description' : 'new Description',
-        'dueDate' : Code('self.dateTimeStr(300)'),
+        'dueDate' : Code('self.dateTimeStr(3031)'),
         'referenceNumber' : 'new ReferenceNumber',
         'callbackUrl' : 'https://www.callback.com/smartling/new_job',
         'callbackMethod': 'POST',
@@ -185,7 +185,7 @@ else:
 ),
 
 'modifyScheduleItemsForTranslationJob' : TestData({
-    'schedules': Code(' [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(20)} ]'),
+    'schedules': Code(' [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(2021)} ]'),
     'translationJobUid': jobUidCode,
 }
 ),
