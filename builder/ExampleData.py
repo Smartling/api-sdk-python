@@ -16,6 +16,12 @@
  * See the License for the specific language governing permissions and
  * limit
  '''
+class TestData:
+    def __init__(self, fields, pre = [], post = [], custom_test_check = ''):
+        self.fields = fields
+        self.pre_calls = pre
+        self.post_calls = post
+        self.custom_test_check = custom_test_check
 
 exampleHeader="""
 #!/usr/bin/python

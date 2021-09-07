@@ -23,12 +23,13 @@ import time
 from .Constants import ReqMethod
 
 class AuthClient:
-    host = "api.smartling.com"
+    host_prod = "api.smartling.com"
     authUri = "/auth-api/v2/authenticate"
     refreshUri = "/auth-api/v2/authenticate/refresh"
     timeJitter = 5 #seconds off server expiration time
 
     def __init__(self, userIdentifier, userSecret, proxySettings=None):
+        self.host = os.environ.get('SL_API_HOST', self.host_prod)
         self.httpClient = HttpClient(self.host, proxySettings)
         self.userIdentifier = userIdentifier
         self.userSecret = userSecret

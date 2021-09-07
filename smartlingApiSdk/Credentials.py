@@ -46,7 +46,7 @@ class Credentials:
     MY_USER_IDENTIFIER = "CHANGE_ME"
     MY_USER_SECRET = "CHANGE_ME"
     MY_LOCALE="CHANGE_ME"
-    
+
     creds = ("PROJECT_ID", "ACCOUNT_UID", "USER_IDENTIFIER", "USER_SECRET", "LOCALE")
     optional_creds = ("ACCOUNT_UID")
    

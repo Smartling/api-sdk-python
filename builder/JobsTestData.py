@@ -18,13 +18,7 @@
  '''
 
 from Parameters import Code
-
-class TestData:
-    def __init__(self, fields, pre = [], post = [], custom_test_check = ''):
-        self.fields = fields
-        self.pre_calls = pre
-        self.post_calls = post
-        self.custom_test_check = custom_test_check
+from ExampleData import TestData
 
 tests_order = [
    'addJob',

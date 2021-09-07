@@ -53,6 +53,7 @@ class ApiBuilder:
         open(outPath,'w').write(built)
         print (built)
         print ("stored as:",outPath)
+        return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildExample(self):
         built = self.apisrc.buildExample()
@@ -61,6 +62,7 @@ class ApiBuilder:
         open(outPath,'w').write(built)
         print (built)
         print ("stored as:",outPath)
+        return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildTest(self):
         built = self.apisrc.buildTest()
@@ -69,17 +71,20 @@ class ApiBuilder:
         open(outPath,'w').write(built)
         print (built)
         print ("stored as:",outPath)
+        return self #allow tagged calls : build().buildExample().buildTest()
 
 
 
 def main():
     sys.stdout = Logger('python-sdk', logging.INFO)
-    #ApiBuilder("Files").build()
-    #ApiBuilder("Account & Projects").build()
-    #ApiBuilder("Jobs").build()
-    ApiBuilder("Jobs").buildExample()
-    ApiBuilder("Jobs").buildTest()
-
+    build_all = False
+    if build_all:
+        ApiBuilder("Files").build()
+        ApiBuilder("Account & Projects").build()
+        ApiBuilder("Jobs").build()
+        ApiBuilder("Jobs").buildExample()
+        ApiBuilder("Jobs").buildTest()
+    ApiBuilder("Job Batches V2").build().buildExample().buildTest()
 
 
 main()

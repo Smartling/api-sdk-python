@@ -38,17 +38,17 @@ class ApiSource():
                 #if descr['operationId'] != 'assignCustomFieldsToProject': continue
                 if self.full_name in descr['tags']:
                     m = Method(self.api_name, k, method, descr, opaDict)
-                    self.patchExportTranslations(descr, m)
+                    self.patchExportTranslations(descr, m, opaDict)
                     self.methods.append(m)
 
-    def patchExportTranslations(self, descr, m):
+    def patchExportTranslations(self, descr, m, opa_dict):
         if descr['operationId'] == 'exportFileTranslations':
             prop_dict = {
                 "type": "string",
                 "format": "binary",
                 "description": "The file contents to upload."
             }
-            mp = MuptipartProperty('file', prop_dict)
+            mp = MuptipartProperty('file', prop_dict, opa_dict)
             mp.setRequired()
             m.need_multipart = True
             m.mp_params.insert(0, mp)
@@ -56,7 +56,7 @@ class ApiSource():
     def build(self):
         rows = []
         rows.append('from smartlingApiSdk.UrlV2Helper import UrlV2Helper')
-        rows.append('from .ApiV2 import ApiV2')
+        rows.append('from smartlingApiSdk.ApiV2 import ApiV2')
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
