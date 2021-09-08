@@ -81,10 +81,8 @@ def main():
     if build_all:
         ApiBuilder("Files").build()
         ApiBuilder("Account & Projects").build()
-        ApiBuilder("Jobs").build()
-        ApiBuilder("Jobs").buildExample()
-        ApiBuilder("Jobs").buildTest()
-    ApiBuilder("Job Batches V2").build().buildExample().buildTest()
+        ApiBuilder("Jobs").build().buildExample().buildTest()
+    ApiBuilder("Job Batches V2").build().buildExample()
 
 
 main()

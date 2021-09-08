@@ -32,14 +32,22 @@ class CredentialsNotSet(Exception):
      export SL_PROJECT_ID=******* #required for api calls `projects` and `project_details`
     """
 
-    def __init__(self, id):
+    def __init__(self, id, env):
         self.id = id
-        
+        self.env = env
+
+    def getMessage(self):
+        res = self.noKeymessage
+        if 'stg'==self.env:
+            res = res.replace('SL_USER_IDENTIFIER=','SL_USER_IDENTIFIER_STG=')
+            res = res.replace('SL_USER_SECRET=','SL_USER_SECRET_STG=')
+        return res
+
     def __str__(self):
-        return "Missing:" + self.id + self.noKeymessage
+        return "Missing:" + self.id + self.getMessage()
 
 
-class Credentials:
+class Credentials():
 
     MY_PROJECT_ID = "CHANGE_ME"
     MY_ACCOUNT_UID = "CHANGE_ME"
@@ -47,15 +55,19 @@ class Credentials:
     MY_USER_SECRET = "CHANGE_ME"
     MY_LOCALE="CHANGE_ME"
 
+
     creds = ("PROJECT_ID", "ACCOUNT_UID", "USER_IDENTIFIER", "USER_SECRET", "LOCALE")
     optional_creds = ("ACCOUNT_UID")
    
-    def __init__(self):
+    def __init__(self, env='prod'):
         for id in self.creds:
             cred = "MY_"+id
-            value = getattr(self, cred, "CHANGE_ME")
+            suffix = ''
+            if env == 'stg' and id.startswith("USER_"):
+                suffix = '_STG'
+            value = getattr(self, cred+suffix, "CHANGE_ME")
             if "CHANGE_ME" == value:
-                value = os.environ.get('SL_'+id, getattr(self, cred))    
+                value = os.environ.get('SL_'+id+suffix, getattr(self, cred))
             if "CHANGE_ME" == value and not id in self.optional_creds:
-                raise CredentialsNotSet(id)
+                raise CredentialsNotSet('SL_'+id+suffix, env)
             setattr(self, cred, value)

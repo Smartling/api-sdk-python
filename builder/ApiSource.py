@@ -24,7 +24,7 @@ from Method import Method
 from ExampleData import exampleHeader, exampleFooter, testsFooter
 
 class ApiSource():
-    def __init__(self, full_name, api_name):
+    def __init__(self, full_name, api_name, test_evnironment='prod'):
         self.full_name = full_name
         self.methods = []
         self.api_name = api_name
@@ -35,7 +35,7 @@ class ApiSource():
         for k,v  in opaDict['paths'].items():
             for method, descr in v.items():
                 if method == '$ref': continue
-                #if descr['operationId'] != 'assignCustomFieldsToProject': continue
+                #if descr['operationId'] != 'getJobBatchesListV2': continue
                 if self.full_name in descr['tags']:
                     m = Method(self.api_name, k, method, descr, opaDict)
                     self.patchExportTranslations(descr, m, opaDict)
@@ -60,8 +60,12 @@ class ApiSource():
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
-        rows.append('    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):')
-        rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)')
+        if 'JobBatchesV2'==self.api_name:
+            rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
+            rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
+        else:
+            rows.append('    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):')
+            rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)')
         rows.append('        self.urlHelper = UrlV2Helper(projectId)')
         rows.append('')
 
@@ -85,15 +89,19 @@ class ApiSource():
         testDataModule = __import__(self.api_name+'TestData')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
         tests_order = getattr(testDataModule, 'tests_order')
-        return extra_initializations, tests_order
+        test_evnironment = getattr(testDataModule, 'test_evnironment', 'prod')
+        return extra_initializations, tests_order, test_evnironment
 
     def buildTestOrExample(self, footer, indent):
         rows = []
 
         myname = self.api_name + "Api"
 
-        extra_initializations, tests_order = self.importTestData()
+        extra_initializations, tests_order, test_evnironment = self.importTestData()
         hdr = exampleHeader.replace('{API_NAME}', myname)
+        if 'stg' == test_evnironment:
+            hdr = hdr.replace('Credentials()', "Credentials('stg')")
+            hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
         hdr += extra_initializations
 
         mnmes = [m.operationId for m in self.methods]

@@ -78,7 +78,8 @@ class Parameter():
         default = getattr(self, '_default', None)
         if default is None:
             default = "''"
-
+        if "string" == self._type and  default != "''":
+            default = "'"+default+"'"
         if 'array' == self._type:
             return '[]'
         if 'integer' == self._type:

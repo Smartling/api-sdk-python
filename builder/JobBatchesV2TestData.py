@@ -27,70 +27,17 @@ tests_order = [
 extra_initializations = '''
 '''
 
+test_evnironment = 'stg'
 
 TestDecorators = {
-'addJob':TestData(
+'createJobBatchV2':TestData(
     {
-        'jobName' : Code('self.jobname'),
-        'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
-        'description' : 'testDescription',
-        'dueDate' : Code('self.dateTimeStr(2)'),
-        'referenceNumber' : 'testReferenceNumber',
-        'callbackUrl' : 'https://www.callback.com/smartling/job',
-        'callbackMethod': 'GET',
-        'customFields' : [],
-    },
+        'authorize' : False,
+        'translationJobUid' : 'zzzzz',
+        'fileUris': Code('["test_import.xml_2.2.4_1629202583.584802",] #use your actual file uris uploaded earielr to Smartling'),
+        'localeWorkflows': Code(' [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]'),
+},
     [],
-    ["self.test_job_uid = res.data.translationJobUid",]
+    []
 ),
-
-'updateJob':  TestData(
-    {
-        'translationJobUid':Code('self.test_job_uid'),
-        'jobName' : Code('"new name" + self.jobname'),
-        'description' : 'new Description',
-        'dueDate' : Code('self.dateTimeStr(300)'),
-        'referenceNumber' : 'new ReferenceNumber',
-        'callbackUrl' : 'https://www.callback.com/smartling/new_job',
-        'callbackMethod': 'POST',
-        'customFields' : [],
-    }
-),
-
-'findJobsByStrings' : TestData(
-    {'hashcodes':Code('[]'), 'localeIds' : Code('[self.MY_LOCALE,]'),}
-),
-
-'getAccountCustomFields' : TestData(
-    {'accountUid':Code('self.MY_ACCOUNT_UID')}
-),
-
-'assignCustomFieldsToProject' : TestData(
-    {'accountUid':Code('self.MY_ACCOUNT_UID'),
-     'CustomFieldAssignmentList': Code('[{"fieldUid":self.fieldUid},]')
-    },
-'''
-resp, code = self.api.getAccountCustomFields(self.MY_ACCOUNT_UID)
-self.fieldUid=None
-for fld in resp.data.items:
-    if 'python-sdk-test' == fld['fieldName']:
-        self.fieldUid = fld['fieldUid']
-
-'''.split('\n')
-),
-
-'updateCustomField' : TestData(
-    {'accountUid':Code('self.MY_ACCOUNT_UID'),
-     "fieldUid": Code("self.fieldUid"),
-     "fieldName": "python-sdk-test",
-     "enabled": True,
-     "required": False,
-     "searchable": True,
-     "displayToTranslators": True,
-     "options": [],
-     "defaultValue": "New default field value",
-     "description": "New custom field example"
-     },
-),
-
 }
