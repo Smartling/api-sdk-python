@@ -56,6 +56,7 @@ class ApiV2(FileApiBase):
 
     def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}, env='prod'):
         self.host = self.host_prod
+        self.userIdentifier = userIdentifier
         if 'stg'==env:
             self.host = self.host_stg
         FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
@@ -64,7 +65,7 @@ class ApiV2(FileApiBase):
     def addAuth(self, params):
         token = self.authClient.getToken()
         if token is None:
-            raise Exception("Error getting token, check you credentials")
+            raise Exception("Error getting token, check your credentials for userIdentifier:%s" % (self.userIdentifier))
         return {"Authorization" : "Bearer "+ token}
 
     def validateFileTypes(self, kw):

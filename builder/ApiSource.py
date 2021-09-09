@@ -104,15 +104,15 @@ class ApiSource():
             hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
         hdr += extra_initializations
 
-        mnmes = [m.operationId for m in self.methods]
-        mnmes.insert(0, "'''")
-        mnmes.insert(0, '# not covered by tests #')
+        not_tested_calls = [m.operationId for m in self.methods]
+        not_tested_calls.insert(0, "'''")
+        not_tested_calls.insert(0, '# not covered by tests #')
         rows.append(hdr)
         test_calls = []
 
         for name in tests_order:
             m = self.methodByName(name)
-            mnmes.remove(name)
+            not_tested_calls.remove(name)
 
             built = m.buildExample()
             capitalized = m.operationId[0].capitalize() + m.operationId[1:]
@@ -124,11 +124,13 @@ class ApiSource():
                 rows.append(built)
                 rows.append('')
 
-        mnmes.append("'''")
+        not_tested_calls.append("'''")
+        if len(not_tested_calls) > 3:
+            test_calls += not_tested_calls
 
         ftr = footer.replace('{API_NAME}', myname)
         newline_w_indent = '\n'+ '    ' * indent
-        rows.append(ftr % newline_w_indent.join(test_calls + mnmes))
+        rows.append(ftr % newline_w_indent.join(test_calls))
         return '\n'.join(rows)
 
     def buildExample(self):

@@ -22,6 +22,10 @@ from ExampleData import TestData
 
 tests_order = [
     'createJobBatchV2',
+    'getJobBatchesListV2',
+    'getJobBatchStatusV2',
+    'uploadFileToJobBatchV2',
+    'processBatchActionV2',
 ]
 
 extra_initializations = '''
@@ -33,11 +37,33 @@ TestDecorators = {
 'createJobBatchV2':TestData(
     {
         'authorize' : False,
-        'translationJobUid' : 'zzzzz',
-        'fileUris': Code('["test_import.xml_2.2.4_1629202583.584802",] #use your actual file uris uploaded earielr to Smartling'),
+        'translationJobUid' : Code('"c4e4b14773bd"  #use real batch job here'),
+        'fileUris': Code('[self.file_uri, "file_to_cancel_later"]'),
         'localeWorkflows': Code(' [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]'),
 },
-    [],
-    []
+    ['self.file_uri = "java.properties.jb2.%d" % time.time()',],
+    ['self.batch_uid = res.data.batchUid']
 ),
+
+'getJobBatchStatusV2': TestData({'batchUid':Code('self.batch_uid')}),
+
+'processBatchActionV2': TestData({
+    'batchUid': Code('self.batch_uid'),
+    'action' : 'CANCEL_FILE',
+    'fileUri': 'file_to_cancel_later',
+    'reason' : 'test reason'
+}),
+
+'uploadFileToJobBatchV2': TestData({
+    'batchUid': Code('self.batch_uid'),
+    'file' : '../resources/java.properties',
+    'fileUri': Code('self.file_uri'),
+    'fileType':'javaProperties',
+    'authorize':False,
+    'localeIdsToAuthorize':Code('["zh-TW",]'),
+    'callbackUrl' : 'https://www.callback.com/smartling/python/sdk/jb2.test',
+}),
+
+
+
 }

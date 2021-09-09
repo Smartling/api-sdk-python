@@ -82,7 +82,7 @@ def main():
         ApiBuilder("Files").build()
         ApiBuilder("Account & Projects").build()
         ApiBuilder("Jobs").build().buildExample().buildTest()
-    ApiBuilder("Job Batches V2").build().buildExample()
+    ApiBuilder("Job Batches V2").build().buildExample().buildTest()
 
 
 main()

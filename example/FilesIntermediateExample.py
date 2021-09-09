@@ -131,8 +131,12 @@ class SmartlingApiExample:
         resp, code = self.fapi.getRecentlyUploadedSourceFilesList()
         self.printMarker("removing %d items" % len(resp.data.items))
         for fl in resp.data.items:
-            resp, code = self.fapi.deleteUploadedSourceFile(fl['fileUri'])
-            print("removed:", fl['fileUri'], resp, code)
+            uri_2_del = fl['fileUri']
+            if "test_import.xml_2.2.4_1629202583.584802" == uri_2_del:
+                print ("skipping %s it's necessary for Jobs test")
+                continue
+            resp, code = self.fapi.deleteUploadedSourceFile(uri_2_del)
+            print("removed:", uri_2_del, resp, code)
 
 
 FILE_NAME = "java.properties"
