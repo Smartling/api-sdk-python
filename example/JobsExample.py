@@ -101,7 +101,7 @@ class testJobsApi(object):
         jobName=self.jobname
         targetLocaleIds=[self.MY_LOCALE,]
         description='testDescription'
-        dueDate=self.dateTimeStr(2)
+        dueDate=self.dateTimeStr(3600*24*30)
         referenceNumber='testReferenceNumber'
         callbackUrl='https://www.callback.com/smartling/job'
         callbackMethod='GET'
@@ -229,7 +229,7 @@ class testJobsApi(object):
             ------------------------------------------------------------------------------------------------------------------------
         """
         translationJobUid=self.test_job_uid
-        schedules= [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(20)} ]
+        schedules= [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(3600*24*30)} ]
         res, status = self.api.modifyScheduleItemsForTranslationJob(translationJobUid=translationJobUid, schedules=schedules)
         
         assert_equal(True, status in [200,202])
@@ -430,7 +430,7 @@ class testJobsApi(object):
         translationJobUid=self.test_job_uid
         jobName="new name" + self.jobname
         description='new Description'
-        dueDate=self.dateTimeStr(300)
+        dueDate=self.dateTimeStr(3600*24*120)
         referenceNumber='new ReferenceNumber'
         callbackUrl='https://www.callback.com/smartling/new_job'
         callbackMethod='POST'
