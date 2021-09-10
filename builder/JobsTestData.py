@@ -185,7 +185,7 @@ else:
 ),
 
 'addStringsToJob' : TestData({
-    'hashcodes' : Code('["5760794264f7f1f2bd80ee9bfd646869", ] # use your string hashcodes list here'),
+    'hashcodes' : Code('["e1159037badca0a2a618f62c50eff1bb", ] # use your string hashcodes list here'),
     'moveEnabled': Code('False'),
     'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
     'translationJobUid': jobUidCode,
@@ -195,7 +195,7 @@ else:
 ),
 
 'removeStringsFromJob' : TestData({
-    'hashcodes' : Code('["5760794264f7f1f2bd80ee9bfd646869", ] # use your string hashcodes list here'),
+    'hashcodes' : Code('["e1159037badca0a2a618f62c50eff1bb", ] # use your string hashcodes list here'),
     'localeIds' : Code('[self.MY_LOCALE,]'),
     'translationJobUid': jobUidCode,
 }
