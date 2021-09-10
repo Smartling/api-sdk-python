@@ -158,7 +158,7 @@ class testFapiV2(object):
         
         
     def testGetMultipleLocalesAsZip(self):
-        res, status = self.fapi.downloadMultipleTranslatedFiles([self.uri,self.uri16], [self.MY_LOCALE])
+        res, status = self.fapi.downloadMultipleTranslatedFiles([self.uri,self.uri16], [self.MY_LOCALE, 'zh-TW'])
         assert_equal(200, status)
 
         if isPython3:

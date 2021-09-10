@@ -23,20 +23,11 @@ class Code:
     def __str__(self):
         return self.value
 
-class Parameter():
-    def __init__(self, param_dict, opa_dict):
-        param_names = ['name', 'description', 'in', 'required', 'schema']
-        self.processParams(param_names, param_dict)
-        self._type = "string"
+class ApiCore():
+    def __init__(self, opa_dict):
         self.opa_dict = opa_dict
-        if self._schema:
-            if '$ref' == list(self._schema.keys())[0]:
-                self._schema, refname = self.resolveRef(self._schema['$ref'])
-            self._type = self._schema['type']
-            self._default = self._schema.get('default', None)
 
     def resolveRef(self, ref):
-        #import pdb; pdb.set_trace()
         if not ref.startswith('#/'):
             raise Exception('Unknown $ref:%s' % ref)
         pth = ref[2:].split('/')
@@ -47,8 +38,20 @@ class Parameter():
             lastname = p
         return dct, lastname
 
-    def processParams(self, param_names, param_dict):
+class Parameter(ApiCore):
+    def __init__(self, param_dict, opa_dict):
+        ApiCore.__init__(self, opa_dict)
+        param_names = ['name', 'description', 'in', 'required', 'schema']
+        self.processParams(param_names, param_dict)
+        self._type = "string"
 
+        if self._schema:
+            if '$ref' == list(self._schema.keys())[0]:
+                self._schema, refname = self.resolveRef(self._schema['$ref'])
+            self._type = self._schema['type']
+            self._default = self._schema.get('default', None)
+
+    def processParams(self, param_names, param_dict):
         for name in param_names:
             n = param_dict.get(name, None)
             if 'name' == name:
@@ -91,7 +94,7 @@ class MuptipartProperty(Parameter):
         param_names = ['description', 'format', 'type', 'default', 'example']
         self.processParams(param_names, param_dict)
         self._required = False
-        self._name = name.replace('[]','')
+        self._name = name.replace('[]','').split(' ')[0]
         self.is_request_body = False
         self.opa_dict = opa_dict
 
