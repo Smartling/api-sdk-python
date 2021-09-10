@@ -133,7 +133,7 @@ class SmartlingApiExample:
         for fl in resp.data.items:
             uri_2_del = fl['fileUri']
             if "test_import.xml_2.2.4_1629202583.584802" == uri_2_del:
-                print ("skipping %s it's necessary for Jobs test")
+                print ("skipping %s it's necessary for Jobs test" % uri_2_del)
                 continue
             resp, code = self.fapi.deleteUploadedSourceFile(uri_2_del)
             print("removed:", uri_2_del, resp, code)

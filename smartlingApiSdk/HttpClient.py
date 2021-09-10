@@ -39,7 +39,7 @@ from .version import version
 
 class HttpClient:
     headers = {"Content-Type": "application/x-www-form-urlencoded", \
-               "User-Agent": "Python SDK client v%s py:%s" % (version,sys.version.split()[0])}
+               "User-Agent": "Python SDK client v%s py:%s" % (version, sys.version.split()[0])}
     protocol = 'https://'
 
     def __init__(self, host, proxySettings=None, permanentHeaders={}):
@@ -47,6 +47,7 @@ class HttpClient:
        self.proxySettings = proxySettings
        self.permanentHeaders = permanentHeaders
        self.ignore_errors = False
+       self.list_brackets = True #add [] suffix to GET list keys in urls, like &hashcodes[]=abcs, required by Files API
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = {}, requestBody=""):
         self.installOpenerWithProxy(handler)
@@ -122,7 +123,9 @@ class HttpClient:
                 for single in v:
                     if len(result)>0:
                         result += "&"
-                    key_list = k+"[]"
+                    key_list = k
+                    if self.list_brackets:
+                        key_list += "[]"
                     dct = {key_list: single}
                     result += urlencode( dct )
 

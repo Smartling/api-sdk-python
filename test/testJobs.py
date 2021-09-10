@@ -141,7 +141,7 @@ class testJobsApi(object):
             ------------------------------------------------------------------------------------------------------------------------
         """
         translationJobUid=self.test_job_uid
-        hashcodes=["5760794264f7f1f2bd80ee9bfd646869", ] # use your string hashcodes list here
+        hashcodes=["e1159037badca0a2a618f62c50eff1bb", ] # use your string hashcodes list here
         moveEnabled=False
         targetLocaleIds=[self.MY_LOCALE,]
         res, status = self.api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
@@ -344,7 +344,7 @@ class testJobsApi(object):
             ------------------------------------------------------------------------------------------------------------------------
         """
         translationJobUid=self.test_job_uid
-        hashcodes=["5760794264f7f1f2bd80ee9bfd646869", ] # use your string hashcodes list here
+        hashcodes=["e1159037badca0a2a618f62c50eff1bb", ] # use your string hashcodes list here
         localeIds=[self.MY_LOCALE,]
         res, status = self.api.removeStringsFromJob(translationJobUid=translationJobUid, hashcodes=hashcodes, localeIds=localeIds)
         

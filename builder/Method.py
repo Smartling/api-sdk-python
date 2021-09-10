@@ -19,15 +19,16 @@
 
 import json
 import collections
-from Parameters import Parameter, MuptipartProperty
+from Parameters import ApiCore, Parameter, MuptipartProperty
 
-class Method():
+class Method(ApiCore):
     indent = '    '
     indent2 = indent*2
     indent3 = indent*3
     indent4 = indent*4
 
     def __init__(self, api_name, path, method, description_dict, opa_dict):
+        ApiCore.__init__(self, opa_dict)
         for name in ['summary', 'description', 'tags', 'operationId', 'responses', 'x-code-samples', 'requestBody']:
             setattr(self, name, description_dict.get(name, None))
         self.api_name = api_name
@@ -36,10 +37,11 @@ class Method():
         self.parameters = []
         self.oldSource = open('../smartlingApiSdk/FileApiV2.py').read().split('\n')
         self.UrlV2Helper = open('../smartlingApiSdk/UrlV2Helper.py').read().split('\n')
-        self.opa_dict = opa_dict
         for p in description_dict['parameters']:
             if 'projectId' == p['name'] : continue
-            self.parameters .append( Parameter(p, opa_dict) )
+            parameter = Parameter(p, opa_dict)
+            self.parameters .append(parameter)
+
         self.need_multipart = False
         self.is_json = False
         self.getMultipartProps()
@@ -224,7 +226,7 @@ class Method():
         initializers = {}
 
         testDataModule = __import__(self.api_name+'TestData')
-        testData = getattr(testDataModule, 'TestDecorators')
+        testData = getattr(testDataModule, 'test_decortators')
 
         jobs_test_data = None
         if self.operationId in testData.keys():
@@ -264,18 +266,6 @@ class Method():
                 body_lines.append(line)
 
         return self.joinWithIndent(body_lines, self.indent2)
-
-    def resolveRef(self, ref):
-        #import pdb; pdb.set_trace()
-        if not ref.startswith('#/'):
-            raise Exception('Unknown $ref:%s' % ref)
-        pth = ref[2:].split('/')
-        dct = self.opa_dict
-        lastname = ''
-        for p in pth:
-            dct = dct[p]
-            lastname = p
-        return dct, lastname
 
     def listPrtoperty(self, name, array):
         if not name:

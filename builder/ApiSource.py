@@ -32,16 +32,18 @@ class ApiSource():
     def collectMethods(self, opaDict):
         pt = opaDict['paths']
         all_tags = []
+        methods_to_build = []
         for k,v  in opaDict['paths'].items():
             for method, descr in v.items():
                 if method == '$ref': continue
-                #if descr['operationId'] != 'getJobBatchesListV2': continue
+                if methods_to_build and descr['operationId'] not in methods_to_build: #debug build for specific methods only
+                    continue
                 if self.full_name in descr['tags']:
                     m = Method(self.api_name, k, method, descr, opaDict)
-                    self.patchExportTranslations(descr, m, opaDict)
+                    self.patchMethods(descr, m, opaDict)
                     self.methods.append(m)
 
-    def patchExportTranslations(self, descr, m, opa_dict):
+    def patchMethods(self, descr, m, opa_dict):
         if descr['operationId'] == 'exportFileTranslations':
             prop_dict = {
                 "type": "string",
@@ -52,6 +54,18 @@ class ApiSource():
             mp.setRequired()
             m.need_multipart = True
             m.mp_params.insert(0, mp)
+        if descr['operationId'] in ('getAllSourceStringsByProject'):
+            m.method = 'post'
+            m.is_json = True
+        if descr['operationId'] in ('getAllTranslationsByProject'):
+            m.method = 'post'
+            m.is_json = True
+            #import pdb; pdb.set_trace()
+            if m.parameters[0]._name == 'hashcodes':
+                p = m.parameters[0]
+                del (m.parameters[0])
+                m.parameters.insert(1, p)
+
 
     def build(self):
         rows = []
@@ -60,7 +74,7 @@ class ApiSource():
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
-        if 'JobBatchesV2'==self.api_name:
+        if self.api_name in ['JobBatchesV2', 'Strings']:
             rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
             rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
         else:
