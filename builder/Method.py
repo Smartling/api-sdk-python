@@ -93,10 +93,10 @@ class Method(ApiCore):
 
     def buildPrarams(self):
         result = ''
-        if self.parameters:
-            result += ", " + ", ".join(x.getParamForName() for x in self.parameters)
-        if self.mp_params:
-            result += ", " + ", ".join(x.getParamForName() for x in self.mp_params)
+        joined = self.parameters + self.mp_params
+        self.rearrangeRequired(joined)
+        if joined:
+            result += ", " + ", ".join(x.getParamForName() for x in joined)
         if self.hasDirectives:
             result += ', directives={}'
         return result
@@ -248,9 +248,9 @@ class Method(ApiCore):
         for p in kw_params:
             if p._required or p._name in initializers:
                 body_lines.append(p.getParamForMethodCall(initializers))
-        for m in self.mp_params:
+        for p in self.mp_params:
             if p._required or p._name in initializers:
-                body_lines.append(m.getParamForMethodCall(initializers))
+                body_lines.append(p.getParamForMethodCall(initializers))
 
         call_params = ', '.join(parameters)
         body_lines.append('res, status = self.api.%s(%s)' % (self.operationId, call_params))
@@ -304,6 +304,23 @@ class Method(ApiCore):
             for mp in self.mp_params:
                 if req == mp._name:
                     mp.setRequired()
+
+        self.rearrangeRequired(self.mp_params)
+
+    def rearrangeRequired(self, params):
+        need_rearrange_idx = []
+        has_optional = False
+        for p in params:
+            if not p._required:
+                has_optional = True
+                continue
+            if has_optional:
+                need_rearrange_idx.append( params.index(p) )
+        need_rearrange_idx.reverse()
+        for idx in need_rearrange_idx:
+            p = params[idx]
+            del params[idx]
+            params.insert(0, p)
 
     def parseProperties(self, props):
         prop_list = []

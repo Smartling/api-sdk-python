@@ -52,7 +52,6 @@ class ApiBuilder:
         outPath = '../api/%sApi.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
-        print ("stored as:",outPath)
         return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildExample(self):
@@ -61,7 +60,6 @@ class ApiBuilder:
         outPath = '../example/%sExample.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
-        print ("stored as:",outPath)
         return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildTest(self):
@@ -70,7 +68,6 @@ class ApiBuilder:
         outPath = '../test/test%s.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
-        print ("stored as:",outPath)
         return self #allow tagged calls : build().buildExample().buildTest()
 
 
@@ -83,6 +80,7 @@ def main():
         ApiBuilder("Account & Projects").build()
         ApiBuilder("Jobs").build().buildExample().buildTest()
         ApiBuilder("Job Batches V2").build().buildExample().buildTest()
-    ApiBuilder("Strings").build().buildExample().buildTest()
+        ApiBuilder("Strings").build().buildExample().buildTest()
+    ApiBuilder("Context").build().buildExample().buildTest()
 
 main()
