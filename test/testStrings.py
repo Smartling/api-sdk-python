@@ -89,8 +89,9 @@ class testStringsApi(object):
         
         assert_equal(res.data.wordCount, 15)
         assert_equal(res.data.stringCount, 2)
-        assert_equal(res.data.items[0]['stringText'], 'Strings API test from python api sdk')
-        assert_equal(res.data.items[1]['stringText'], 'Another Strings API test from python api sdk')
+        stringTexts = [res.data.items[0]['stringText'], res.data.items[1]['stringText']]
+        assert_equal(True, 'Strings API test from python api sdk' in stringTexts)
+        assert_equal(True, 'Another Strings API test from python api sdk' in stringTexts)
         
         print("addStringsToProject", "OK")
         self.processUid = res.data.processUid
@@ -132,8 +133,9 @@ class testStringsApi(object):
         
         
         assert_equal(res.data.totalCount, 2)
-        assert_equal(res.data.items[0]['stringText'], 'Strings API test from python api sdk')
-        assert_equal(res.data.items[1]['stringText'], 'Another Strings API test from python api sdk')
+        stringTexts = [res.data.items[0]['stringText'], res.data.items[1]['stringText']]
+        assert_equal(True, 'Strings API test from python api sdk' in stringTexts)
+        assert_equal(True, 'Another Strings API test from python api sdk' in stringTexts)
         
         print("getAllSourceStringsByProject", "OK")
 
