@@ -60,7 +60,6 @@ class ApiSource():
         if descr['operationId'] in ('getAllTranslationsByProject'):
             m.method = 'post'
             m.is_json = True
-            #import pdb; pdb.set_trace()
             if m.parameters[0]._name == 'hashcodes':
                 p = m.parameters[0]
                 del (m.parameters[0])
@@ -74,7 +73,7 @@ class ApiSource():
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
-        if self.api_name in ['JobBatchesV2', 'Strings']:
+        if self.api_name in ['JobBatchesV2', 'Strings', 'Context','Estimates']:
             rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
             rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
         else:

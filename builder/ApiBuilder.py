@@ -43,16 +43,25 @@ class ApiBuilder:
             raise Exception('Can not load openapi description')
 
         open("openapi3.json",'w').write(response_data.decode('utf8'))
+        response_data = self.patchContextApi(response_data)
         json_string = response_data
         json_dict = json.loads(json_string, object_pairs_hook=collections.OrderedDict)
         return json_dict
+
+    def patchContextApi(self, response_data):
+        # path Context API # path Context API # path Context API # path Context API
+        response_data = response_data.decode('utf8')
+        response_data = response_data.replace("#/components/schemas/BatchBindingsRequest",
+                                              "#/components/schemas/BatchBindingsRequest/properties/batchBindingsRequest")
+        response_data = response_data.replace("#/components/schemas/DeleteBatchBindingsRequest",
+                                              "#/components/schemas/DeleteBatchBindingsRequest/properties/batchBindingsRequest")
+        return response_data
 
     def build(self):
         built = self.apisrc.build()
         outPath = '../api/%sApi.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
-        print ("stored as:",outPath)
         return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildExample(self):
@@ -61,7 +70,6 @@ class ApiBuilder:
         outPath = '../example/%sExample.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
-        print ("stored as:",outPath)
         return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildTest(self):
@@ -70,7 +78,6 @@ class ApiBuilder:
         outPath = '../test/test%s.py' % self.api_name
         open(outPath,'w').write(built)
         print (built)
-        print ("stored as:",outPath)
         return self #allow tagged calls : build().buildExample().buildTest()
 
 
@@ -83,6 +90,7 @@ def main():
         ApiBuilder("Account & Projects").build()
         ApiBuilder("Jobs").build().buildExample().buildTest()
         ApiBuilder("Job Batches V2").build().buildExample().buildTest()
-    ApiBuilder("Strings").build().buildExample().buildTest()
+        ApiBuilder("Strings").build().buildExample().buildTest()
+    ApiBuilder("Context").build().buildExample().buildTest()
 
 main()

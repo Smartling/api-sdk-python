@@ -43,11 +43,12 @@ class HttpClient:
     protocol = 'https://'
 
     def __init__(self, host, proxySettings=None, permanentHeaders={}):
-       self.host = host
-       self.proxySettings = proxySettings
-       self.permanentHeaders = permanentHeaders
-       self.ignore_errors = False
-       self.list_brackets = True #add [] suffix to GET list keys in urls, like &hashcodes[]=abcs, required by Files API
+        self.host = host
+        self.proxySettings = proxySettings
+        self.permanentHeaders = permanentHeaders
+        self.ignore_errors = False
+        self.list_brackets = True #add [] suffix to GET list keys in urls, like &hashcodes[]=abcs, required by Files API
+        self.force_multipart = True
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = {}, requestBody=""):
         self.installOpenerWithProxy(handler)
@@ -71,7 +72,7 @@ class HttpClient:
             else:
                 if handler:
                     multipartHandler = MultipartPostHandler();
-                    req = multipartHandler.http_request(req)
+                    req = multipartHandler.http_request(req, self.force_multipart)
                 else:
                     req.data = req.data.encode()
                 response = urllib2.urlopen(req)

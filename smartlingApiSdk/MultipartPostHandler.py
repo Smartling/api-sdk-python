@@ -47,7 +47,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
         else:
             return type(value) == file
 
-    def http_request(self, request):
+    def http_request(self, request, force_multipart = False):
         if isPython3:
             data = request.data
         else:
@@ -66,7 +66,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 systype, value, traceback = sys.exc_info()
                 raise TypeError("not a valid non-string sequence or mapping object")(traceback)
 
-            if len(v_files) == 0:
+            if (not force_multipart) and len(v_files) == 0:
                 data = urlencode(v_vars, self.doseq)
             else:
                 boundary, data = self.multipartEncode(v_vars, v_files)
@@ -105,6 +105,8 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 buffer += '\r\n' + fd.read() + '\r\n'
 
         if isPython3:
+            if str == type(buffer):
+                buffer = buffer.encode()
             buffer += b'--%b--\r\n\r\n' % boundary.encode()
         else:
             buffer += '--%s--\r\n\r\n' % boundary
