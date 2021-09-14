@@ -105,6 +105,8 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 buffer += '\r\n' + fd.read() + '\r\n'
 
         if isPython3:
+            if str == type(buffer):
+                buffer = buffer.encode()
             buffer += b'--%b--\r\n\r\n' % boundary.encode()
         else:
             buffer += '--%s--\r\n\r\n' % boundary

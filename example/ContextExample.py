@@ -87,6 +87,9 @@ class testContextApi(object):
         assert_equal(res.data.contextType, 'VIDEO')
         assert_equal(res.data.name, 'https://www.youtube.com/watch?v=0lJykuiS_9s')
         
+        res_img, status = self.api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
+        self.context_uid_img = res_img.data.contextUid
+        
         print("uploadNewVisualContext", "OK")
         self.context_uid = res.data.contextUid
 
@@ -108,6 +111,157 @@ class testContextApi(object):
         print("getVisualContextsListByProject", "OK")
 
 
+    def checkGetVisualContextInfo(self):
+        """
+            get
+            /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            for details check: https://api-reference.smartling.com/#operation/getVisualContextInfo
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        contextUid=self.context_uid
+        res, status = self.api.getVisualContextInfo(contextUid=contextUid)
+        
+        
+        assert_equal(res.data.contextType, 'VIDEO')
+        assert_equal(res.data.name, 'https://www.youtube.com/watch?v=0lJykuiS_9s')
+        
+        print("getVisualContextInfo", "OK")
+
+
+    def checkDownloadVisualContextFileContent(self):
+        """
+            get
+            /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
+            for details check: https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        contextUid=self.context_uid_img
+        res, status = self.api.downloadVisualContextFileContent(contextUid=contextUid)
+        
+        
+        assert_equal(86324, len(res)) #empty for video context
+        
+        print("downloadVisualContextFileContent", "OK")
+
+
+    def checkRunAutomaticContextMatching(self):
+        """
+            post
+            /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
+            for details check: https://api-reference.smartling.com/#operation/runAutomaticContextMatching
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        contextUid=self.context_uid_img
+        contentFileUri=''
+        stringHashcodes=''
+        overrideContextOlderThanDays=1
+        res, status = self.api.runAutomaticContextMatching(contextUid=contextUid, contentFileUri=contentFileUri, stringHashcodes=stringHashcodes, overrideContextOlderThanDays=overrideContextOlderThanDays)
+        
+        
+        self.match_id = res.data.matchId
+        
+        print("runAutomaticContextMatching", "OK")
+
+
+    def checkUploadAndMatchVisualContext(self):
+        """
+            post
+            /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
+            for details check: https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        content='../resources/ctx_api_test.png'
+        res, status = self.api.uploadAndMatchVisualContext(content=content)
+        
+        
+        self.match_id_upl_n_match = res.data.matchId
+        
+        print("uploadAndMatchVisualContext", "OK")
+
+
+    def checkGetAsyncContextMatchResults(self):
+        """
+            get
+            /context-api/v2/projects/{projectId}/match/{matchId}
+            for details check: https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        matchId=self.match_id_upl_n_match
+        res, status = self.api.getAsyncContextMatchResults(matchId=matchId)
+        
+        
+        
+        print("getAsyncContextMatchResults", "OK")
+
+
+    def checkCreateStringToContextBindings(self):
+        """
+            post
+            /context-api/v2/projects/{projectId}/bindings
+            for details check: https://api-reference.smartling.com/#operation/createStringToContextBindings
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        bindings=[{'contextUid': self.context_uid, 'stringHashcode': 'ede6083ebd2594ca4e557612aaa05b2e'},
+             {'contextUid': self.context_uid_img, 'stringHashcode': '4f25feab674accf572433f22dc516e2e'}]
+        res, status = self.api.createStringToContextBindings(bindings=bindings)
+        
+        
+        assert_equal(res.data.errors['totalCount'], 0)
+        assert_equal(res.data.created['totalCount'], 2)
+        items = res.data.created['items']
+        self.binding_uno = items[0]['bindingUid']
+        self.binding_dos = items[1]['bindingUid']
+        
+        print("createStringToContextBindings", "OK")
+
+
+    def checkGetBindings(self):
+        """
+            post
+            /context-api/v2/projects/{projectId}/bindings/list
+            for details check: https://api-reference.smartling.com/#operation/getBindings
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        stringHashcodes=['ede6083ebd2594ca4e557612aaa05b2e', '4f25feab674accf572433f22dc516e2e']
+        contentFileUri=''
+        contextUid=''
+        bindingUids=[]
+        res, status = self.api.getBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
+        
+        
+        print('Total bindings count:',len(res.data.items))
+        assert_equal(len(res.data.items), 2)
+        
+        print("getBindings", "OK")
+
+
+    def checkDeleteBindings(self):
+        """
+            post
+            /context-api/v2/projects/{projectId}/bindings/remove
+            for details check: https://api-reference.smartling.com/#operation/deleteBindings
+
+            ------------------------------------------------------------------------------------------------------------------------
+        """
+        stringHashcodes=[]
+        contentFileUri=''
+        contextUid=''
+        bindingUids=[self.binding_uno, self.binding_dos]
+        res, status = self.api.deleteBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
+        
+        
+        assert_equal(res.data.totalCount, 2)
+        
+        print("deleteBindings", "OK")
+
+
     def checkDeleteVisualContext(self):
         """
             delete
@@ -119,8 +273,9 @@ class testContextApi(object):
         contextUid=self.context_uid
         res, status = self.api.deleteVisualContext(contextUid=contextUid)
         
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        
+        res2, status = self.api.deleteVisualContext(contextUid=self.context_uid_img)
+        
         print("deleteVisualContext", "OK")
 
 
@@ -130,18 +285,15 @@ def example():
     t.setUp()
     t.checkUploadNewVisualContext()
     t.checkGetVisualContextsListByProject()
+    t.checkGetVisualContextInfo()
+    t.checkDownloadVisualContextFileContent()
+    t.checkRunAutomaticContextMatching()
+    t.checkUploadAndMatchVisualContext()
+    t.checkGetAsyncContextMatchResults()
+    t.checkCreateStringToContextBindings()
+    t.checkGetBindings()
+    t.checkDeleteBindings()
     t.checkDeleteVisualContext()
-    # not covered by tests #
-    '''
-    getVisualContextInfo
-    downloadVisualContextFileContent
-    runAutomaticContextMatching
-    uploadAndMatchVisualContext
-    getAsyncContextMatchResults
-    createStringToContextBindings
-    getBindings
-    deleteBindings
-    '''
     t.tearDown()
 
 example()

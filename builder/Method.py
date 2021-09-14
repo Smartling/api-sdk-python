@@ -310,17 +310,20 @@ class Method(ApiCore):
     def rearrangeRequired(self, params):
         need_rearrange_idx = []
         has_optional = False
+        pos_to_insert = 0
         for p in params:
             if not p._required:
                 has_optional = True
+                if not has_optional:
+                    pos_to_insert = params.index(p)
                 continue
             if has_optional:
                 need_rearrange_idx.append( params.index(p) )
-        need_rearrange_idx.reverse()
         for idx in need_rearrange_idx:
             p = params[idx]
             del params[idx]
-            params.insert(0, p)
+            params.insert(pos_to_insert, p)
+            pos_to_insert += 1
 
     def parseProperties(self, props):
         prop_list = []

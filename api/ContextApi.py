@@ -164,24 +164,20 @@ class ContextApi(ApiV2):
 
 
 
-    def getBindings(self, batchBindingsRequest, offset=''):
+    def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset=''):
         """
             post
             /context-api/v2/projects/{projectId}/bindings/list
             for details check: https://api-reference.smartling.com/#operation/getBindings
 
             ------------------------------------------------------------------------------------------------------------------------
-            Parameters example:
-            batchBindingsRequest: {
-                "stringHashcodes": "[]",
-                "contentFileUri": "''",
-                "contextUid": "''",
-                "bindingUids": "[]"
-                }
         """
         kw = {
             'offset':offset,
-            'batchBindingsRequest':batchBindingsRequest,
+            'stringHashcodes':stringHashcodes,
+            'contentFileUri':contentFileUri,
+            'contextUid':contextUid,
+            'bindingUids':bindingUids,
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/list')
         return self.commandJson('POST', url, kw)
@@ -189,23 +185,19 @@ class ContextApi(ApiV2):
 
 
 
-    def deleteBindings(self, batchBindingsRequest):
+    def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids):
         """
             post
             /context-api/v2/projects/{projectId}/bindings/remove
             for details check: https://api-reference.smartling.com/#operation/deleteBindings
 
             ------------------------------------------------------------------------------------------------------------------------
-            Parameters example:
-            batchBindingsRequest: {
-                "stringHashcodes": "[]",
-                "contentFileUri": "''",
-                "contextUid": "''",
-                "bindingUids": "[]"
-                }
         """
         kw = {
-            'batchBindingsRequest':batchBindingsRequest,
+            'stringHashcodes':stringHashcodes,
+            'contentFileUri':contentFileUri,
+            'contextUid':contextUid,
+            'bindingUids':bindingUids,
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/remove')
         return self.commandJson('POST', url, kw)
