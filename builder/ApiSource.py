@@ -73,12 +73,8 @@ class ApiSource():
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
-        if self.api_name in ['JobBatchesV2', 'Strings', 'Context','Estimates']:
-            rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
-            rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
-        else:
-            rows.append('    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):')
-            rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)')
+        rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
+        rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
         rows.append('        self.urlHelper = UrlV2Helper(projectId)')
         rows.append('')
 
@@ -101,20 +97,23 @@ class ApiSource():
     def importTestData(self):
         testDataModule = __import__(self.api_name+'TestData')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
+        tear_down = getattr(testDataModule, 'tear_down', '')
         tests_order = getattr(testDataModule, 'tests_order')
         test_evnironment = getattr(testDataModule, 'test_evnironment', 'prod')
-        return extra_initializations, tests_order, test_evnironment
+        return extra_initializations, tear_down, tests_order, test_evnironment
 
     def buildTestOrExample(self, footer, indent):
         rows = []
 
         myname = self.api_name + "Api"
 
-        extra_initializations, tests_order, test_evnironment = self.importTestData()
+        extra_initializations, tear_down, tests_order, test_evnironment = self.importTestData()
         hdr = exampleHeader.replace('{API_NAME}', myname)
         if 'stg' == test_evnironment:
             hdr = hdr.replace('Credentials()', "Credentials('stg')")
             hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
+        tear_down_marker = '        print("tearDown", "OK")'
+        hdr = hdr.replace(tear_down_marker, tear_down+tear_down_marker)
         hdr += extra_initializations
 
         not_tested_calls = [m.operationId for m in self.methods]

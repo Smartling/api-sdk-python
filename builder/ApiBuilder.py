@@ -43,19 +43,9 @@ class ApiBuilder:
             raise Exception('Can not load openapi description')
 
         open("openapi3.json",'w').write(response_data.decode('utf8'))
-        response_data = self.patchContextApi(response_data)
         json_string = response_data
         json_dict = json.loads(json_string, object_pairs_hook=collections.OrderedDict)
         return json_dict
-
-    def patchContextApi(self, response_data):
-        # path Context API # path Context API # path Context API # path Context API
-        response_data = response_data.decode('utf8')
-        response_data = response_data.replace("#/components/schemas/BatchBindingsRequest",
-                                              "#/components/schemas/BatchBindingsRequest/properties/batchBindingsRequest")
-        response_data = response_data.replace("#/components/schemas/DeleteBatchBindingsRequest",
-                                              "#/components/schemas/DeleteBatchBindingsRequest/properties/batchBindingsRequest")
-        return response_data
 
     def build(self):
         built = self.apisrc.build()

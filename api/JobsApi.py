@@ -3,8 +3,8 @@ from smartlingApiSdk.ApiV2 import ApiV2
 
 class JobsApi(ApiV2):
 
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
+        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
         self.urlHelper = UrlV2Helper(projectId)
 
     def getJobsByAccount(self, accountUid, jobName='', projectIds=[], translationJobStatus=[], withPriority='', limit=0, offset=0, sortBy='', sortDirection=''):

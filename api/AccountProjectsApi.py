@@ -3,8 +3,8 @@ from smartlingApiSdk.ApiV2 import ApiV2
 
 class AccountProjectsApi(ApiV2):
 
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings)
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
+        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
         self.urlHelper = UrlV2Helper(projectId)
 
     def getProjectsByAccount(self, accountUid, projectNameFilter='', includeArchived='', offset=0, limit=0):
