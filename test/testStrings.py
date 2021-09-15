@@ -41,7 +41,7 @@ def assert_equal(a,b, comment=''):
 class testStringsApi(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
-    ACCEPTED_TOKED = 'ACCEPTED'
+    ACCEPTED_TOKEN = 'ACCEPTED'
 
     def tearDown(self):
         print("tearDown", "OK")

@@ -89,7 +89,7 @@ class FileApiBase:
 
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
         if not code in [200,202]:
-            print ("jsonBody=", jsonBody,'\n\n')
+            print ("code:%d jsonBody=%s" % (code, jsonBody))
 
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code

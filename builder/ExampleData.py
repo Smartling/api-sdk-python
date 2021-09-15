@@ -66,7 +66,7 @@ def assert_equal(a,b, comment=''):
 class test{API_NAME}(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
-    ACCEPTED_TOKED = 'ACCEPTED'
+    ACCEPTED_TOKEN = 'ACCEPTED'
 
     def tearDown(self):
         print("tearDown", "OK")
