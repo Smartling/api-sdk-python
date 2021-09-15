@@ -81,6 +81,7 @@ def main():
         ApiBuilder("Jobs").build().buildExample().buildTest()
         ApiBuilder("Job Batches V2").build().buildExample().buildTest()
         ApiBuilder("Strings").build().buildExample().buildTest()
-    ApiBuilder("Context").build().buildExample().buildTest()
+        ApiBuilder("Context").build().buildExample().buildTest()
+    ApiBuilder("Estimates").build().buildExample().buildTest()
 
 main()

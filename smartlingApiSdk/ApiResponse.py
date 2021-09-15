@@ -59,7 +59,7 @@ class ApiResponse:
         try:
             return getattr(self, key)
         except:
-            return getattr(self.response_string, key)
+            pass
 
     def __str__(self):
         return str(self.response_string)

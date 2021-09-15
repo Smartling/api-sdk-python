@@ -86,9 +86,11 @@ class FileApiBase:
         authHeader['Content-Type'] = 'application/json'
         self.filterOutDefaults(params)
         jsonBody = json.dumps(params).encode('utf8')
-        #print ("jsonBody=", jsonBody,'\n\n')
 
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
+        if not code in [200,202]:
+            print ("jsonBody=", jsonBody,'\n\n')
+
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
         return  ApiResponse(data, code), code
