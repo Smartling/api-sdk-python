@@ -41,7 +41,7 @@ def assert_equal(a,b, comment=''):
 class testJobBatchesV2Api(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
-    ACCEPTED_TOKED = 'ACCEPTED'
+    ACCEPTED_TOKEN = 'ACCEPTED'
 
     def tearDown(self):
         print("tearDown", "OK")
@@ -88,7 +88,7 @@ class testJobBatchesV2Api(object):
         res, status = self.api.createJobBatchV2(authorize=authorize, translationJobUid=translationJobUid, fileUris=fileUris, localeWorkflows=localeWorkflows)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("createJobBatchV2", "OK")
         self.batch_uid = res.data.batchUid
 
@@ -107,7 +107,7 @@ class testJobBatchesV2Api(object):
         res, status = self.api.getJobBatchesListV2()
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobBatchesListV2", "OK")
 
 
@@ -123,7 +123,7 @@ class testJobBatchesV2Api(object):
         res, status = self.api.getJobBatchStatusV2(batchUid=batchUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobBatchStatusV2", "OK")
 
 
@@ -153,7 +153,7 @@ class testJobBatchesV2Api(object):
         res, status = self.api.uploadFileToJobBatchV2(batchUid=batchUid, file=file, fileUri=fileUri, fileType=fileType, authorize=authorize, localeIdsToAuthorize=localeIdsToAuthorize, callbackUrl=callbackUrl)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("uploadFileToJobBatchV2", "OK")
 
 
@@ -177,7 +177,7 @@ class testJobBatchesV2Api(object):
         res, status = self.api.processBatchActionV2(batchUid=batchUid, action=action, fileUri=fileUri, reason=reason)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("processBatchActionV2", "OK")
 
 

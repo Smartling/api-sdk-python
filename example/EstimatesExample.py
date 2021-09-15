@@ -41,7 +41,7 @@ def assert_equal(a,b, comment=''):
 class testEstimatesApi(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
-    ACCEPTED_TOKED = 'ACCEPTED'
+    ACCEPTED_TOKEN = 'ACCEPTED'
 
     def tearDown(self):
 
@@ -176,7 +176,7 @@ class testEstimatesApi(object):
         res, status = self.api.getJobCostEstimateReports(translationJobUid=translationJobUid, reportStatus=reportStatus)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobCostEstimateReports", "OK")
 
 
@@ -264,7 +264,7 @@ class testEstimatesApi(object):
         res, status = self.api.deleteJobEstimateReport(reportUid=reportUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("deleteJobEstimateReport", "OK")
 
 
