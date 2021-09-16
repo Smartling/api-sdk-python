@@ -41,7 +41,7 @@ def assert_equal(a,b, comment=''):
 class testJobsApi(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
-    ACCEPTED_TOKED = 'ACCEPTED'
+    ACCEPTED_TOKEN = 'ACCEPTED'
 
     def tearDown(self):
         print("tearDown", "OK")
@@ -109,7 +109,7 @@ class testJobsApi(object):
         res, status = self.api.addJob(jobName=jobName, targetLocaleIds=targetLocaleIds, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("addJob", "OK")
         self.test_job_uid = res.data.translationJobUid
 
@@ -128,7 +128,7 @@ class testJobsApi(object):
         res, status = self.api.addLocaleToJob(translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, syncContent=syncContent)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("addLocaleToJob", "OK")
 
 
@@ -147,7 +147,7 @@ class testJobsApi(object):
         res, status = self.api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("addStringsToJob", "OK")
         assert_equal(1, res.data.successCount, "addStringsToJob will fail if string was already in other job")
 
@@ -166,7 +166,7 @@ class testJobsApi(object):
         res, status = self.api.addFileToJob(translationJobUid=translationJobUid, fileUri=fileUri, targetLocaleIds=targetLocaleIds)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("addFileToJob", "OK")
 
 
@@ -182,7 +182,7 @@ class testJobsApi(object):
         res, status = self.api.getJobFilesList(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobFilesList", "OK")
 
 
@@ -199,7 +199,7 @@ class testJobsApi(object):
         res, status = self.api.getJobFileProgress(translationJobUid=translationJobUid, fileUri=fileUri)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobFileProgress", "OK")
 
 
@@ -216,7 +216,7 @@ class testJobsApi(object):
         res, status = self.api.authorizeJob(translationJobUid=translationJobUid, localeWorkflows=localeWorkflows)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("authorizeJob", "OK")
 
 
@@ -233,7 +233,7 @@ class testJobsApi(object):
         res, status = self.api.modifyScheduleItemsForTranslationJob(translationJobUid=translationJobUid, schedules=schedules)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("modifyScheduleItemsForTranslationJob", "OK")
 
 
@@ -289,7 +289,7 @@ class testJobsApi(object):
         res, status = self.api.assignCustomFieldsToProject(CustomFieldAssignmentList=CustomFieldAssignmentList)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("assignCustomFieldsToProject", "OK")
 
 
@@ -314,7 +314,7 @@ class testJobsApi(object):
         res, status = self.api.updateCustomField(accountUid=self.MY_ACCOUNT_UID, fieldUid=fieldUid, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("updateCustomField", "OK")
 
 
@@ -331,7 +331,7 @@ class testJobsApi(object):
         res, status = self.api.removeFileFromJob(translationJobUid=translationJobUid, fileUri=fileUri)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("removeFileFromJob", "OK")
 
 
@@ -349,7 +349,7 @@ class testJobsApi(object):
         res, status = self.api.removeStringsFromJob(translationJobUid=translationJobUid, hashcodes=hashcodes, localeIds=localeIds)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("removeStringsFromJob", "OK")
 
 
@@ -365,7 +365,7 @@ class testJobsApi(object):
         res, status = self.api.getJobLastCompletionDatesPerLocale(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobLastCompletionDatesPerLocale", "OK")
 
 
@@ -381,7 +381,7 @@ class testJobsApi(object):
         res, status = self.api.findScheduleForTranslationJob(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("findScheduleForTranslationJob", "OK")
 
 
@@ -398,7 +398,7 @@ class testJobsApi(object):
         res, status = self.api.removeLocaleFromJob(translationJobUid=translationJobUid, targetLocaleId=targetLocaleId)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("removeLocaleFromJob", "OK")
 
 
@@ -415,7 +415,7 @@ class testJobsApi(object):
         res, status = self.api.getJobsByProject(jobName=jobName)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobsByProject", "OK")
 
 
@@ -438,7 +438,7 @@ class testJobsApi(object):
         res, status = self.api.updateJob(translationJobUid=translationJobUid, jobName=jobName, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("updateJob", "OK")
 
 
@@ -454,7 +454,7 @@ class testJobsApi(object):
         res, status = self.api.getJobProgress(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobProgress", "OK")
 
 
@@ -470,7 +470,7 @@ class testJobsApi(object):
         res, status = self.api.getJobDetails(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobDetails", "OK")
 
 
@@ -486,7 +486,7 @@ class testJobsApi(object):
         res, status = self.api.getStringsForTranslationJob(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getStringsForTranslationJob", "OK")
 
 
@@ -503,7 +503,7 @@ class testJobsApi(object):
         res, status = self.api.findJobsByStrings(hashcodes=hashcodes, localeIds=localeIds)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("findJobsByStrings", "OK")
 
 
@@ -521,7 +521,7 @@ class testJobsApi(object):
         res, status = self.api.searchForJob(fileUris=fileUris, hashcodes=hashcodes, translationJobUids=translationJobUids)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("searchForJob", "OK")
 
 
@@ -538,7 +538,7 @@ class testJobsApi(object):
         res, status = self.api.cancelJob(translationJobUid=translationJobUid, reason=reason)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("cancelJob", "OK")
 
 
@@ -554,7 +554,7 @@ class testJobsApi(object):
         res, status = self.api.deleteJob(translationJobUid=translationJobUid)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("deleteJob", "OK")
 
 
@@ -569,7 +569,7 @@ class testJobsApi(object):
         res, status = self.api.getProjectCustomFields()
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getProjectCustomFields", "OK")
 
 
@@ -585,7 +585,7 @@ class testJobsApi(object):
         res, status = self.api.getAccountCustomFields(accountUid=self.MY_ACCOUNT_UID)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getAccountCustomFields", "OK")
 
 
@@ -602,7 +602,7 @@ class testJobsApi(object):
         res, status = self.api.getJobsByAccount(accountUid=self.MY_ACCOUNT_UID)
         
         assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobsByAccount", "OK")
 
 

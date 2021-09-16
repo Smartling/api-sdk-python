@@ -259,7 +259,7 @@ class Method(ApiCore):
             body_lines += self.custom_test_check.split('\n')
         else:
             body_lines.append('assert_equal(True, status in [200,202])')
-            body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])')
+            body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
         body_lines.append('print("%s", "OK")' % self.operationId)
         if jobs_test_data:
             for line in jobs_test_data.post_calls:
