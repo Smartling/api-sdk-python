@@ -84,4 +84,5 @@ def main():
         ApiBuilder("Account & Projects").build().buildExample().buildTest()
     ApiBuilder("Files").build().buildExample().buildTest()
 
-main()
+if __name__ == '__main__':
+    main()

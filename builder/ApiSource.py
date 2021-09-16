@@ -124,7 +124,7 @@ class ApiSource():
         hdr = hdr.replace('{API_NAME}', api_name_api)
         ftr = footer.replace('{API_NAME}', api_name_api)
 
-`        not_tested_calls = [m.operationId for m in self.methods]
+        not_tested_calls = [m.operationId for m in self.methods]
         not_tested_calls.insert(0, "'''")
         not_tested_calls.insert(0, '# not covered by tests #')
         rows.append(hdr)
