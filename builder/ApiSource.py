@@ -94,29 +94,37 @@ class ApiSource():
                 return m
         raise Exception("Can't find method:"+name)
 
-    def importTestData(self):
+    def buildExampleHeader(self):
+        #do dynamic imports based on apy_name
         testDataModule = __import__(self.api_name+'TestData')
+        imports = getattr(testDataModule, 'imports', '')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
         tear_down = getattr(testDataModule, 'tear_down', '')
         tests_order = getattr(testDataModule, 'tests_order')
         test_evnironment = getattr(testDataModule, 'test_evnironment', 'prod')
-        return extra_initializations, tear_down, tests_order, test_evnironment
 
-    def buildTestOrExample(self, footer, indent):
-        rows = []
-
-        myname = self.api_name + "Api"
-
-        extra_initializations, tear_down, tests_order, test_evnironment = self.importTestData()
-        hdr = exampleHeader.replace('{API_NAME}', myname)
+        hdr = exampleHeader
         if 'stg' == test_evnironment:
             hdr = hdr.replace('Credentials()', "Credentials('stg')")
             hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
         tear_down_marker = '        print("tearDown", "OK")'
         hdr = hdr.replace(tear_down_marker, tear_down+tear_down_marker)
+        hdr = hdr.replace("{EXTRA_IMPORTS}\n", imports)
         hdr += extra_initializations
 
-        not_tested_calls = [m.operationId for m in self.methods]
+        return hdr, tests_order
+
+
+    def buildTestOrExample(self, footer, indent):
+        rows = []
+
+        hdr, tests_order = self.buildExampleHeader()
+
+        api_name_api = self.api_name + "Api"
+        hdr = hdr.replace('{API_NAME}', api_name_api)
+        ftr = footer.replace('{API_NAME}', api_name_api)
+
+`        not_tested_calls = [m.operationId for m in self.methods]
         not_tested_calls.insert(0, "'''")
         not_tested_calls.insert(0, '# not covered by tests #')
         rows.append(hdr)
@@ -140,7 +148,6 @@ class ApiSource():
         if len(not_tested_calls) > 3:
             test_calls += not_tested_calls
 
-        ftr = footer.replace('{API_NAME}', myname)
         newline_w_indent = '\n'+ '    ' * indent
         rows.append(ftr % newline_w_indent.join(test_calls))
         return '\n'.join(rows)

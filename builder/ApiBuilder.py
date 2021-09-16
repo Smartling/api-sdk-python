@@ -76,11 +76,12 @@ def main():
     sys.stdout = Logger('python-sdk', logging.INFO)
     build_all = False
     if build_all:
-        ApiBuilder("Files").build()
         ApiBuilder("Jobs").build().buildExample().buildTest()
         ApiBuilder("Job Batches V2").build().buildExample().buildTest()
         ApiBuilder("Strings").build().buildExample().buildTest()
         ApiBuilder("Context").build().buildExample().buildTest()
-    ApiBuilder("Estimates").build().buildExample().buildTest()
+        ApiBuilder("Estimates").build().buildExample().buildTest()
+        ApiBuilder("Account & Projects").build().buildExample().buildTest()
+    ApiBuilder("Files").build().buildExample().buildTest()
 
 main()

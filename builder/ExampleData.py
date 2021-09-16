@@ -55,6 +55,7 @@ from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
 isPython3 =  sys.version_info[:2] >= (3,0)
+{EXTRA_IMPORTS}
 
 def assert_equal(a,b, comment=''):
     if a != b :
