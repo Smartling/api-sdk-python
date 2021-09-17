@@ -61,10 +61,6 @@ class Parameter(ApiCore):
     def getParamForName(self):
         if self._required:
             return self._name
-        else:
-            return self.getParamInit()
-
-    def getParamInit(self):
         return "%s=%s" % (self._name, self.getDefault())
 
     def getParamForMethodCall(self, values={}):
@@ -85,7 +81,7 @@ class Parameter(ApiCore):
             default = "'"+default+"'"
         if 'array' == self._type:
             return '[]'
-        if 'integer' == self._type:
+        if 'integer' == self._type and  default == "''":
             return '0'
         return default
 

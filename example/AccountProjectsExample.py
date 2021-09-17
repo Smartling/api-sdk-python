@@ -72,104 +72,104 @@ class testAccountProjectsApi(object):
 
 
     def checkGetProjectsByAccount(self):
-        """
-            get
-            /accounts-api/v2/accounts/{accountUid}/projects
-            for details check: https://api-reference.smartling.com/#operation/getProjectsByAccount
-            curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
-
-
-        """
+        '''
+            method  :  GET
+            api url :  /accounts-api/v2/accounts/{accountUid}/projects
+            details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
+        '''
         accountUid=self.MY_ACCOUNT_UID
         res, status = self.api.getProjectsByAccount(accountUid=self.MY_ACCOUNT_UID)
-        
-        
+
+
         assert_equal(True, res.data.totalCount > 0)
         project_name = ''
         for p in res.data.items:
             if p['projectId'] == self.MY_PROJECT_ID:
                 project_name = p['projectName']
         assert_equal('test variants', project_name)
-        
-        print("getProjectsByAccount", "OK")
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('getProjectsByAccount', 'OK')
 
 
     def checkGetProjectDetails(self):
-        """
-            get
-            /projects-api/v2/projects/{projectId}
-            for details check: https://api-reference.smartling.com/#operation/getProjectDetails
-            curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
-
-
-        """
+        '''
+            method  :  GET
+            api url :  /projects-api/v2/projects/{projectId}
+            details :  https://api-reference.smartling.com/#operation/getProjectDetails
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
+        '''
         res, status = self.api.getProjectDetails()
-        
-        
+
+
         assert_equal(res.data.projectId, self.MY_PROJECT_ID)
         assert_equal(res.data.projectName, 'test variants')
         assert_equal(res.data.accountUid, self.MY_ACCOUNT_UID)
-        
-        print("getProjectDetails", "OK")
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('getProjectDetails', 'OK')
 
 
     def checkAddLocaleToProject(self):
-        """
-            post
-            /projects-api/v2/projects/{projectId}/targetLocales
-            for details check: https://api-reference.smartling.com/#operation/addLocaleToProject
-
-            ------------------------------------------------------------------------------------------------------------------------
-        """
+        '''
+            method  :  POST
+            api url :  /projects-api/v2/projects/{projectId}/targetLocales
+            details :  https://api-reference.smartling.com/#operation/addLocaleToProject
+        '''
         defaultWorkflowUid='748398939979'
         localeId='es-MX'
         res, status = self.api.addLocaleToProject(defaultWorkflowUid=defaultWorkflowUid, localeId=localeId)
-        
-        
+
+
         assert_equal(res.data.projectId, self.MY_PROJECT_ID)
         assert_equal(res.data.projectName, 'test variants')
         assert_equal(res.data.accountUid, self.MY_ACCOUNT_UID)
         locales = [l['localeId'] for l in res.data.targetLocales]
         assert_equal(True, 'es-MX' in locales)
-        
-        print("addLocaleToProject", "OK")
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('addLocaleToProject', 'OK')
 
 
     def checkCopyProject(self):
-        """
-            post
-            /projects-api/v2/projects/{projectId}/copy
-            for details check: https://api-reference.smartling.com/#operation/copyProject
-
-            ------------------------------------------------------------------------------------------------------------------------
-        """
+        '''
+            method  :  POST
+            api url :  /projects-api/v2/projects/{projectId}/copy
+            details :  https://api-reference.smartling.com/#operation/copyProject
+        '''
         projectName='python SDK test'
         targetLocaleIds=['es-MX', 'zh-TW']
         res, status = self.api.copyProject(projectName=projectName, targetLocaleIds=targetLocaleIds)
-        
-        
+
+
         assert_equal(res.code, 'ACCEPTED')
-        
-        print("copyProject", "OK")
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('copyProject', 'OK')
         self.copy_process_uid  = res.data.processUid
 
 
     def checkGetProjectCopyRequestStatus(self):
-        """
-            get
-            /projects-api/v2/projects/{projectId}/copy/{processUid}
-            for details check: https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
-
-            ------------------------------------------------------------------------------------------------------------------------
-        """
+        '''
+            method  :  GET
+            api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
+            details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
+        '''
         processUid=self.copy_process_uid
         res, status = self.api.getProjectCopyRequestStatus(processUid=processUid)
-        
-        
+
+
         assert_equal(res.data.processUid, self.copy_process_uid)
         assert_equal(True, res.data.processState in ['IN_PROGRESS','COMPLETED'])
-        
-        print("getProjectCopyRequestStatus", "OK")
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('getProjectCopyRequestStatus', 'OK')
 
 
 

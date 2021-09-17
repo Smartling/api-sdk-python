@@ -85,7 +85,6 @@ class ApiSource():
                 rows.append(built)
                 rows.append('')
                 rows.append('')
-                rows.append('')
         return '\n'.join(rows)
 
 

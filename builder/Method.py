@@ -36,10 +36,8 @@ class Method(ApiCore):
         self.method = method
         self.path = path
         self.parameters = []
-        self.oldSource = open('../smartlingApiSdk/FileApiV2.py').read().split('\n')
-        self.UrlV2Helper = open('../smartlingApiSdk/UrlV2Helper.py').read().split('\n')
         for p in description_dict['parameters']:
-            if 'projectId' == p['name'] : continue
+            if 'projectId' == p['name'] : continue # we have projectId as api class member
             parameter = Parameter(p, opa_dict)
             self.parameters .append(parameter)
 
@@ -58,7 +56,7 @@ class Method(ApiCore):
             rows.append(self.buildMultipart())
         else:
             rows.append(self.buildBody())
-        rows.append('')
+
         return '\n'.join(rows)
 
     def buildExample(self):
@@ -70,15 +68,16 @@ class Method(ApiCore):
 
         rows.append(self.buildTestBody())
         rows.append('')
-        return '\n'.join(rows)
+        joined = '\n'.join(rows)
+        joined = joined.replace(self.indent2 + '\n', '\n')# remove whitespaces for separator line
+        return joined
 
     def buildTestName(self):
         return ''.join([
             self.indent,
             'def check',
             self.operationId[0].capitalize() + self.operationId[1:],
-            '(self',
-            '):',
+            '(self):',
             ]
         )
     def buildName(self):
@@ -102,51 +101,21 @@ class Method(ApiCore):
             result += ', directives={}'
         return result
 
-    def getOldMethod(self):
-        UHMethod = ''
-        result = [self.indent + '-'*120]
-        pt = self.path + '"'
-        self.oldMethodName = ''
-        for line in self.UrlV2Helper:
-            if not pt in line: continue
-            UHMethod = line.split(' = ')[0].strip()
-            UHMethod = 'urlHelper.' + UHMethod
-        if not UHMethod:
-            return self.joinWithIndent(result, self.indent2)
-        old_method_lines = []
-        start = end = 0
-        for i in range(len(self.oldSource)):
-            if UHMethod in self.oldSource[i]:
-                end = i
-                start = i
-                while not 'def ' in self.oldSource[start]:
-                    start -= 1
-                while not 'return ' in self.oldSource[end]:
-                    end += 1
-                if 'return ' in self.oldSource[end]: end +=1
-                result +=  self.oldSource[start:end]
-                break
-        if not 'def ' in self.oldSource[start]: return ''
-        if start == end :
-            result.append(self.indent+'Unable to get old method body')
-        self.oldMethodName = self.oldSource[start].split('def ')[1]
-        self.oldMethodName = '.'+self.oldMethodName.split('(')[0] + '('
-        res_str = self.joinWithIndent(result, self.indent2)
-        return res_str.replace('"""', "'''")
-
     def buildDoc(self):
+        comment_marker = self.indent2 + "'''"
         doc_lines = [
-            self.indent2 + '"""',
-            self.indent3 + self.method,
-            self.indent3 + self.path,
-            self.indent3 + 'for details check: https://api-reference.smartling.com/#operation/'+self.operationId,
-            self.getCurlExample(),
-            self.getOldMethod(),
+            comment_marker,
+            self.indent3 + 'method  :  '+ self.method.upper(),
+            self.indent3 + 'api url :  '+self.path,
+            self.indent3 + 'details :  https://api-reference.smartling.com/#operation/'+self.operationId,
         ]
+        curl_example = self.getCurlExample()
+        if curl_example:
+            doc_lines.append(curl_example)
         nested = self.listNestedValues()
         if nested:
             doc_lines.append(nested)
-        doc_lines.append(self.indent2 + '"""')
+        doc_lines.append(comment_marker)
 
         return '\n'.join(doc_lines)
 
@@ -157,7 +126,7 @@ class Method(ApiCore):
             return ''
 
         for d in samples:
-            result.append( self.indent + d['source'] )
+            result.append( self.indent + 'as curl :  '+ d['source'].replace('\n','') )
         return self.joinWithIndent(result, self.indent2)
 
     def getPropertyDescription(self, prop):
@@ -165,8 +134,7 @@ class Method(ApiCore):
         for m in prop.prop_list:
             prop_dict[m._name] = getattr(m, '_example', '') or m.getDefault()
 
-        result = [ self.indent + 'Parameters example:'
-        ]
+        result = [ self.indent + 'Parameters example:']
         hdr = self.indent +  '%s: ' % prop._name
         dumped = json.dumps(prop_dict, indent=16)
         dumped = dumped.replace('}', self.indent4+'}')
@@ -199,7 +167,7 @@ class Method(ApiCore):
 
         values_to_pass = "kw"
         body_lines.append('kw = {')
-        #import pdb; pdb.set_trace()
+
         kw_params = [x for x in self.parameters if x._in == 'query']
         for p in kw_params:
             body_lines.append(self.indent + "'%s':%s," % (p._name, p._name))
@@ -226,30 +194,22 @@ class Method(ApiCore):
         parameters = []
         initializers = {}
 
-        testDataModule = importlib.import_module('builder.'+self.api_name+'TestData')
-        testData = getattr(testDataModule, 'test_decortators')
+        test_data_module = importlib.import_module('builder.'+self.api_name+'TestData')
+        decorators = getattr(test_data_module, 'test_decortators')
 
         jobs_test_data = None
-        if self.operationId in testData.keys():
-            jobs_test_data = testData[self.operationId]
+        if self.operationId in decorators.keys():
+            jobs_test_data = decorators[self.operationId]
             initializers = jobs_test_data.fields
             self.custom_test_check = jobs_test_data.custom_test_check
             for line in jobs_test_data.pre_calls:
                 body_lines.append(line)
-        if self.parameters:
-            for p in self.parameters:
-                if p._required or p._name in initializers:
-                    parameters.append(p.getParamForMethodCall())
-        if self.mp_params:
-            for p in self.mp_params:
-                if p._required or p._name in initializers:
-                    parameters.append(p.getParamForMethodCall())
+        for p in self.parameters + self.mp_params:
+            if p._required or p._name in initializers:
+                parameters.append(p.getParamForMethodCall())
 
         kw_params = [x for x in self.parameters if x._in == 'query' or x._in == 'path']
-        for p in kw_params:
-            if p._required or p._name in initializers:
-                body_lines.append(p.getParamForMethodCall(initializers))
-        for p in self.mp_params:
+        for p in kw_params + self.mp_params:
             if p._required or p._name in initializers:
                 body_lines.append(p.getParamForMethodCall(initializers))
 
@@ -258,10 +218,11 @@ class Method(ApiCore):
         body_lines.append('')
         if self.custom_test_check:
             body_lines += self.custom_test_check.split('\n')
-        else:
+
+        if jobs_test_data and jobs_test_data.is_apiv2_response:
             body_lines.append('assert_equal(True, status in [200,202])')
             body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
-        body_lines.append('print("%s", "OK")' % self.operationId)
+        body_lines.append("print('%s', 'OK')" % self.operationId)
         if jobs_test_data:
             for line in jobs_test_data.post_calls:
                 body_lines.append(line)

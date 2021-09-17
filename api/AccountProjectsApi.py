@@ -8,14 +8,12 @@ class AccountProjectsApi(ApiV2):
         self.urlHelper = UrlV2Helper(projectId)
 
     def getProjectsByAccount(self, accountUid, projectNameFilter='', includeArchived='', offset=0, limit=0):
-        """
-            get
-            /accounts-api/v2/accounts/{accountUid}/projects
-            for details check: https://api-reference.smartling.com/#operation/getProjectsByAccount
-            curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
-
-
-        """
+        '''
+            method  :  GET
+            api url :  /accounts-api/v2/accounts/{accountUid}/projects
+            details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
+        '''
         kw = {
             'projectNameFilter':projectNameFilter,
             'includeArchived':includeArchived,
@@ -26,17 +24,13 @@ class AccountProjectsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getProjectDetails(self, includeDisabledLocales=''):
-        """
-            get
-            /projects-api/v2/projects/{projectId}
-            for details check: https://api-reference.smartling.com/#operation/getProjectDetails
-            curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
-
-
-        """
+        '''
+            method  :  GET
+            api url :  /projects-api/v2/projects/{projectId}
+            details :  https://api-reference.smartling.com/#operation/getProjectDetails
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
+        '''
         kw = {
             'includeDisabledLocales':includeDisabledLocales,
         }
@@ -44,16 +38,12 @@ class AccountProjectsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def addLocaleToProject(self, defaultWorkflowUid, localeId):
-        """
-            post
-            /projects-api/v2/projects/{projectId}/targetLocales
-            for details check: https://api-reference.smartling.com/#operation/addLocaleToProject
-
-            ------------------------------------------------------------------------------------------------------------------------
-        """
+        '''
+            method  :  POST
+            api url :  /projects-api/v2/projects/{projectId}/targetLocales
+            details :  https://api-reference.smartling.com/#operation/addLocaleToProject
+        '''
         kw = {
             'defaultWorkflowUid':defaultWorkflowUid,
             'localeId':localeId,
@@ -62,16 +52,12 @@ class AccountProjectsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def copyProject(self, projectName, targetLocaleIds):
-        """
-            post
-            /projects-api/v2/projects/{projectId}/copy
-            for details check: https://api-reference.smartling.com/#operation/copyProject
-
-            ------------------------------------------------------------------------------------------------------------------------
-        """
+        '''
+            method  :  POST
+            api url :  /projects-api/v2/projects/{projectId}/copy
+            details :  https://api-reference.smartling.com/#operation/copyProject
+        '''
         kw = {
             'projectName':projectName,
             'targetLocaleIds':targetLocaleIds,
@@ -80,20 +66,14 @@ class AccountProjectsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getProjectCopyRequestStatus(self, processUid):
-        """
-            get
-            /projects-api/v2/projects/{projectId}/copy/{processUid}
-            for details check: https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
-
-            ------------------------------------------------------------------------------------------------------------------------
-        """
+        '''
+            method  :  GET
+            api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
+            details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
+        '''
         kw = {
         }
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy/{processUid}', processUid=processUid)
         return self.command('GET', url, kw)
-
-
 

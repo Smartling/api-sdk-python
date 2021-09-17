@@ -32,8 +32,9 @@ import logging
 
 isPython3 =  sys.version_info[:2] >= (3,0)
 
-def assert_diff_is_empty(diff):
+def assert_diff_is_empty(diff, cmd):
     if diff :
+        print ("diff command is:", cmd)
         print (diff)
         err = "Api is changed"
         if not isPython3 and type(err) == str:
@@ -83,9 +84,8 @@ class testApiChanges:
         outPath = '/tmp/'+api_file_name
         self.storeToFile(built, outPath)
         cmd = 'diff -u %s/%s %s' % (api_dir, api_file_name, outPath)
-        print (cmd)
         diff = self.command(cmd)
-        assert_diff_is_empty(diff.decode('utf8'))
+        assert_diff_is_empty(diff.decode('utf8'), cmd)
 
     def storeToFile(self, data, path):
         out = open(path, 'w')

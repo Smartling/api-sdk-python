@@ -51,24 +51,24 @@ class ApiBuilder:
 
     def build(self):
         built = self.apisrc.build()
-        outPath = '../api/%sApi.py' % self.api_name
-        open(outPath,'w').write(built)
+        out_path = '../api/%sApi.py' % self.api_name
+        open(out_path,'w').write(built)
         print (built)
         return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildExample(self):
         built = self.apisrc.buildExample()
 
-        outPath = '../example/%sExample.py' % self.api_name
-        open(outPath,'w').write(built)
+        out_path = '../example/%sExample.py' % self.api_name
+        open(out_path,'w').write(built)
         print (built)
         return self #allow tagged calls : build().buildExample().buildTest()
 
     def buildTest(self):
         built = self.apisrc.buildTest()
 
-        outPath = '../test/test%s.py' % self.api_name
-        open(outPath,'w').write(built)
+        out_path = '../test/test%s.py' % self.api_name
+        open(out_path,'w').write(built)
         print (built)
         return self #allow tagged calls : build().buildExample().buildTest()
 
@@ -76,14 +76,12 @@ class ApiBuilder:
 
 def main():
     sys.stdout = Logger('python-sdk', logging.INFO)
-    build_all = True
-    if build_all:
-        ApiBuilder("Jobs").build().buildExample().buildTest()
-        ApiBuilder("Job Batches V2").build().buildExample().buildTest()
-        ApiBuilder("Strings").build().buildExample().buildTest()
-        ApiBuilder("Context").build().buildExample().buildTest()
-        ApiBuilder("Estimates").build().buildExample().buildTest()
-        ApiBuilder("Account & Projects").build().buildExample().buildTest()
+    ApiBuilder("Jobs").build().buildExample().buildTest()
+    ApiBuilder("Job Batches V2").build().buildExample().buildTest()
+    ApiBuilder("Strings").build().buildExample().buildTest()
+    ApiBuilder("Context").build().buildExample().buildTest()
+    ApiBuilder("Estimates").build().buildExample().buildTest()
+    ApiBuilder("Account & Projects").build().buildExample().buildTest()
     ApiBuilder("Files").build().buildExample().buildTest()
 
 if __name__ == '__main__':

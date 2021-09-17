@@ -17,11 +17,12 @@
  * limit
  '''
 class TestData:
-    def __init__(self, fields, pre = [], post = [], custom_test_check = ''):
+    def __init__(self, fields, pre = [], post = [], custom_test_check = '', is_apiv2_response = True):
         self.fields = fields
         self.pre_calls = pre
         self.post_calls = post
         self.custom_test_check = custom_test_check
+        self.is_apiv2_response = is_apiv2_response
 
 exampleHeader="""
 #!/usr/bin/python
