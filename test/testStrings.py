@@ -80,7 +80,24 @@ class testStringsApi(object):
 
             ------------------------------------------------------------------------------------------------------------------------
         """
-        strings=[{'stringText': 'Strings API test from python api sdk', 'callbackUrl': 'https://test.strings.smartling.com/test', 'callbackMethod': 'GET', 'instruction': "Do nothing it's a test", 'maxLength': 4096, 'format': 'auto'}, {'stringText': 'Another Strings API test from python api sdk', 'callbackUrl': 'https://test.strings.smartling.com/test', 'callbackMethod': 'GET', 'instruction': "Do nothing it's a test", 'maxLength': 4096, 'format': 'auto'}]
+        strings=[
+                {
+                    "stringText": 'Strings API test from python api sdk',
+                    "callbackUrl": "https://test.strings.smartling.com/test",
+                    "callbackMethod": "GET",
+                    "instruction": "Do nothing it's a test",
+                    "maxLength": 4096,
+                    "format": "auto",
+                },
+                {
+                    "stringText": 'Another Strings API test from python api sdk',
+                    "callbackUrl": "https://test.strings.smartling.com/test",
+                    "callbackMethod": "GET",
+                    "instruction": "Do nothing it's a test",
+                    "maxLength": 4096,
+                    "format": "auto",
+                },
+            ]
         placeholderFormat='none'
         placeholderFormatCustom=''
         namespace=''

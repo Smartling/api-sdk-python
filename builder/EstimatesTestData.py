@@ -17,8 +17,8 @@
  * limit
  '''
 
-from Parameters import Code
-from ExampleData import TestData
+from builder.Parameters import Code
+from builder.ExampleData import TestData
 
 tests_order = [
     "generateJobFuzzyEstimateReports",

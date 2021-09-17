@@ -19,9 +19,10 @@
 
 import json
 import collections
-from Parameters import Parameter, MuptipartProperty
-from Method import Method
-from ExampleData import exampleHeader, exampleFooter, testsFooter
+import importlib
+from builder.Parameters import Parameter, MuptipartProperty
+from builder.Method import Method
+from builder.ExampleData import exampleHeader, exampleFooter, testsFooter
 
 class ApiSource():
     def __init__(self, full_name, api_name, test_evnironment='prod'):
@@ -96,7 +97,7 @@ class ApiSource():
 
     def buildExampleHeader(self):
         #do dynamic imports based on apy_name
-        testDataModule = __import__(self.api_name+'TestData')
+        testDataModule = importlib.import_module('builder.'+self.api_name+'TestData')
         imports = getattr(testDataModule, 'imports', '')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
         tear_down = getattr(testDataModule, 'tear_down', '')

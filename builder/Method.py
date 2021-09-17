@@ -19,7 +19,8 @@
 
 import json
 import collections
-from Parameters import ApiCore, Parameter, MuptipartProperty
+import importlib
+from builder.Parameters import ApiCore, Parameter, MuptipartProperty
 
 class Method(ApiCore):
     indent = '    '
@@ -225,7 +226,7 @@ class Method(ApiCore):
         parameters = []
         initializers = {}
 
-        testDataModule = __import__(self.api_name+'TestData')
+        testDataModule = importlib.import_module('builder.'+self.api_name+'TestData')
         testData = getattr(testDataModule, 'test_decortators')
 
         jobs_test_data = None

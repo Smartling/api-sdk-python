@@ -17,8 +17,8 @@
  * limit
  '''
 
-from Parameters import Code
-from ExampleData import TestData
+from builder.Parameters import Code
+from builder.ExampleData import TestData
 
 tests_order = [
     'uploadSourceFile',
@@ -37,10 +37,6 @@ tests_order = [
     'exportFileTranslations',
     'getRecentlyPublishedFilesList',
     'deleteUploadedSourceFile',
-]
-
-zіtests_order = [
-    'getRecentlyPublishedFilesList',
 ]
 
 teardown = '''

@@ -69,7 +69,7 @@ class Parameter(ApiCore):
 
     def getParamForMethodCall(self, values={}):
         value = values.get(self._name, self._name)
-        if value.__class__ == Code.__class__:
+        if type(value) == type(Code):
             pass
         elif value != self._name and type(value) == str:
             value = "'" + value + "'"
