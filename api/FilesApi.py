@@ -9,28 +9,10 @@ class FilesApi(ApiV2):
 
     def uploadSourceFile(self, file, fileUri, fileType, authorize=False, localeIdsToAuthorize=[], callbackUrl='', directives={}):
         """
-            post
-            /files-api/v2/projects/{projectId}/file
-            for details check: https://api-reference.smartling.com/#operation/uploadSourceFile
-            curl -X POST -H "Authorization: Bearer $smartlingToken" -F "file=@$uploadFilePath;type=text/plain" -F "fileUri=$uploadFileSmartlingUri" -F "fileType=$uploadFileSmartlingType" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandUpload(self, filePath, fileType, directives={}, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#upload '''
-                params = {
-                        Params.FILE_URI: filePath,
-                        Params.FILE_TYPE: fileType,
-                        Params.FILE_PATH: filePath
-                    }
-        
-                for k,v in list(kw.items()):
-                    params[k] = v
-        
-                self.addLibIdDirective(params)
-                self.processDirectives(params, directives)
-        
-                url = self.urlHelper.getUrl(self.urlHelper.UPLOAD)
-                return self.uploadMultipart(url, params)
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/file
+            details :  https://api-reference.smartling.com/#operation/uploadSourceFile
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "file=@$uploadFilePath;type=text/plain" -F "fileUri=$uploadFileSmartlingUri" -F "fileType=$uploadFileSmartlingType" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
         """
         kw = {
             'file':self.processFile(file),
@@ -46,32 +28,12 @@ class FilesApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-
-
     def downloadSourceFile(self, fileUri):
         """
-            get
-            /files-api/v2/projects/{projectId}/file
-            for details check: https://api-reference.smartling.com/#operation/downloadSourceFile
-            curl -H "Authorization: Bearer $smartlingToken" -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandUpload(self, filePath, fileType, directives={}, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#upload '''
-                params = {
-                        Params.FILE_URI: filePath,
-                        Params.FILE_TYPE: fileType,
-                        Params.FILE_PATH: filePath
-                    }
-        
-                for k,v in list(kw.items()):
-                    params[k] = v
-        
-                self.addLibIdDirective(params)
-                self.processDirectives(params, directives)
-        
-                url = self.urlHelper.getUrl(self.urlHelper.UPLOAD)
-                return self.uploadMultipart(url, params)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/file
+            details :  https://api-reference.smartling.com/#operation/downloadSourceFile
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
         """
         kw = {
             'fileUri':fileUri,
@@ -80,21 +42,11 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getFileTranslationStatusAllLocales(self, fileUri):
         """
-            get
-            /files-api/v2/projects/{projectId}/file/status
-            for details check: https://api-reference.smartling.com/#operation/getFileTranslationStatusAllLocales
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandStatus(self, fileUri):
-                ''' https://developer.smartling.com/v1.0/reference#get_projects-projectid-file-status '''
-                kw = {}
-                kw[Params.FILE_URI] = fileUri
-                url = self.urlHelper.getUrl(self.urlHelper.STATUS_ALL)
-                return self.command(ReqMethod.GET, url, kw)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/file/status
+            details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusAllLocales
         """
         kw = {
             'fileUri':fileUri,
@@ -103,21 +55,11 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getFileTranslationStatusSingleLocale(self, localeId, fileUri):
         """
-            get
-            /files-api/v2/projects/{projectId}/locales/{localeId}/file/status
-            for details check: https://api-reference.smartling.com/#operation/getFileTranslationStatusSingleLocale
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandStatusLocale(self, fileUri, localeId):
-                ''' https://developer.smartling.com/v1.0/reference#get_projects-projectid-locales-localeid-file-status '''
-                kw = {}
-                kw[Params.FILE_URI] = fileUri
-                url = self.urlHelper.getUrl(self.urlHelper.STATUS_LOCALE, localeId = localeId)
-                return self.command(ReqMethod.GET, url, kw)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/status
+            details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusSingleLocale
         """
         kw = {
             'fileUri':fileUri,
@@ -126,26 +68,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings=''):
         """
-            get
-            /files-api/v2/projects/{projectId}/locales/{localeId}/file
-            for details check: https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
-            curl -H "Authorization: Bearer $smartlingToken" -o $smartlingLocaleId$smartlingFileUri -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file"
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandGet(self, fileUri, locale, directives={}, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#get_projects-projectid-locales-localeid-file '''
-                kw[Params.FILE_URI] = fileUri
-        
-                self.checkRetrievalType(kw)
-                self.processDirectives(kw, directives)
-                url = self.urlHelper.getUrl(self.urlHelper.GET, localeId=locale)
-        
-                resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, url, kw)
-                return resp, code
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file
+            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -o $smartlingLocaleId$smartlingFileUri -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file"
         """
         kw = {
             'fileUri':fileUri,
@@ -156,27 +84,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def downloadTranslatedFilesAllLocales(self, fileUri, retrievalType='', includeOriginalStrings='', zipFileName=''):
         """
-            get
-            /files-api/v2/projects/{projectId}/locales/all/file/zip
-            for details check: https://api-reference.smartling.com/#operation/downloadTranslatedFilesAllLocales
-            curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/{projectId}/locales/all/file/zip?fileUri=yourfile.json&retrievalType=published'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandGetAllLocalesZip(self, fileUri, directives={}, **kw):
-                 ''' http://docs.smartling.com/pages/API/v2/FileAPI/Download-File/All-Locales '''
-                 kw[Params.FILE_URI] = fileUri
-        
-                 self.checkRetrievalType(kw)
-                 self.processDirectives(kw, directives)
-        
-                 url = self.urlHelper.getUrl(self.urlHelper.GET_ALL_LOCALES_ZIP)
-        
-                 resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, url, kw)
-                 return resp, code
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/locales/all/file/zip
+            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFilesAllLocales
+            as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/{projectId}/locales/all/file/zip?fileUri=yourfile.json&retrievalType=published'
         """
         kw = {
             'fileUri':fileUri,
@@ -188,25 +101,11 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def downloadMultipleTranslatedFiles(self, fileUris, localeIds, retrievalType='', includeOriginalStrings='', fileNameMode='', localeMode='', zipFileName=''):
         """
-            get
-            /files-api/v2/projects/{projectId}/files/zip
-            for details check: https://api-reference.smartling.com/#operation/downloadMultipleTranslatedFiles
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandGetMultipleLocalesAsZip(self, fileUri, localeIds, directives={}, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#get_projects-projectid-files-zip '''
-                kw[Params.FILE_URIS] = fileUri
-                kw[Params.LOCALE_IDS] = localeIds
-        
-                self.checkRetrievalType(kw)
-                self.processDirectives(kw, directives)
-        
-                resp, code, headers = self.getResponseAndStatus(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.GET_MULTIPLE_LOCALES), kw)
-                return resp, code
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/files/zip
+            details :  https://api-reference.smartling.com/#operation/downloadMultipleTranslatedFiles
         """
         kw = {
             'fileUris':fileUris,
@@ -221,22 +120,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getRecentlyUploadedSourceFilesList(self, uriMask='', fileTypes=[], lastUploadedAfter='', lastUploadedBefore='', orderBy='', limit=0, offset=0):
         """
-            get
-            /files-api/v2/projects/{projectId}/files/list
-            for details check: https://api-reference.smartling.com/#operation/getRecentlyUploadedSourceFilesList
-            curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/files/list?fileTypes[]=json&uriMask=strings"
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandList(self, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#list '''
-                url = self.urlHelper.getUrl(self.urlHelper.LIST_FILES)
-                self.validateFileTypes(kw)
-        
-                return self.command(ReqMethod.GET, url, kw)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/files/list
+            details :  https://api-reference.smartling.com/#operation/getRecentlyUploadedSourceFilesList
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/files/list?fileTypes[]=json&uriMask=strings"
         """
         kw = {
             'uriMask':uriMask,
@@ -251,19 +140,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getFileTypesList(self):
         """
-            get
-            /files-api/v2/projects/{projectId}/file-types
-            for details check: https://api-reference.smartling.com/#operation/getFileTypesList
-            curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file-types"
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandListFileTypes(self, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#get_projects-projectid-file-types '''
-                return self.command(ReqMethod.GET, self.urlHelper.getUrl(self.urlHelper.LIST_FILE_TYPES), kw)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/file-types
+            details :  https://api-reference.smartling.com/#operation/getFileTypesList
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file-types"
         """
         kw = {
         }
@@ -271,23 +153,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def renameUploadedSourceFile(self, fileUri, newFileUri):
         """
-            post
-            /files-api/v2/projects/{projectId}/file/rename
-            for details check: https://api-reference.smartling.com/#operation/renameUploadedSourceFile
-            curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" -F "newFileUri=filename2.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/rename'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandRename(self, fileUri, newFileUrl):
-                ''' https://developer.smartling.com/v1.0/reference#rename '''
-                kw = {}
-                kw[Params.FILE_URI] = fileUri
-                kw[Params.FILE_URI_NEW] = newFileUrl
-                url = self.urlHelper.getUrl(self.urlHelper.RENAME)
-                return self.command(ReqMethod.POST, url, kw)
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/file/rename
+            details :  https://api-reference.smartling.com/#operation/renameUploadedSourceFile
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" -F "newFileUri=filename2.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/rename'
         """
         kw = {
             'fileUri':fileUri,
@@ -297,22 +168,12 @@ class FilesApi(ApiV2):
         return self.command('POST', url, kw)
 
 
-
-
     def deleteUploadedSourceFile(self, fileUri):
         """
-            post
-            /files-api/v2/projects/{projectId}/file/delete
-            for details check: https://api-reference.smartling.com/#operation/deleteUploadedSourceFile
-            curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/delete'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandDelete(self, fileUri, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#delete '''
-                kw[Params.FILE_URI] = fileUri
-                uri = self.urlHelper.getUrl(self.urlHelper.DELETE)
-        
-                return self.command(ReqMethod.POST, uri, kw)
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/file/delete
+            details :  https://api-reference.smartling.com/#operation/deleteUploadedSourceFile
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/delete'
         """
         kw = {
             'fileUri':fileUri,
@@ -321,21 +182,12 @@ class FilesApi(ApiV2):
         return self.command('POST', url, kw)
 
 
-
-
     def getTranslatedFileLastModifiedDateSingleLocale(self, localeId, fileUri, lastModifiedAfter=''):
         """
-            get
-            /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified
-            for details check: https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateSingleLocale
-            curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/last-modified?fileUri=filename.properties'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandLastModified(self, fileUri, localeId, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#last-modified '''
-                kw[Params.FILE_URI] = fileUri
-                url = self.urlHelper.getUrl(self.urlHelper.LAST_MODIFIED, localeId = localeId)
-                return self.command(ReqMethod.GET, url, kw)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified
+            details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateSingleLocale
+            as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/last-modified?fileUri=filename.properties'
         """
         kw = {
             'fileUri':fileUri,
@@ -345,21 +197,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getTranslatedFileLastModifiedDateAllLocales(self, fileUri, lastModifiedAfter=''):
         """
-            get
-            /files-api/v2/projects/{projectId}/file/last-modified
-            for details check: https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateAllLocales
-            curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/last-modified?fileUri=filename.properties'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandLastModifiedAll(self, fileUri, **kw):
-                ''' https://developer.smartling.com/v1.0/reference#get_projects-projectid-file-last-modified '''
-                kw[Params.FILE_URI] = fileUri
-                url = self.urlHelper.getUrl(self.urlHelper.LAST_MODIFIED_ALL)
-                return self.command(ReqMethod.GET, url, kw)
+            method  :  GET
+            api url :  /files-api/v2/projects/{projectId}/file/last-modified
+            details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateAllLocales
+            as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/last-modified?fileUri=filename.properties'
         """
         kw = {
             'fileUri':fileUri,
@@ -369,31 +212,12 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def importFileTranslations(self, localeId, file, fileUri, fileType, translationState, overwrite=''):
         """
-            post
-            /files-api/v2/projects/{projectId}/locales/{localeId}/file/import
-            for details check: https://api-reference.smartling.com/#operation/importFileTranslations
-            curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F "fileUri=filename.properties" -F "fileType=javaProperties" -F "translationState=PUBLISHED" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/import'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandImport(self, fileUriOriginal, filePathTranslated, fileType, localeId, directives={}, **kw):
-                self.validateFileTypes({"fileTypes":fileType})
-                params = {}
-                params[Params.FILE_URI]  = fileUriOriginal
-                params[Params.FILE_TYPE] = fileType
-                params[Params.FILE_PATH] = filePathTranslated
-                params["file"] = filePathTranslated + ";type=text/plain"
-        
-                for k,v in list(kw.items()):
-                    params[k] = v
-        
-                self.processDirectives(params, directives)
-        
-                url = self.urlHelper.getUrl(self.urlHelper.IMPORT, localeId = localeId)
-                return self.uploadMultipart(url, params)
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/import
+            details :  https://api-reference.smartling.com/#operation/importFileTranslations
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F "fileUri=filename.properties" -F "fileType=javaProperties" -F "translationState=PUBLISHED" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/import'
         """
         kw = {
             'file':self.processFile(file),
@@ -406,26 +230,12 @@ class FilesApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-
-
     def exportFileTranslations(self, localeId, file, fileUri, retrievalType='', includeOriginalStrings=''):
         """
-            post
-            /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations
-            for details check: https://api-reference.smartling.com/#operation/exportFileTranslations
-            curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F 'fileUri=filename.properties' 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/get-translations'
-
-            ------------------------------------------------------------------------------------------------------------------------
-            def commandGetTranslations(self, fileUri, filePath, localeId, directives={}, **kw):
-                '''  https://developer.smartling.com/v1.0/reference#post_projects-projectid-locales-localeid-file-import '''
-                kw[Params.FILE_URI]  = fileUri
-                kw[Params.FILE_PATH] = filePath
-                kw["file"] = filePath + ";type=text/plain"
-        
-                self.processDirectives(kw, directives)
-        
-                url = self.urlHelper.getUrl(self.urlHelper.GET_TRANSLATIONS, localeId = localeId)
-                return self.uploadMultipart(url, kw, response_as_string=True)
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations
+            details :  https://api-reference.smartling.com/#operation/exportFileTranslations
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F 'fileUri=filename.properties' 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/get-translations'
         """
         kw = {
             'file':self.processFile(file),
@@ -437,16 +247,12 @@ class FilesApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-
-
     def getRecentlyPublishedFilesList(self, publishedAfter, fileUris=[], localeIds=[], offset=0, limit=0):
         """
-            get
-            /published-files-api/v2/projects/{projectId}/files/list/recently-published
-            for details check: https://api-reference.smartling.com/#operation/getRecentlyPublishedFilesList
-            curl -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/published-files-api/v2/projects/$smartlingProjectId/files/list/recently-published?publishedAfter=2019-11-21T11:51:17Z&fileUris[]=files/example1.json&localeIds[]=fr-CA&limit=10&offset=100'
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /published-files-api/v2/projects/{projectId}/files/list/recently-published
+            details :  https://api-reference.smartling.com/#operation/getRecentlyPublishedFilesList
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/published-files-api/v2/projects/$smartlingProjectId/files/list/recently-published?publishedAfter=2019-11-21T11:51:17Z&fileUris[]=files/example1.json&localeIds[]=fr-CA&limit=10&offset=100'
         """
         kw = {
             'publishedAfter':publishedAfter,
@@ -457,6 +263,4 @@ class FilesApi(ApiV2):
         }
         url = self.urlHelper.getUrl('/published-files-api/v2/projects/{projectId}/files/list/recently-published')
         return self.command('GET', url, kw)
-
-
 

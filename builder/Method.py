@@ -58,7 +58,7 @@ class Method(ApiCore):
             rows.append(self.buildMultipart())
         else:
             rows.append(self.buildBody())
-        rows.append('')
+
         return '\n'.join(rows)
 
     def buildExample(self):
@@ -70,7 +70,9 @@ class Method(ApiCore):
 
         rows.append(self.buildTestBody())
         rows.append('')
-        return '\n'.join(rows)
+        joined = '\n'.join(rows)
+        joined = joined.replace(self.indent2 + '\n', '\n')# remove whitespaces for separator line
+        return joined
 
     def buildTestName(self):
         return ''.join([
@@ -137,12 +139,13 @@ class Method(ApiCore):
     def buildDoc(self):
         doc_lines = [
             self.indent2 + '"""',
-            self.indent3 + self.method,
-            self.indent3 + self.path,
-            self.indent3 + 'for details check: https://api-reference.smartling.com/#operation/'+self.operationId,
-            self.getCurlExample(),
-            self.getOldMethod(),
+            self.indent3 + 'method  :  '+ self.method.upper(),
+            self.indent3 + 'api url :  '+self.path,
+            self.indent3 + 'details :  https://api-reference.smartling.com/#operation/'+self.operationId,
         ]
+        curl_example = self.getCurlExample()
+        if curl_example:
+            doc_lines.append(curl_example)
         nested = self.listNestedValues()
         if nested:
             doc_lines.append(nested)
@@ -157,7 +160,7 @@ class Method(ApiCore):
             return ''
 
         for d in samples:
-            result.append( self.indent + d['source'] )
+            result.append( self.indent + 'as curl :  '+ d['source'].replace('\n','') )
         return self.joinWithIndent(result, self.indent2)
 
     def getPropertyDescription(self, prop):
@@ -258,9 +261,9 @@ class Method(ApiCore):
         body_lines.append('')
         if self.custom_test_check:
             body_lines += self.custom_test_check.split('\n')
-        else:
-            body_lines.append('assert_equal(True, status in [200,202])')
-            body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
+
+        body_lines.append('assert_equal(True, status in [200,202])')
+        body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
         body_lines.append('print("%s", "OK")' % self.operationId)
         if jobs_test_data:
             for line in jobs_test_data.post_calls:

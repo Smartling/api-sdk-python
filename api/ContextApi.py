@@ -9,12 +9,10 @@ class ContextApi(ApiV2):
 
     def uploadNewVisualContext(self, name='', content=''):
         """
-            post
-            /context-api/v2/projects/{projectId}/contexts
-            for details check: https://api-reference.smartling.com/#operation/uploadNewVisualContext
-            curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/contexts
+            details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
         """
         kw = {
             'name':name,
@@ -24,15 +22,11 @@ class ContextApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-
-
     def getVisualContextsListByProject(self, nameFilter='', offset='', type=''):
         """
-            get
-            /context-api/v2/projects/{projectId}/contexts
-            for details check: https://api-reference.smartling.com/#operation/getVisualContextsListByProject
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /context-api/v2/projects/{projectId}/contexts
+            details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
         """
         kw = {
             'nameFilter':nameFilter,
@@ -43,15 +37,11 @@ class ContextApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getVisualContextInfo(self, contextUid):
         """
-            get
-            /context-api/v2/projects/{projectId}/contexts/{contextUid}
-            for details check: https://api-reference.smartling.com/#operation/getVisualContextInfo
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
         """
         kw = {
         }
@@ -59,15 +49,11 @@ class ContextApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def deleteVisualContext(self, contextUid):
         """
-            delete
-            /context-api/v2/projects/{projectId}/contexts/{contextUid}
-            for details check: https://api-reference.smartling.com/#operation/deleteVisualContext
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  DELETE
+            api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            details :  https://api-reference.smartling.com/#operation/deleteVisualContext
         """
         kw = {
         }
@@ -75,15 +61,11 @@ class ContextApi(ApiV2):
         return self.command('DELETE', url, kw)
 
 
-
-
     def downloadVisualContextFileContent(self, contextUid):
         """
-            get
-            /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
-            for details check: https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
+            details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
         """
         kw = {
         }
@@ -91,15 +73,11 @@ class ContextApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def runAutomaticContextMatching(self, contextUid, contentFileUri, stringHashcodes, overrideContextOlderThanDays):
         """
-            post
-            /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
-            for details check: https://api-reference.smartling.com/#operation/runAutomaticContextMatching
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
+            details :  https://api-reference.smartling.com/#operation/runAutomaticContextMatching
         """
         kw = {
             'contentFileUri':contentFileUri,
@@ -110,15 +88,11 @@ class ContextApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def uploadAndMatchVisualContext(self, content, name='', matchParams=''):
         """
-            post
-            /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
-            for details check: https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
+            details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
         """
         kw = {
             'content':self.processFile(content),
@@ -129,15 +103,11 @@ class ContextApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-
-
     def getAsyncContextMatchResults(self, matchId):
         """
-            get
-            /context-api/v2/projects/{projectId}/match/{matchId}
-            for details check: https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /context-api/v2/projects/{projectId}/match/{matchId}
+            details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
         """
         kw = {
         }
@@ -145,15 +115,11 @@ class ContextApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def createStringToContextBindings(self, bindings):
         """
-            post
-            /context-api/v2/projects/{projectId}/bindings
-            for details check: https://api-reference.smartling.com/#operation/createStringToContextBindings
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/bindings
+            details :  https://api-reference.smartling.com/#operation/createStringToContextBindings
         """
         kw = {
             'bindings':bindings,
@@ -162,15 +128,11 @@ class ContextApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset=''):
         """
-            post
-            /context-api/v2/projects/{projectId}/bindings/list
-            for details check: https://api-reference.smartling.com/#operation/getBindings
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/bindings/list
+            details :  https://api-reference.smartling.com/#operation/getBindings
         """
         kw = {
             'offset':offset,
@@ -183,15 +145,11 @@ class ContextApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids):
         """
-            post
-            /context-api/v2/projects/{projectId}/bindings/remove
-            for details check: https://api-reference.smartling.com/#operation/deleteBindings
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/bindings/remove
+            details :  https://api-reference.smartling.com/#operation/deleteBindings
         """
         kw = {
             'stringHashcodes':stringHashcodes,
@@ -201,6 +159,4 @@ class ContextApi(ApiV2):
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/remove')
         return self.commandJson('POST', url, kw)
-
-
 

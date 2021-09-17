@@ -9,12 +9,10 @@ class JobsApi(ApiV2):
 
     def getJobsByAccount(self, accountUid, jobName='', projectIds=[], translationJobStatus=[], withPriority='', limit=0, offset=0, sortBy='', sortDirection=''):
         """
-            get
-            /jobs-api/v3/accounts/{accountUid}/jobs
-            for details check: https://api-reference.smartling.com/#operation/getJobsByAccount
-            curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/accounts/$smartlingAccountId/jobs
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/accounts/{accountUid}/jobs
+            details :  https://api-reference.smartling.com/#operation/getJobsByAccount
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/accounts/$smartlingAccountId/jobs
         """
         kw = {
             'jobName':jobName,
@@ -30,16 +28,12 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getJobsByProject(self, jobName='', jobNumber='', translationJobUids=[], translationJobStatus=[], limit=0, offset=0, sortBy='', sortDirection=''):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs
-            for details check: https://api-reference.smartling.com/#operation/getJobsByProject
-            curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs
+            details :  https://api-reference.smartling.com/#operation/getJobsByProject
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
         """
         kw = {
             'jobName':jobName,
@@ -55,16 +49,12 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def addJob(self, jobName, targetLocaleIds, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs
-            for details check: https://api-reference.smartling.com/#operation/addJob
-            curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingJobJSON" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs
+            details :  https://api-reference.smartling.com/#operation/addJob
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingJobJSON" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
         """
         kw = {
             'jobName':jobName,
@@ -80,15 +70,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def findJobsByStrings(self, hashcodes, localeIds):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings
-            for details check: https://api-reference.smartling.com/#operation/findJobsByStrings
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings
+            details :  https://api-reference.smartling.com/#operation/findJobsByStrings
         """
         kw = {
             'hashcodes':hashcodes,
@@ -98,15 +84,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getStringsForTranslationJob(self, translationJobUid, targetLocaleId='', limit=0, offset=0):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings
-            for details check: https://api-reference.smartling.com/#operation/getStringsForTranslationJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings
+            details :  https://api-reference.smartling.com/#operation/getStringsForTranslationJob
         """
         kw = {
             'targetLocaleId':targetLocaleId,
@@ -117,15 +99,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def addStringsToJob(self, translationJobUid, hashcodes, moveEnabled, targetLocaleIds):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add
-            for details check: https://api-reference.smartling.com/#operation/addStringsToJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add
+            details :  https://api-reference.smartling.com/#operation/addStringsToJob
         """
         kw = {
             'hashcodes':hashcodes,
@@ -136,15 +114,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def removeStringsFromJob(self, translationJobUid, hashcodes, localeIds):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove
-            for details check: https://api-reference.smartling.com/#operation/removeStringsFromJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove
+            details :  https://api-reference.smartling.com/#operation/removeStringsFromJob
         """
         kw = {
             'hashcodes':hashcodes,
@@ -154,15 +128,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def closeJob(self, translationJobUid):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close
-            for details check: https://api-reference.smartling.com/#operation/closeJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close
+            details :  https://api-reference.smartling.com/#operation/closeJob
         """
         kw = {
         }
@@ -170,15 +140,11 @@ class JobsApi(ApiV2):
         return self.command('POST', url, kw)
 
 
-
-
     def cancelJob(self, translationJobUid, reason):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel
-            for details check: https://api-reference.smartling.com/#operation/cancelJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel
+            details :  https://api-reference.smartling.com/#operation/cancelJob
         """
         kw = {
             'reason':reason,
@@ -187,15 +153,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def authorizeJob(self, translationJobUid, localeWorkflows):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize
-            for details check: https://api-reference.smartling.com/#operation/authorizeJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize
+            details :  https://api-reference.smartling.com/#operation/authorizeJob
         """
         kw = {
             'localeWorkflows':localeWorkflows,
@@ -204,15 +166,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getJobDetails(self, translationJobUid):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
-            for details check: https://api-reference.smartling.com/#operation/getJobDetails
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            details :  https://api-reference.smartling.com/#operation/getJobDetails
         """
         kw = {
         }
@@ -220,15 +178,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def updateJob(self, translationJobUid, jobName, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields):
         """
-            put
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
-            for details check: https://api-reference.smartling.com/#operation/updateJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  PUT
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            details :  https://api-reference.smartling.com/#operation/updateJob
         """
         kw = {
             'jobName':jobName,
@@ -243,15 +197,11 @@ class JobsApi(ApiV2):
         return self.commandJson('PUT', url, kw)
 
 
-
-
     def deleteJob(self, translationJobUid):
         """
-            delete
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
-            for details check: https://api-reference.smartling.com/#operation/deleteJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  DELETE
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            details :  https://api-reference.smartling.com/#operation/deleteJob
         """
         kw = {
         }
@@ -259,15 +209,11 @@ class JobsApi(ApiV2):
         return self.command('DELETE', url, kw)
 
 
-
-
     def searchForJob(self, fileUris, hashcodes, translationJobUids):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/search
-            for details check: https://api-reference.smartling.com/#operation/searchForJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/search
+            details :  https://api-reference.smartling.com/#operation/searchForJob
         """
         kw = {
             'fileUris':fileUris,
@@ -278,15 +224,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getJobAsyncProcessStatus(self, translationJobUid, processUid):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}
-            for details check: https://api-reference.smartling.com/#operation/getJobAsyncProcessStatus
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}
+            details :  https://api-reference.smartling.com/#operation/getJobAsyncProcessStatus
         """
         kw = {
         }
@@ -294,15 +236,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def addFileToJob(self, translationJobUid, fileUri, targetLocaleIds):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add
-            for details check: https://api-reference.smartling.com/#operation/addFileToJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add
+            details :  https://api-reference.smartling.com/#operation/addFileToJob
         """
         kw = {
             'fileUri':fileUri,
@@ -312,15 +250,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def removeFileFromJob(self, translationJobUid, fileUri):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove
-            for details check: https://api-reference.smartling.com/#operation/removeFileFromJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove
+            details :  https://api-reference.smartling.com/#operation/removeFileFromJob
         """
         kw = {
             'fileUri':fileUri,
@@ -329,15 +263,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getJobFilesList(self, translationJobUid, limit=0, offset=0):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files
-            for details check: https://api-reference.smartling.com/#operation/getJobFilesList
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files
+            details :  https://api-reference.smartling.com/#operation/getJobFilesList
         """
         kw = {
             'limit':limit,
@@ -347,15 +277,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def addLocaleToJob(self, translationJobUid, targetLocaleId, syncContent):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
-            for details check: https://api-reference.smartling.com/#operation/addLocaleToJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
+            details :  https://api-reference.smartling.com/#operation/addLocaleToJob
         """
         kw = {
             'syncContent':syncContent,
@@ -364,15 +290,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def removeLocaleFromJob(self, translationJobUid, targetLocaleId):
         """
-            delete
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
-            for details check: https://api-reference.smartling.com/#operation/removeLocaleFromJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  DELETE
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
+            details :  https://api-reference.smartling.com/#operation/removeLocaleFromJob
         """
         kw = {
         }
@@ -380,15 +302,11 @@ class JobsApi(ApiV2):
         return self.command('DELETE', url, kw)
 
 
-
-
     def getJobFileProgress(self, translationJobUid, fileUri):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress
-            for details check: https://api-reference.smartling.com/#operation/getJobFileProgress
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress
+            details :  https://api-reference.smartling.com/#operation/getJobFileProgress
         """
         kw = {
             'fileUri':fileUri,
@@ -397,15 +315,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getJobProgress(self, translationJobUid, targetLocaleId=''):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress
-            for details check: https://api-reference.smartling.com/#operation/getJobProgress
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress
+            details :  https://api-reference.smartling.com/#operation/getJobProgress
         """
         kw = {
             'targetLocaleId':targetLocaleId,
@@ -414,15 +328,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getJobLastCompletionDatesPerLocale(self, translationJobUid):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates
-            for details check: https://api-reference.smartling.com/#operation/getJobLastCompletionDatesPerLocale
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates
+            details :  https://api-reference.smartling.com/#operation/getJobLastCompletionDatesPerLocale
         """
         kw = {
         }
@@ -430,15 +340,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def findScheduleForTranslationJob(self, translationJobUid):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
-            for details check: https://api-reference.smartling.com/#operation/findScheduleForTranslationJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
+            details :  https://api-reference.smartling.com/#operation/findScheduleForTranslationJob
         """
         kw = {
         }
@@ -446,15 +352,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def modifyScheduleItemsForTranslationJob(self, translationJobUid, schedules):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
-            for details check: https://api-reference.smartling.com/#operation/modifyScheduleItemsForTranslationJob
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
+            details :  https://api-reference.smartling.com/#operation/modifyScheduleItemsForTranslationJob
         """
         kw = {
             'schedules':schedules,
@@ -463,15 +365,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getProjectCustomFields(self):
         """
-            get
-            /jobs-api/v3/projects/{projectId}/custom-fields
-            for details check: https://api-reference.smartling.com/#operation/getProjectCustomFields
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            details :  https://api-reference.smartling.com/#operation/getProjectCustomFields
         """
         kw = {
         }
@@ -479,15 +377,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def assignCustomFieldsToProject(self, CustomFieldAssignmentList):
         """
-            post
-            /jobs-api/v3/projects/{projectId}/custom-fields
-            for details check: https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            details :  https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
         """
         kw = {
         }
@@ -495,15 +389,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, CustomFieldAssignmentList)
 
 
-
-
     def getAccountCustomFields(self, accountUid, searchableOnly='', enabledOnly=''):
         """
-            get
-            /jobs-api/v3/accounts/{accountUid}/custom-fields
-            for details check: https://api-reference.smartling.com/#operation/getAccountCustomFields
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
+            details :  https://api-reference.smartling.com/#operation/getAccountCustomFields
         """
         kw = {
             'searchableOnly':searchableOnly,
@@ -513,15 +403,11 @@ class JobsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def createCustomField(self, accountUid, type, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description):
         """
-            post
-            /jobs-api/v3/accounts/{accountUid}/custom-fields
-            for details check: https://api-reference.smartling.com/#operation/createCustomField
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
+            details :  https://api-reference.smartling.com/#operation/createCustomField
         """
         kw = {
             'type':type,
@@ -538,15 +424,11 @@ class JobsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def updateCustomField(self, accountUid, fieldUid, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description):
         """
-            put
-            /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
-            for details check: https://api-reference.smartling.com/#operation/updateCustomField
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  PUT
+            api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
+            details :  https://api-reference.smartling.com/#operation/updateCustomField
         """
         kw = {
             'fieldName':fieldName,
@@ -560,6 +442,4 @@ class JobsApi(ApiV2):
         }
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}', accountUid=accountUid, fieldUid=fieldUid)
         return self.commandJson('PUT', url, kw)
-
-
 

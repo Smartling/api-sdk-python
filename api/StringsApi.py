@@ -9,12 +9,10 @@ class StringsApi(ApiV2):
 
     def addStringsToProject(self, strings, placeholderFormat, placeholderFormatCustom, namespace):
         """
-            post
-            /strings-api/v2/projects/{projectId}
-            for details check: https://api-reference.smartling.com/#operation/addStringsToProject
-            curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /strings-api/v2/projects/{projectId}
+            details :  https://api-reference.smartling.com/#operation/addStringsToProject
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
         """
         kw = {
             'strings':strings,
@@ -26,16 +24,12 @@ class StringsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getAddStringsToProjectRequestStatus(self, processUid):
         """
-            get
-            /strings-api/v2/projects/{projectId}/processes/{processUid}
-            for details check: https://api-reference.smartling.com/#operation/getAddStringsToProjectRequestStatus
-            curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/processes/$processUid
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /strings-api/v2/projects/{projectId}/processes/{processUid}
+            details :  https://api-reference.smartling.com/#operation/getAddStringsToProjectRequestStatus
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/processes/$processUid
         """
         kw = {
         }
@@ -43,16 +37,12 @@ class StringsApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getAllSourceStringsByProject(self, hashcodes=[], fileUri='', limit='', offset=''):
         """
-            post
-            /strings-api/v2/projects/{projectId}/source-strings
-            for details check: https://api-reference.smartling.com/#operation/getAllSourceStringsByProject
-            curl -H "Authorization: Bearer $smartlingToken" -G -d "fileUri=$smartlingFileUri" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/source-strings
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /strings-api/v2/projects/{projectId}/source-strings
+            details :  https://api-reference.smartling.com/#operation/getAllSourceStringsByProject
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -G -d "fileUri=$smartlingFileUri" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/source-strings
         """
         kw = {
             'hashcodes':hashcodes,
@@ -64,16 +54,12 @@ class StringsApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getAllTranslationsByProject(self, targetLocaleId, hashcodes=[], retrievalType='', fileUri='', limit='', offset=''):
         """
-            post
-            /strings-api/v2/projects/{projectId}/translations
-            for details check: https://api-reference.smartling.com/#operation/getAllTranslationsByProject
-            curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/translations
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /strings-api/v2/projects/{projectId}/translations
+            details :  https://api-reference.smartling.com/#operation/getAllTranslationsByProject
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/translations
         """
         kw = {
             'targetLocaleId':targetLocaleId,
@@ -85,6 +71,4 @@ class StringsApi(ApiV2):
         }
         url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/translations')
         return self.commandJson('POST', url, kw)
-
-
 

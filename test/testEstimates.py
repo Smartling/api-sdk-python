@@ -103,51 +103,49 @@ class testEstimatesApi(object):
 
     def checkGenerateJobFuzzyEstimateReports(self):
         """
-            post
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
-            for details check: https://api-reference.smartling.com/#operation/generateJobFuzzyEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
+            details :  https://api-reference.smartling.com/#operation/generateJobFuzzyEstimateReports
         """
         translationJobUid=self.test_job_uid
         contentType='JOB_CONTENT_ALL_CONTENT'
         tags=['some', 'tags']
         res, status = self.api.generateJobFuzzyEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags)
-        
-        
+
+
         self.report_uid = res.data.reportUid
         assert_equal(res.data.reportType, 'FUZZY')
         assert_equal(res.data.reportStatus, 'PENDING')
-        
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("generateJobFuzzyEstimateReports", "OK")
 
 
     def checkGetJobFuzzyEstimateReports(self):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
-            for details check: https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
+            details :  https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
         """
         translationJobUid=self.test_job_uid
         res, status = self.api.getJobFuzzyEstimateReports(translationJobUid=translationJobUid)
-        
-        
+
+
         assert_equal(res.data.totalCount, 1)
         assert_equal(res.data.items[0]['translationJobUid'], self.test_job_uid)
-        
-        
+
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobFuzzyEstimateReports", "OK")
 
 
     def checkGenerateJobCostEstimateReports(self):
         """
-            post
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
-            for details check: https://api-reference.smartling.com/#operation/generateJobCostEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
+            details :  https://api-reference.smartling.com/#operation/generateJobCostEstimateReports
         """
         translationJobUid=self.test_job_uid
         contentType='JOB_CONTENT_ALL_CONTENT'
@@ -155,26 +153,26 @@ class testEstimatesApi(object):
         localeWorkflows= [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]
         fuzzyProfileUid='624e06b333af'
         res, status = self.api.generateJobCostEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags, localeWorkflows=localeWorkflows, fuzzyProfileUid=fuzzyProfileUid)
-        
-        
+
+
         assert_equal(res.data.reportType, 'FUZZY')
         assert_equal(True, res.data.reportStatus in ('PENDING'))
-        
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("generateJobCostEstimateReports", "OK")
 
 
     def checkGetJobCostEstimateReports(self):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
-            for details check: https://api-reference.smartling.com/#operation/getJobCostEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
+            details :  https://api-reference.smartling.com/#operation/getJobCostEstimateReports
         """
         translationJobUid=self.test_job_uid
         reportStatus='PENDING'
         res, status = self.api.getJobCostEstimateReports(translationJobUid=translationJobUid, reportStatus=reportStatus)
-        
+
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobCostEstimateReports", "OK")
@@ -182,87 +180,85 @@ class testEstimatesApi(object):
 
     def checkGetJobEstimateReportStatus(self):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
-            for details check: https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
+            details :  https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
         """
         reportUid=self.report_uid
         res, status = self.api.getJobEstimateReportStatus(reportUid=reportUid)
-        
-        
+
+
         assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED'))
-        
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobEstimateReportStatus", "OK")
 
 
     def checkGetJobEstimateReport(self):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}
-            for details check: https://api-reference.smartling.com/#operation/getJobEstimateReport
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
+            details :  https://api-reference.smartling.com/#operation/getJobEstimateReport
         """
         reportUid=self.report_uid
         res, status = self.api.getJobEstimateReport(reportUid=reportUid)
-        
-        
+
+
         assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED'))
-        
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("getJobEstimateReport", "OK")
 
 
     def checkModifyJobEstimateReportTags(self):
         """
-            put
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
-            for details check: https://api-reference.smartling.com/#operation/modifyJobEstimateReportTags
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  PUT
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
+            details :  https://api-reference.smartling.com/#operation/modifyJobEstimateReportTags
         """
         reportUid=self.report_uid
         tags=['tags', 'remodeling']
         res, status = self.api.modifyJobEstimateReportTags(reportUid=reportUid, tags=tags)
-        
-        
+
+
         assert_equal(res.data.tags[0], 'tags')
         assert_equal(res.data.tags[1], 'remodeling')
-        
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("modifyJobEstimateReportTags", "OK")
 
 
     def checkExportJobEstimationReport(self):
         """
-            get
-            /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
-            for details check: https://api-reference.smartling.com/#operation/exportJobEstimationReport
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
+            details :  https://api-reference.smartling.com/#operation/exportJobEstimationReport
         """
         projectUid=self.MY_PROJECT_ID
         reportUid=self.report_uid
         format='csv'
         res, status = self.api.exportJobEstimationReport(projectUid=projectUid, reportUid=reportUid, format=format)
-        
-        
+
+
         assert_equal(True, res.decode('utf-8').startswith('Project Name,Job Name,'))
-        
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("exportJobEstimationReport", "OK")
 
 
     def checkDeleteJobEstimateReport(self):
         """
-            delete
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}
-            for details check: https://api-reference.smartling.com/#operation/deleteJobEstimateReport
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  DELETE
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
+            details :  https://api-reference.smartling.com/#operation/deleteJobEstimateReport
         """
         reportUid=self.report_uid
         res, status = self.api.deleteJobEstimateReport(reportUid=reportUid)
-        
+
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print("deleteJobEstimateReport", "OK")

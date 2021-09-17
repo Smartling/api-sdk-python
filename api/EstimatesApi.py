@@ -9,11 +9,9 @@ class EstimatesApi(ApiV2):
 
     def getJobFuzzyEstimateReports(self, translationJobUid, reportStatus='', contentCoverage='', creatorUserUids=[], translationJobSchemaContents=[], tags=[], createdFrom='', createdTo='', limit=0, offset=0):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
-            for details check: https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
+            details :  https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
         """
         kw = {
             'reportStatus':reportStatus,
@@ -30,15 +28,11 @@ class EstimatesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def generateJobFuzzyEstimateReports(self, translationJobUid, contentType, tags):
         """
-            post
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
-            for details check: https://api-reference.smartling.com/#operation/generateJobFuzzyEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
+            details :  https://api-reference.smartling.com/#operation/generateJobFuzzyEstimateReports
         """
         kw = {
             'contentType':contentType,
@@ -48,15 +42,11 @@ class EstimatesApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getJobCostEstimateReports(self, translationJobUid, reportStatus='', contentCoverage='', creatorUserUids=[], translationJobSchemaContents=[], tags=[], createdFrom='', createdTo='', limit=0, offset=0):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
-            for details check: https://api-reference.smartling.com/#operation/getJobCostEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
+            details :  https://api-reference.smartling.com/#operation/getJobCostEstimateReports
         """
         kw = {
             'reportStatus':reportStatus,
@@ -73,15 +63,11 @@ class EstimatesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def generateJobCostEstimateReports(self, translationJobUid, contentType, tags, localeWorkflows, fuzzyProfileUid):
         """
-            post
-            /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
-            for details check: https://api-reference.smartling.com/#operation/generateJobCostEstimateReports
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  POST
+            api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
+            details :  https://api-reference.smartling.com/#operation/generateJobCostEstimateReports
         """
         kw = {
             'contentType':contentType,
@@ -93,15 +79,11 @@ class EstimatesApi(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-
-
     def getJobEstimateReportStatus(self, reportUid, reportStatus='', reportType=''):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
-            for details check: https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
+            details :  https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
         """
         kw = {
             'reportStatus':reportStatus,
@@ -111,15 +93,11 @@ class EstimatesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def getJobEstimateReport(self, reportUid, reportStatus='', reportType=''):
         """
-            get
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}
-            for details check: https://api-reference.smartling.com/#operation/getJobEstimateReport
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
+            details :  https://api-reference.smartling.com/#operation/getJobEstimateReport
         """
         kw = {
             'reportStatus':reportStatus,
@@ -129,15 +107,11 @@ class EstimatesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-
-
     def deleteJobEstimateReport(self, reportUid):
         """
-            delete
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}
-            for details check: https://api-reference.smartling.com/#operation/deleteJobEstimateReport
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  DELETE
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
+            details :  https://api-reference.smartling.com/#operation/deleteJobEstimateReport
         """
         kw = {
         }
@@ -145,15 +119,11 @@ class EstimatesApi(ApiV2):
         return self.command('DELETE', url, kw)
 
 
-
-
     def modifyJobEstimateReportTags(self, reportUid, tags):
         """
-            put
-            /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
-            for details check: https://api-reference.smartling.com/#operation/modifyJobEstimateReportTags
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  PUT
+            api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
+            details :  https://api-reference.smartling.com/#operation/modifyJobEstimateReportTags
         """
         kw = {
             'tags':tags,
@@ -162,21 +132,15 @@ class EstimatesApi(ApiV2):
         return self.commandJson('PUT', url, kw)
 
 
-
-
     def exportJobEstimationReport(self, projectUid, reportUid, format):
         """
-            get
-            /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
-            for details check: https://api-reference.smartling.com/#operation/exportJobEstimationReport
-
-            ------------------------------------------------------------------------------------------------------------------------
+            method  :  GET
+            api url :  /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
+            details :  https://api-reference.smartling.com/#operation/exportJobEstimationReport
         """
         kw = {
             'format':format,
         }
         url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download', projectUid=projectUid, reportUid=reportUid)
         return self.command('GET', url, kw)
-
-
 
