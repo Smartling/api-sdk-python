@@ -18,10 +18,11 @@
  '''
 import os, sys
 sys.path.append(os.path.abspath('../'))
+isPython3 =  sys.version_info[:2] >= (3,0)
 
 import json
 import collections
-from ApiSource import ApiSource
+from builder.ApiSource import ApiSource
 from smartlingApiSdk.HttpClient import HttpClient
 from smartlingApiSdk.Logger import Logger
 import logging
@@ -41,8 +42,9 @@ class ApiBuilder:
         response_data, status_code, headers = http_loader.getHttpResponseAndStatus('GET', '/swagger.json', {})
         if 200 != status_code:
             raise Exception('Can not load openapi description')
-
-        open("openapi3.json",'w').write(response_data.decode('utf8'))
+        if isPython3:
+            response_data = response_data.decode('utf8')
+        open("openapi3.json",'w').write(response_data)
         json_string = response_data
         json_dict = json.loads(json_string, object_pairs_hook=collections.OrderedDict)
         return json_dict
@@ -74,13 +76,15 @@ class ApiBuilder:
 
 def main():
     sys.stdout = Logger('python-sdk', logging.INFO)
-    build_all = False
+    build_all = True
     if build_all:
-        ApiBuilder("Files").build()
         ApiBuilder("Jobs").build().buildExample().buildTest()
         ApiBuilder("Job Batches V2").build().buildExample().buildTest()
         ApiBuilder("Strings").build().buildExample().buildTest()
         ApiBuilder("Context").build().buildExample().buildTest()
-    ApiBuilder("Estimates").build().buildExample().buildTest()
+        ApiBuilder("Estimates").build().buildExample().buildTest()
+        ApiBuilder("Account & Projects").build().buildExample().buildTest()
+    ApiBuilder("Files").build().buildExample().buildTest()
 
-main()
+if __name__ == '__main__':
+    main()

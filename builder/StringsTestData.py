@@ -17,8 +17,8 @@
  * limit
  '''
 
-from Parameters import Code
-from ExampleData import TestData
+from builder.Parameters import Code
+from builder.ExampleData import TestData
 
 tests_order = [
     'addStringsToProject',
@@ -35,7 +35,7 @@ test_evnironment = 'stg'
 test_decortators = {
     'addStringsToProject':TestData(
         {
-            'strings' : [
+            'strings' : Code('''[
                 {
                     "stringText": 'Strings API test from python api sdk',
                     "callbackUrl": "https://test.strings.smartling.com/test",
@@ -52,7 +52,7 @@ test_decortators = {
                     "maxLength": 4096,
                     "format": "auto",
                 },
-            ],
+            ]'''),
             'placeholderFormat' : 'none',
             'placeholderFormatCustom' : '',
             'namespace' : '',
