@@ -156,7 +156,8 @@ assert_equal(res.data.tags[1], 'remodeling')
         [],
         custom_test_check = '''
 assert_equal(True, res.decode('utf-8').startswith('Project Name,Job Name,'))
-'''
+''',
+        is_apiv2_response = False,
     ),
 
 

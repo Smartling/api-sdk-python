@@ -195,11 +195,11 @@ class Method(ApiCore):
         initializers = {}
 
         test_data_module = importlib.import_module('builder.'+self.api_name+'TestData')
-        testData = getattr(test_data_module, 'test_decortators')
+        decorators = getattr(test_data_module, 'test_decortators')
 
         jobs_test_data = None
-        if self.operationId in testData.keys():
-            jobs_test_data = testData[self.operationId]
+        if self.operationId in decorators.keys():
+            jobs_test_data = decorators[self.operationId]
             initializers = jobs_test_data.fields
             self.custom_test_check = jobs_test_data.custom_test_check
             for line in jobs_test_data.pre_calls:
@@ -219,8 +219,9 @@ class Method(ApiCore):
         if self.custom_test_check:
             body_lines += self.custom_test_check.split('\n')
 
-        body_lines.append('assert_equal(True, status in [200,202])')
-        body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
+        if jobs_test_data and jobs_test_data.is_apiv2_response:
+            body_lines.append('assert_equal(True, status in [200,202])')
+            body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
         body_lines.append("print('%s', 'OK')" % self.operationId)
         if jobs_test_data:
             for line in jobs_test_data.post_calls:

@@ -100,8 +100,6 @@ class testJobBatchesV2Api(object):
         '''
         res, status = self.api.getJobBatchesListV2()
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('getJobBatchesListV2', 'OK')
 
 

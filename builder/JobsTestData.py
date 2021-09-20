@@ -161,7 +161,8 @@ if 400 == status:
 else:
     assert_equal(True, status in [200,202])
     assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
-'''
+''',
+    is_apiv2_response = False,
 ),
 
 'getJobProgress' :                     TestData({'translationJobUid':jobUidCode}),

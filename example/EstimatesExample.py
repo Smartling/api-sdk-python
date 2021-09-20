@@ -245,8 +245,6 @@ class testEstimatesApi(object):
 
         assert_equal(True, res.decode('utf-8').startswith('Project Name,Job Name,'))
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('exportJobEstimationReport', 'OK')
 
 

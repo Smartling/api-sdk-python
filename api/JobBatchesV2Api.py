@@ -24,7 +24,7 @@ class JobBatchesV2Api(ApiV2):
         return self.commandJson('POST', url, kw)
 
 
-    def getJobBatchesListV2(self, translationJobUid='', status='', sortBy='createdDate', orderBy='desc', offset=0, limit=0):
+    def getJobBatchesListV2(self, translationJobUid='', status='', sortBy='createdDate', orderBy='desc', offset=0, limit=20):
         '''
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches

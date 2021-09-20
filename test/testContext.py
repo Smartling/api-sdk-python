@@ -141,8 +141,6 @@ class testContextApi(object):
 
         assert_equal(86324, len(res)) #empty for video context
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('downloadVisualContextFileContent', 'OK')
 
 

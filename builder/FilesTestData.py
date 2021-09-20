@@ -123,7 +123,8 @@ assert_equal(res.data.stringCount, 6)
         custom_test_check = '''
 orig = open(self.FILE_PATH + self.FILE_NAME, "rb").read()
 assert_equal(res, orig)
-'''
+''',
+        is_apiv2_response = False,
     ),
 
     'getFileTranslationStatusAllLocales': TestData(
@@ -156,7 +157,8 @@ assert_equal(res.data.fileType, self.FILE_TYPE)
 resp_lines_count = len(res.decode('utf-8').split('\\n'))
 file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").read().decode('utf-8').split('\\n') )
 assert_equal(resp_lines_count, file_lines_count)
-'''
+''',
+        is_apiv2_response = False,
     ),
 
     'downloadTranslatedFilesAllLocales' : TestData(
@@ -167,7 +169,8 @@ assert_equal(resp_lines_count, file_lines_count)
 zfile = self.getZipFile(res)
 names = zfile.namelist()
 assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
-'''
+''',
+        is_apiv2_response = False,
     ),
 
     'downloadMultipleTranslatedFiles' : TestData(
@@ -182,7 +185,8 @@ assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
 assert_equal(True, self.MY_LOCALE+'/'+self.uri16 in names)
 assert_equal(True, 'zh-TW'+'/'+self.uri in names)
 assert_equal(True, 'zh-TW'+'/'+self.uri16 in names)
-'''
+''',
+        is_apiv2_response = False,
     ),
 
     'getRecentlyUploadedSourceFilesList' : TestData(
@@ -274,7 +278,8 @@ assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 resp_lines_count = len(res.split(newline))
 file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
 assert_equal(resp_lines_count, file_lines_count)
-'''
+''',
+        is_apiv2_response = False,
     ),
 
     'getRecentlyPublishedFilesList' : TestData(

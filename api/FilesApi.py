@@ -120,7 +120,7 @@ class FilesApi(ApiV2):
         return self.command('GET', url, kw)
 
 
-    def getRecentlyUploadedSourceFilesList(self, uriMask='', fileTypes=[], lastUploadedAfter='', lastUploadedBefore='', orderBy='', limit=0, offset=0):
+    def getRecentlyUploadedSourceFilesList(self, uriMask='', fileTypes=[], lastUploadedAfter='', lastUploadedBefore='', orderBy='', limit=100, offset=0):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/list

@@ -90,7 +90,8 @@ assert_equal(res.data.name, '%s')
         },
         custom_test_check = '''
 assert_equal(86324, len(res)) #empty for video context
-'''
+''',
+        is_apiv2_response = False,
     ),
 
 

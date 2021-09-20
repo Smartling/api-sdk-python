@@ -80,7 +80,7 @@ class testStringsApi(object):
         '''
         strings=[
                 {
-                    "stringText": 'Strings API test from python api sdk',
+                    "stringText": "Strings API test from python api sdk",
                     "callbackUrl": "https://test.strings.smartling.com/test",
                     "callbackMethod": "GET",
                     "instruction": "Do nothing it's a test",
@@ -88,7 +88,23 @@ class testStringsApi(object):
                     "format": "auto",
                 },
                 {
-                    "stringText": 'Another Strings API test from python api sdk',
+                    "stringText": "Another Strings API test from python api sdk",
+                    "callbackUrl": "https://test.strings.smartling.com/test",
+                    "callbackMethod": "GET",
+                    "instruction": "Do nothing it's a test",
+                    "maxLength": 4096,
+                    "format": "auto",
+                },
+                {
+                    "stringText": 'Service',
+                    "callbackUrl": "https://test.strings.smartling.com/test",
+                    "callbackMethod": "GET",
+                    "instruction": "Do nothing it's a test",
+                    "maxLength": 4096,
+                    "format": "auto",
+                },
+                {
+                    "stringText": 'Usability Testing',
                     "callbackUrl": "https://test.strings.smartling.com/test",
                     "callbackMethod": "GET",
                     "instruction": "Do nothing it's a test",
@@ -102,8 +118,8 @@ class testStringsApi(object):
         res, status = self.api.addStringsToProject(strings=strings, placeholderFormat=placeholderFormat, placeholderFormatCustom=placeholderFormatCustom, namespace=namespace)
 
 
-        assert_equal(res.data.wordCount, 15)
-        assert_equal(res.data.stringCount, 2)
+        assert_equal(res.data.wordCount, 18)
+        assert_equal(res.data.stringCount, 4)
         stringTexts = [res.data.items[0]['stringText'], res.data.items[1]['stringText']]
         assert_equal(True, 'Strings API test from python api sdk' in stringTexts)
         assert_equal(True, 'Another Strings API test from python api sdk' in stringTexts)
@@ -128,7 +144,7 @@ class testStringsApi(object):
 
 
         assert_equal(res.data.processUid, self.processUid)
-        assert_equal(res.data.processStatistics['requested'], 2)
+        assert_equal(res.data.processStatistics['requested'], 4)
         assert_equal(res.data.processStatistics['errored'], 0)
 
         assert_equal(True, status in [200,202])

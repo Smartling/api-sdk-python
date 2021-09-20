@@ -151,8 +151,6 @@ class testFilesApi(object):
         orig = open(self.FILE_PATH + self.FILE_NAME, "rb").read()
         assert_equal(res, orig)
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('downloadSourceFile', 'OK')
 
 
@@ -209,8 +207,6 @@ class testFilesApi(object):
         file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").read().decode('utf-8').split('\n') )
         assert_equal(resp_lines_count, file_lines_count)
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('downloadTranslatedFileSingleLocale', 'OK')
 
 
@@ -229,8 +225,6 @@ class testFilesApi(object):
         names = zfile.namelist()
         assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('downloadTranslatedFilesAllLocales', 'OK')
 
 
@@ -252,8 +246,6 @@ class testFilesApi(object):
         assert_equal(True, 'zh-TW'+'/'+self.uri in names)
         assert_equal(True, 'zh-TW'+'/'+self.uri16 in names)
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('downloadMultipleTranslatedFiles', 'OK')
 
 
@@ -403,8 +395,6 @@ class testFilesApi(object):
         file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
         assert_equal(resp_lines_count, file_lines_count)
 
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('exportFileTranslations', 'OK')
 
 
