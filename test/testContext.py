@@ -72,12 +72,12 @@ class testContextApi(object):
 
 
     def checkUploadNewVisualContext(self):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts
             details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
-        """
+        '''
         name='https://www.youtube.com/watch?v=0lJykuiS_9s'
         res, status = self.api.uploadNewVisualContext(name=name)
 
@@ -90,16 +90,16 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("uploadNewVisualContext", "OK")
+        print('uploadNewVisualContext', 'OK')
         self.context_uid = res.data.contextUid
 
 
     def checkGetVisualContextsListByProject(self):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts
             details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
-        """
+        '''
         res, status = self.api.getVisualContextsListByProject()
 
 
@@ -108,15 +108,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getVisualContextsListByProject", "OK")
+        print('getVisualContextsListByProject', 'OK')
 
 
     def checkGetVisualContextInfo(self):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
             details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
-        """
+        '''
         contextUid=self.context_uid
         res, status = self.api.getVisualContextInfo(contextUid=contextUid)
 
@@ -126,15 +126,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getVisualContextInfo", "OK")
+        print('getVisualContextInfo', 'OK')
 
 
     def checkDownloadVisualContextFileContent(self):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
             details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
-        """
+        '''
         contextUid=self.context_uid_img
         res, status = self.api.downloadVisualContextFileContent(contextUid=contextUid)
 
@@ -143,15 +143,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("downloadVisualContextFileContent", "OK")
+        print('downloadVisualContextFileContent', 'OK')
 
 
     def checkRunAutomaticContextMatching(self):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
             details :  https://api-reference.smartling.com/#operation/runAutomaticContextMatching
-        """
+        '''
         contextUid=self.context_uid_img
         contentFileUri=''
         stringHashcodes=''
@@ -163,15 +163,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("runAutomaticContextMatching", "OK")
+        print('runAutomaticContextMatching', 'OK')
 
 
     def checkUploadAndMatchVisualContext(self):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
-        """
+        '''
         content='../resources/ctx_api_test.png'
         res, status = self.api.uploadAndMatchVisualContext(content=content)
 
@@ -180,15 +180,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("uploadAndMatchVisualContext", "OK")
+        print('uploadAndMatchVisualContext', 'OK')
 
 
     def checkGetAsyncContextMatchResults(self):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/match/{matchId}
             details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
-        """
+        '''
         matchId=self.match_id_upl_n_match
         res, status = self.api.getAsyncContextMatchResults(matchId=matchId)
 
@@ -196,15 +196,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getAsyncContextMatchResults", "OK")
+        print('getAsyncContextMatchResults', 'OK')
 
 
     def checkCreateStringToContextBindings(self):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
             details :  https://api-reference.smartling.com/#operation/createStringToContextBindings
-        """
+        '''
         bindings=[{'contextUid': self.context_uid, 'stringHashcode': 'ede6083ebd2594ca4e557612aaa05b2e'},
              {'contextUid': self.context_uid_img, 'stringHashcode': '4f25feab674accf572433f22dc516e2e'}]
         res, status = self.api.createStringToContextBindings(bindings=bindings)
@@ -218,15 +218,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("createStringToContextBindings", "OK")
+        print('createStringToContextBindings', 'OK')
 
 
     def checkGetBindings(self):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
             details :  https://api-reference.smartling.com/#operation/getBindings
-        """
+        '''
         stringHashcodes=['ede6083ebd2594ca4e557612aaa05b2e', '4f25feab674accf572433f22dc516e2e']
         contentFileUri=''
         contextUid=''
@@ -239,15 +239,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getBindings", "OK")
+        print('getBindings', 'OK')
 
 
     def checkDeleteBindings(self):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove
             details :  https://api-reference.smartling.com/#operation/deleteBindings
-        """
+        '''
         stringHashcodes=[]
         contentFileUri=''
         contextUid=''
@@ -259,15 +259,15 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("deleteBindings", "OK")
+        print('deleteBindings', 'OK')
 
 
     def checkDeleteVisualContext(self):
-        """
+        '''
             method  :  DELETE
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
             details :  https://api-reference.smartling.com/#operation/deleteVisualContext
-        """
+        '''
         contextUid=self.context_uid
         res, status = self.api.deleteVisualContext(contextUid=contextUid)
 
@@ -276,7 +276,7 @@ class testContextApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("deleteVisualContext", "OK")
+        print('deleteVisualContext', 'OK')
 
 
 

@@ -72,12 +72,12 @@ class testAccountProjectsApi(object):
 
 
     def checkGetProjectsByAccount(self):
-        """
+        '''
             method  :  GET
             api url :  /accounts-api/v2/accounts/{accountUid}/projects
             details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
-        """
+        '''
         accountUid=self.MY_ACCOUNT_UID
         res, status = self.api.getProjectsByAccount(accountUid=self.MY_ACCOUNT_UID)
 
@@ -91,16 +91,16 @@ class testAccountProjectsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getProjectsByAccount", "OK")
+        print('getProjectsByAccount', 'OK')
 
 
     def checkGetProjectDetails(self):
-        """
+        '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}
             details :  https://api-reference.smartling.com/#operation/getProjectDetails
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
-        """
+        '''
         res, status = self.api.getProjectDetails()
 
 
@@ -110,15 +110,15 @@ class testAccountProjectsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getProjectDetails", "OK")
+        print('getProjectDetails', 'OK')
 
 
     def checkAddLocaleToProject(self):
-        """
+        '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/targetLocales
             details :  https://api-reference.smartling.com/#operation/addLocaleToProject
-        """
+        '''
         defaultWorkflowUid='748398939979'
         localeId='es-MX'
         res, status = self.api.addLocaleToProject(defaultWorkflowUid=defaultWorkflowUid, localeId=localeId)
@@ -132,15 +132,15 @@ class testAccountProjectsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("addLocaleToProject", "OK")
+        print('addLocaleToProject', 'OK')
 
 
     def checkCopyProject(self):
-        """
+        '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/copy
             details :  https://api-reference.smartling.com/#operation/copyProject
-        """
+        '''
         projectName='python SDK test'
         targetLocaleIds=['es-MX', 'zh-TW']
         res, status = self.api.copyProject(projectName=projectName, targetLocaleIds=targetLocaleIds)
@@ -150,16 +150,16 @@ class testAccountProjectsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("copyProject", "OK")
+        print('copyProject', 'OK')
         self.copy_process_uid  = res.data.processUid
 
 
     def checkGetProjectCopyRequestStatus(self):
-        """
+        '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
             details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
-        """
+        '''
         processUid=self.copy_process_uid
         res, status = self.api.getProjectCopyRequestStatus(processUid=processUid)
 
@@ -169,7 +169,7 @@ class testAccountProjectsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getProjectCopyRequestStatus", "OK")
+        print('getProjectCopyRequestStatus', 'OK')
 
 
 

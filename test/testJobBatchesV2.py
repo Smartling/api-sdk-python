@@ -72,12 +72,12 @@ class testJobBatchesV2Api(object):
 
 
     def checkCreateJobBatchV2(self):
-        """
+        '''
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches
             details :  https://api-reference.smartling.com/#operation/createJobBatchV2
             as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"]}'
-        """
+        '''
         self.file_uri = "java.properties.jb2.%d" % time.time()
         authorize=False
         translationJobUid="c4e4b14773bd"  #use real batch job here
@@ -87,45 +87,45 @@ class testJobBatchesV2Api(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("createJobBatchV2", "OK")
+        print('createJobBatchV2', 'OK')
         self.batch_uid = res.data.batchUid
 
 
     def checkGetJobBatchesListV2(self):
-        """
+        '''
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches
             details :  https://api-reference.smartling.com/#operation/getJobBatchesListV2
             as curl :  curl -X GET \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches?translationJobUid={translationJobUid}&status={status}&sortBy=createdDate&orderBy=desc&offset=0&limit=20' \-H "Authorization: Bearer $smartlingToken"
-        """
+        '''
         res, status = self.api.getJobBatchesListV2()
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getJobBatchesListV2", "OK")
+        print('getJobBatchesListV2', 'OK')
 
 
     def checkGetJobBatchStatusV2(self):
-        """
+        '''
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
             details :  https://api-reference.smartling.com/#operation/getJobBatchStatusV2
-        """
+        '''
         batchUid=self.batch_uid
         res, status = self.api.getJobBatchStatusV2(batchUid=batchUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getJobBatchStatusV2", "OK")
+        print('getJobBatchStatusV2', 'OK')
 
 
     def checkUploadFileToJobBatchV2(self):
-        """
+        '''
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}/file
             details :  https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
             as curl :  curl -X POST \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/{batchUid}/file' \-H "Authorization: Bearer $smartlingToken" \-F "file=@file.properties;type=text/plain" \-F "fileUri=file.properties" \-F "fileType=javaProperties" \-F "localeIdsToAuthorize[]=fr-FR" \-F "localeIdsToAuthorize[]=ru-RU"
-        """
+        '''
         batchUid=self.batch_uid
         file='../resources/java.properties'
         fileUri=self.file_uri
@@ -137,16 +137,16 @@ class testJobBatchesV2Api(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("uploadFileToJobBatchV2", "OK")
+        print('uploadFileToJobBatchV2', 'OK')
 
 
     def checkProcessBatchActionV2(self):
-        """
+        '''
             method  :  PUT
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
             details :  https://api-reference.smartling.com/#operation/processBatchActionV2
             as curl :  curl -X PUT \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/$batchUid' \-H "Authorization: Bearer $smartlingToken" \-H "Content-Type: application/json" \-d '{ "action": "CANCEL_FILE", "fileUri": "file1.xml", "reason": "Requested asset doesn't exist in Zendesk" }'
-        """
+        '''
         batchUid=self.batch_uid
         action='CANCEL_FILE'
         fileUri='file_to_cancel_later'
@@ -155,7 +155,7 @@ class testJobBatchesV2Api(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("processBatchActionV2", "OK")
+        print('processBatchActionV2', 'OK')
 
 
 

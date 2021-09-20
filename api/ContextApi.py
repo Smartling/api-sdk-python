@@ -8,12 +8,12 @@ class ContextApi(ApiV2):
         self.urlHelper = UrlV2Helper(projectId)
 
     def uploadNewVisualContext(self, name='', content=''):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts
             details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
-        """
+        '''
         kw = {
             'name':name,
             'content':self.processFile(content),
@@ -23,11 +23,11 @@ class ContextApi(ApiV2):
 
 
     def getVisualContextsListByProject(self, nameFilter='', offset='', type=''):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts
             details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
-        """
+        '''
         kw = {
             'nameFilter':nameFilter,
             'offset':offset,
@@ -38,11 +38,11 @@ class ContextApi(ApiV2):
 
 
     def getVisualContextInfo(self, contextUid):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
             details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
-        """
+        '''
         kw = {
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid)
@@ -50,11 +50,11 @@ class ContextApi(ApiV2):
 
 
     def deleteVisualContext(self, contextUid):
-        """
+        '''
             method  :  DELETE
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
             details :  https://api-reference.smartling.com/#operation/deleteVisualContext
-        """
+        '''
         kw = {
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid)
@@ -62,11 +62,11 @@ class ContextApi(ApiV2):
 
 
     def downloadVisualContextFileContent(self, contextUid):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
             details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
-        """
+        '''
         kw = {
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/content', contextUid=contextUid)
@@ -74,11 +74,11 @@ class ContextApi(ApiV2):
 
 
     def runAutomaticContextMatching(self, contextUid, contentFileUri, stringHashcodes, overrideContextOlderThanDays):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
             details :  https://api-reference.smartling.com/#operation/runAutomaticContextMatching
-        """
+        '''
         kw = {
             'contentFileUri':contentFileUri,
             'stringHashcodes':stringHashcodes,
@@ -89,11 +89,11 @@ class ContextApi(ApiV2):
 
 
     def uploadAndMatchVisualContext(self, content, name='', matchParams=''):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
-        """
+        '''
         kw = {
             'content':self.processFile(content),
             'name':name,
@@ -104,11 +104,11 @@ class ContextApi(ApiV2):
 
 
     def getAsyncContextMatchResults(self, matchId):
-        """
+        '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/match/{matchId}
             details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
-        """
+        '''
         kw = {
         }
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/match/{matchId}', matchId=matchId)
@@ -116,11 +116,11 @@ class ContextApi(ApiV2):
 
 
     def createStringToContextBindings(self, bindings):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
             details :  https://api-reference.smartling.com/#operation/createStringToContextBindings
-        """
+        '''
         kw = {
             'bindings':bindings,
         }
@@ -129,11 +129,11 @@ class ContextApi(ApiV2):
 
 
     def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset=''):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
             details :  https://api-reference.smartling.com/#operation/getBindings
-        """
+        '''
         kw = {
             'offset':offset,
             'stringHashcodes':stringHashcodes,
@@ -146,11 +146,11 @@ class ContextApi(ApiV2):
 
 
     def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids):
-        """
+        '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove
             details :  https://api-reference.smartling.com/#operation/deleteBindings
-        """
+        '''
         kw = {
             'stringHashcodes':stringHashcodes,
             'contentFileUri':contentFileUri,

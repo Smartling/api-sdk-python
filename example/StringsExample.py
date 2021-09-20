@@ -72,12 +72,12 @@ class testStringsApi(object):
 
 
     def checkAddStringsToProject(self):
-        """
+        '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
             details :  https://api-reference.smartling.com/#operation/addStringsToProject
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
-        """
+        '''
         strings=[
                 {
                     "stringText": 'Strings API test from python api sdk',
@@ -110,19 +110,19 @@ class testStringsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("addStringsToProject", "OK")
+        print('addStringsToProject', 'OK')
         self.processUid = res.data.processUid
         self.hashcode_0 = res.data.items[0]['hashcode']
         self.hashcode_1 = res.data.items[1]['hashcode']
 
 
     def checkGetAddStringsToProjectRequestStatus(self):
-        """
+        '''
             method  :  GET
             api url :  /strings-api/v2/projects/{projectId}/processes/{processUid}
             details :  https://api-reference.smartling.com/#operation/getAddStringsToProjectRequestStatus
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/processes/$processUid
-        """
+        '''
         processUid=self.processUid
         res, status = self.api.getAddStringsToProjectRequestStatus(processUid=processUid)
 
@@ -133,16 +133,16 @@ class testStringsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getAddStringsToProjectRequestStatus", "OK")
+        print('getAddStringsToProjectRequestStatus', 'OK')
 
 
     def checkGetAllSourceStringsByProject(self):
-        """
+        '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/source-strings
             details :  https://api-reference.smartling.com/#operation/getAllSourceStringsByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G -d "fileUri=$smartlingFileUri" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/source-strings
-        """
+        '''
         hashcodes=[self.hashcode_0,self.hashcode_1]
         res, status = self.api.getAllSourceStringsByProject(hashcodes=hashcodes)
 
@@ -154,16 +154,16 @@ class testStringsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getAllSourceStringsByProject", "OK")
+        print('getAllSourceStringsByProject', 'OK')
 
 
     def checkGetAllTranslationsByProject(self):
-        """
+        '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/translations
             details :  https://api-reference.smartling.com/#operation/getAllTranslationsByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/translations
-        """
+        '''
         targetLocaleId='zh-TW'
         hashcodes=[self.hashcode_0,self.hashcode_1]
         res, status = self.api.getAllTranslationsByProject(targetLocaleId=targetLocaleId, hashcodes=hashcodes)
@@ -173,7 +173,7 @@ class testStringsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getAllTranslationsByProject", "OK")
+        print('getAllTranslationsByProject', 'OK')
 
 
 

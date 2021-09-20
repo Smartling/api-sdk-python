@@ -116,12 +116,12 @@ class testFilesApi(object):
             return zipfile.ZipFile(StringIO.StringIO(res))
 
     def checkUploadSourceFile(self):
-        """
+        '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file
             details :  https://api-reference.smartling.com/#operation/uploadSourceFile
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "file=@$uploadFilePath;type=text/plain" -F "fileUri=$uploadFileSmartlingUri" -F "fileType=$uploadFileSmartlingType" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
-        """
+        '''
         file=self.FILE_PATH + self.FILE_NAME
         fileUri=self.uri
         fileType=self.FILE_TYPE
@@ -134,16 +134,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("uploadSourceFile", "OK")
+        print('uploadSourceFile', 'OK')
 
 
     def checkDownloadSourceFile(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file
             details :  https://api-reference.smartling.com/#operation/downloadSourceFile
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
-        """
+        '''
         fileUri=self.uri
         res, status = self.api.downloadSourceFile(fileUri=fileUri)
 
@@ -153,15 +153,15 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("downloadSourceFile", "OK")
+        print('downloadSourceFile', 'OK')
 
 
     def checkGetFileTranslationStatusAllLocales(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file/status
             details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusAllLocales
-        """
+        '''
         fileUri=self.uri
         res, status = self.api.getFileTranslationStatusAllLocales(fileUri=fileUri)
 
@@ -171,15 +171,15 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getFileTranslationStatusAllLocales", "OK")
+        print('getFileTranslationStatusAllLocales', 'OK')
 
 
     def checkGetFileTranslationStatusSingleLocale(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/status
             details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusSingleLocale
-        """
+        '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
         res, status = self.api.getFileTranslationStatusSingleLocale(localeId=localeId, fileUri=fileUri)
@@ -190,16 +190,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getFileTranslationStatusSingleLocale", "OK")
+        print('getFileTranslationStatusSingleLocale', 'OK')
 
 
     def checkDownloadTranslatedFileSingleLocale(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file
             details :  https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -o $smartlingLocaleId$smartlingFileUri -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file"
-        """
+        '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
         res, status = self.api.downloadTranslatedFileSingleLocale(localeId=localeId, fileUri=fileUri)
@@ -211,16 +211,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("downloadTranslatedFileSingleLocale", "OK")
+        print('downloadTranslatedFileSingleLocale', 'OK')
 
 
     def checkDownloadTranslatedFilesAllLocales(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/all/file/zip
             details :  https://api-reference.smartling.com/#operation/downloadTranslatedFilesAllLocales
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/{projectId}/locales/all/file/zip?fileUri=yourfile.json&retrievalType=published'
-        """
+        '''
         fileUri=self.uri
         res, status = self.api.downloadTranslatedFilesAllLocales(fileUri=fileUri)
 
@@ -231,15 +231,15 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("downloadTranslatedFilesAllLocales", "OK")
+        print('downloadTranslatedFilesAllLocales', 'OK')
 
 
     def checkDownloadMultipleTranslatedFiles(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/zip
             details :  https://api-reference.smartling.com/#operation/downloadMultipleTranslatedFiles
-        """
+        '''
         fileUris=[self.uri,self.uri16]
         localeIds=[self.MY_LOCALE, 'zh-TW']
         res, status = self.api.downloadMultipleTranslatedFiles(fileUris=fileUris, localeIds=localeIds)
@@ -254,16 +254,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("downloadMultipleTranslatedFiles", "OK")
+        print('downloadMultipleTranslatedFiles', 'OK')
 
 
     def checkGetRecentlyUploadedSourceFilesList(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/list
             details :  https://api-reference.smartling.com/#operation/getRecentlyUploadedSourceFilesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/files/list?fileTypes[]=json&uriMask=strings"
-        """
+        '''
         fileTypes=[FileTypes.android, FileTypes.javaProperties]
         res, status = self.api.getRecentlyUploadedSourceFilesList(fileTypes=fileTypes)
 
@@ -274,16 +274,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getRecentlyUploadedSourceFilesList", "OK")
+        print('getRecentlyUploadedSourceFilesList', 'OK')
 
 
     def checkGetFileTypesList(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file-types
             details :  https://api-reference.smartling.com/#operation/getFileTypesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file-types"
-        """
+        '''
         res, status = self.api.getFileTypesList()
 
 
@@ -291,16 +291,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getFileTypesList", "OK")
+        print('getFileTypesList', 'OK')
 
 
     def checkRenameUploadedSourceFile(self):
-        """
+        '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file/rename
             details :  https://api-reference.smartling.com/#operation/renameUploadedSourceFile
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" -F "newFileUri=filename2.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/rename'
-        """
+        '''
         fileUri=self.uri
         newFileUri=self.uri_to_rename
         res, status = self.api.renameUploadedSourceFile(fileUri=fileUri, newFileUri=newFileUri)
@@ -310,16 +310,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("renameUploadedSourceFile", "OK")
+        print('renameUploadedSourceFile', 'OK')
 
 
     def checkGetTranslatedFileLastModifiedDateSingleLocale(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified
             details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateSingleLocale
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/last-modified?fileUri=filename.properties'
-        """
+        '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
         res, status = self.api.getTranslatedFileLastModifiedDateSingleLocale(localeId=localeId, fileUri=fileUri)
@@ -330,16 +330,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getTranslatedFileLastModifiedDateSingleLocale", "OK")
+        print('getTranslatedFileLastModifiedDateSingleLocale', 'OK')
 
 
     def checkGetTranslatedFileLastModifiedDateAllLocales(self):
-        """
+        '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file/last-modified
             details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateAllLocales
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/last-modified?fileUri=filename.properties'
-        """
+        '''
         fileUri=self.uri
         res, status = self.api.getTranslatedFileLastModifiedDateAllLocales(fileUri=fileUri)
 
@@ -352,16 +352,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getTranslatedFileLastModifiedDateAllLocales", "OK")
+        print('getTranslatedFileLastModifiedDateAllLocales', 'OK')
 
 
     def checkImportFileTranslations(self):
-        """
+        '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/import
             details :  https://api-reference.smartling.com/#operation/importFileTranslations
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F "fileUri=filename.properties" -F "fileType=javaProperties" -F "translationState=PUBLISHED" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/import'
-        """
+        '''
         res, status = self.api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)
         localeId=self.MY_LOCALE
         file=self.FILE_PATH + self.FILE_NAME_IMPORT_TRANSLATED
@@ -383,16 +383,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("importFileTranslations", "OK")
+        print('importFileTranslations', 'OK')
 
 
     def checkExportFileTranslations(self):
-        """
+        '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations
             details :  https://api-reference.smartling.com/#operation/exportFileTranslations
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F 'fileUri=filename.properties' 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/get-translations'
-        """
+        '''
         localeId=self.MY_LOCALE
         file=self.FILE_PATH+self.FILE_NAME
         fileUri=self.uri
@@ -405,16 +405,16 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("exportFileTranslations", "OK")
+        print('exportFileTranslations', 'OK')
 
 
     def checkGetRecentlyPublishedFilesList(self):
-        """
+        '''
             method  :  GET
             api url :  /published-files-api/v2/projects/{projectId}/files/list/recently-published
             details :  https://api-reference.smartling.com/#operation/getRecentlyPublishedFilesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/published-files-api/v2/projects/$smartlingProjectId/files/list/recently-published?publishedAfter=2019-11-21T11:51:17Z&fileUris[]=files/example1.json&localeIds[]=fr-CA&limit=10&offset=100'
-        """
+        '''
         publishedAfter=datetime.datetime.fromtimestamp(time.time()-10*24*2600).strftime("%Y-%m-%d")
         localeIds=[self.MY_LOCALE]
         res, status = self.api.getRecentlyPublishedFilesList(publishedAfter=publishedAfter, localeIds=localeIds)
@@ -424,22 +424,22 @@ class testFilesApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("getRecentlyPublishedFilesList", "OK")
+        print('getRecentlyPublishedFilesList', 'OK')
 
 
     def checkDeleteUploadedSourceFile(self):
-        """
+        '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file/delete
             details :  https://api-reference.smartling.com/#operation/deleteUploadedSourceFile
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/delete'
-        """
+        '''
         fileUri=self.uri
         res, status = self.api.deleteUploadedSourceFile(fileUri=fileUri)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print("deleteUploadedSourceFile", "OK")
+        print('deleteUploadedSourceFile', 'OK')
 
 
 

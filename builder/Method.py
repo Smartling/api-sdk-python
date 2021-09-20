@@ -37,7 +37,7 @@ class Method(ApiCore):
         self.path = path
         self.parameters = []
         for p in description_dict['parameters']:
-            if 'projectId' == p['name'] : continue
+            if 'projectId' == p['name'] : continue # we have projectId as api class member
             parameter = Parameter(p, opa_dict)
             self.parameters .append(parameter)
 
@@ -102,8 +102,9 @@ class Method(ApiCore):
         return result
 
     def buildDoc(self):
+        comment_marker = self.indent2 + "'''"
         doc_lines = [
-            self.indent2 + '"""',
+            comment_marker,
             self.indent3 + 'method  :  '+ self.method.upper(),
             self.indent3 + 'api url :  '+self.path,
             self.indent3 + 'details :  https://api-reference.smartling.com/#operation/'+self.operationId,
@@ -114,7 +115,7 @@ class Method(ApiCore):
         nested = self.listNestedValues()
         if nested:
             doc_lines.append(nested)
-        doc_lines.append(self.indent2 + '"""')
+        doc_lines.append(comment_marker)
 
         return '\n'.join(doc_lines)
 
@@ -220,7 +221,7 @@ class Method(ApiCore):
 
         body_lines.append('assert_equal(True, status in [200,202])')
         body_lines.append('assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])')
-        body_lines.append('print("%s", "OK")' % self.operationId)
+        body_lines.append("print('%s', 'OK')" % self.operationId)
         if jobs_test_data:
             for line in jobs_test_data.post_calls:
                 body_lines.append(line)
