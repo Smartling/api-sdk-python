@@ -28,6 +28,7 @@ sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
 from builder.ApiBuilder import ApiBuilder
 from smartlingApiSdk.Logger import Logger
+from smartlingApiSdk.Settings import Settings
 import logging
 
 isPython3 =  sys.version_info[:2] >= (3,0)
@@ -46,7 +47,7 @@ class testApiChanges:
     example_path = '../example'
 
     def setUp(self):
-        sys.stdout = Logger('python-sdk', logging.INFO)
+        sys.stdout = Logger('python-sdk', Settings.log_level)
 
     def tearDown(self):
         pass

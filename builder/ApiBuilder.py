@@ -25,6 +25,7 @@ import collections
 from builder.ApiSource import ApiSource
 from smartlingApiSdk.HttpClient import HttpClient
 from smartlingApiSdk.Logger import Logger
+from smartlingApiSdk.Settings import Settings
 import logging
 
 class ApiBuilder:
@@ -75,7 +76,7 @@ class ApiBuilder:
 
 
 def main():
-    sys.stdout = Logger('python-sdk', logging.INFO)
+    sys.stdout = Logger('python-sdk', Settings.log_level)
     ApiBuilder("Jobs").build().buildExample().buildTest()
     ApiBuilder("Job Batches V2").build().buildExample().buildTest()
     ApiBuilder("Strings").build().buildExample().buildTest()

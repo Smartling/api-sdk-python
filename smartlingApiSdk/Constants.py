@@ -53,6 +53,7 @@ class ReqMethod:
     POST   = "POST"
     GET    = "GET"
     DELETE = "DELETE"
+    PUT    = "PUT"
 
 class FileTypes:
     android        = "android"

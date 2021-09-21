@@ -24,6 +24,7 @@ from .MultipartPostHandler import MultipartPostHandler
 from .Constants import Uri, Params, ReqMethod
 from .ApiResponse import ApiResponse
 from .Logger import Logger
+from .Settings import Settings
 import io
 import sys
 import logging
@@ -40,7 +41,7 @@ class FileApiBase:
         self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
-        sys.stdout = Logger('python-sdk', logging.INFO)
+        sys.stdout = Logger('python-sdk', Settings.log_level)
         sys.stderr = Logger('STDERR', logging.ERROR)
 
     def addAuth(self, params):

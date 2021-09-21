@@ -33,13 +33,12 @@ else:
     from urllib import urlencode
 
 from .Constants import ReqMethod
-
+from .Settings import Settings
 from .MultipartPostHandler import MultipartPostHandler
 from .version import version
 
 class HttpClient:
-    headers = {"Content-Type": "application/x-www-form-urlencoded", \
-               "User-Agent": "Python SDK client v%s py:%s" % (version, sys.version.split()[0])}
+    headers = { "User-Agent": "Python SDK client v%s py:%s" % (version, sys.version.split()[0])}
     protocol = 'https://'
 
     def __init__(self, host, proxySettings=None, permanentHeaders={}):
@@ -60,6 +59,7 @@ class HttpClient:
         headers = {}
         for k,v in list(self.headers.items())+list(extraHeaders.items())+list(self.permanentHeaders.items()):
             headers[k] = v
+        headers = self.setContentEncoding(method, headers)
 
         url = self.protocol + self.host + uri
         if method in (ReqMethod.GET, ReqMethod.DELETE) and params: url += "?" + params
@@ -75,7 +75,7 @@ class HttpClient:
                     req = multipartHandler.http_request(req, self.force_multipart)
                 else:
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req)
+                response = urllib2.urlopen(req, timeout=Settings.request_timeout_seconds)
         except HTTPError as e:
             response = e
 
@@ -144,3 +144,9 @@ class HttpClient:
             if type(v) == type([]) or type(v) == type(()):
                 del params[k]
                 params[k + '[]'] = ",".join(v)
+
+    def setContentEncoding(self, method, headers):
+        ct = "Content-Type"
+        if method in (ReqMethod.POST, ReqMethod.PUT) and ct not in headers:
+            headers[ct] = "application/x-www-form-urlencoded"
+        return headers
