@@ -66,7 +66,7 @@ class testJobsApi(object):
         else:
             proxySettings = None
 
-        self.api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
+        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
 
         print("setUp", "OK", "\n")
 
@@ -75,15 +75,15 @@ class testJobsApi(object):
         self.deleteTestJobs()
 
     def deleteTestJobs(self):
-        response,code = self.api.getJobsByProject()
+        response,code = self.jobs_api.getJobsByProject()
         c = 0
         sz = len(response.data.items)
         for job in response.data.items:
             c += 1
             if job['jobName'].startswith('test_job_'):
                 uid = job['translationJobUid']
-                cres, cstatus = self.api.cancelJob(uid, 'test reason')
-                res, status = self.api.deleteJob(uid)
+                cres, cstatus = self.jobs_api.cancelJob(uid, 'test reason')
+                res, status = self.jobs_api.deleteJob(uid)
                 print (c, 'of', sz, uid, cstatus, status)
 
     def dateTimeStr(self, offset):
@@ -104,7 +104,7 @@ class testJobsApi(object):
         callbackUrl='https://www.callback.com/smartling/job'
         callbackMethod='GET'
         customFields=[]
-        res, status = self.api.addJob(jobName=jobName, targetLocaleIds=targetLocaleIds, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
+        res, status = self.jobs_api.addJob(jobName=jobName, targetLocaleIds=targetLocaleIds, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -121,7 +121,7 @@ class testJobsApi(object):
         translationJobUid=self.test_job_uid
         targetLocaleId="zh-TW" #use your other locale here
         syncContent=True
-        res, status = self.api.addLocaleToJob(translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, syncContent=syncContent)
+        res, status = self.jobs_api.addLocaleToJob(translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, syncContent=syncContent)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -138,7 +138,7 @@ class testJobsApi(object):
         hashcodes=["e1159037badca0a2a618f62c50eff1bb", ] # use your string hashcodes list here
         moveEnabled=False
         targetLocaleIds=[self.MY_LOCALE,]
-        res, status = self.api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
+        res, status = self.jobs_api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -155,7 +155,7 @@ class testJobsApi(object):
         translationJobUid=self.test_job_uid
         fileUri="test_import.xml_2.2.4_1629202583.584802" #use your actual file uri uploaded earielr to Smartling
         targetLocaleIds=[self.MY_LOCALE,]
-        res, status = self.api.addFileToJob(translationJobUid=translationJobUid, fileUri=fileUri, targetLocaleIds=targetLocaleIds)
+        res, status = self.jobs_api.addFileToJob(translationJobUid=translationJobUid, fileUri=fileUri, targetLocaleIds=targetLocaleIds)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -169,7 +169,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobFilesList
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.getJobFilesList(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.getJobFilesList(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -184,7 +184,7 @@ class testJobsApi(object):
         '''
         translationJobUid=self.test_job_uid
         fileUri="test_import.xml_2.2.4_1629202583.584802" #use your actual file uri uploaded earielr to Smartling
-        res, status = self.api.getJobFileProgress(translationJobUid=translationJobUid, fileUri=fileUri)
+        res, status = self.jobs_api.getJobFileProgress(translationJobUid=translationJobUid, fileUri=fileUri)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -199,7 +199,7 @@ class testJobsApi(object):
         '''
         translationJobUid=self.test_job_uid
         localeWorkflows= [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]
-        res, status = self.api.authorizeJob(translationJobUid=translationJobUid, localeWorkflows=localeWorkflows)
+        res, status = self.jobs_api.authorizeJob(translationJobUid=translationJobUid, localeWorkflows=localeWorkflows)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -214,7 +214,7 @@ class testJobsApi(object):
         '''
         translationJobUid=self.test_job_uid
         schedules= [ { "targetLocaleId": "zh-TW", "workflowStepUid": "7f6126eff318", "dueDate": self.dateTimeStr(3600*24*30)} ]
-        res, status = self.api.modifyScheduleItemsForTranslationJob(translationJobUid=translationJobUid, schedules=schedules)
+        res, status = self.jobs_api.modifyScheduleItemsForTranslationJob(translationJobUid=translationJobUid, schedules=schedules)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -227,7 +227,7 @@ class testJobsApi(object):
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
             details :  https://api-reference.smartling.com/#operation/createCustomField
         '''
-        self.api.httpClient.ignore_errors=True
+        self.jobs_api.httpClient.ignore_errors=True
         accountUid=self.MY_ACCOUNT_UID
         type='SHORT_TEXT'
         fieldName='python-sdk-test'
@@ -238,7 +238,7 @@ class testJobsApi(object):
         options=[]
         defaultValue='default field value'
         description='Custom field example'
-        res, status = self.api.createCustomField(accountUid=self.MY_ACCOUNT_UID, type=type, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
+        res, status = self.jobs_api.createCustomField(accountUid=self.MY_ACCOUNT_UID, type=type, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
 
 
         if 400 == status:
@@ -248,7 +248,7 @@ class testJobsApi(object):
             assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
 
         print('createCustomField', 'OK')
-        self.api.httpClient.ignore_errors=False
+        self.jobs_api.httpClient.ignore_errors=False
 
 
     def checkAssignCustomFieldsToProject(self):
@@ -258,7 +258,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
         '''
 
-        resp, code = self.api.getAccountCustomFields(self.MY_ACCOUNT_UID)
+        resp, code = self.jobs_api.getAccountCustomFields(self.MY_ACCOUNT_UID)
         self.fieldUid=None
         for fld in resp.data.items:
             if 'python-sdk-test' == fld['fieldName']:
@@ -266,7 +266,7 @@ class testJobsApi(object):
 
 
         CustomFieldAssignmentList=[{"fieldUid":self.fieldUid},]
-        res, status = self.api.assignCustomFieldsToProject(CustomFieldAssignmentList=CustomFieldAssignmentList)
+        res, status = self.jobs_api.assignCustomFieldsToProject(CustomFieldAssignmentList=CustomFieldAssignmentList)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -289,7 +289,7 @@ class testJobsApi(object):
         options=[]
         defaultValue='New default field value'
         description='New custom field example'
-        res, status = self.api.updateCustomField(accountUid=self.MY_ACCOUNT_UID, fieldUid=fieldUid, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
+        res, status = self.jobs_api.updateCustomField(accountUid=self.MY_ACCOUNT_UID, fieldUid=fieldUid, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -304,7 +304,7 @@ class testJobsApi(object):
         '''
         translationJobUid=self.test_job_uid
         fileUri="test_import.xml_2.2.4_1629202583.584802" #use your actual file uri uploaded earielr to Smartling
-        res, status = self.api.removeFileFromJob(translationJobUid=translationJobUid, fileUri=fileUri)
+        res, status = self.jobs_api.removeFileFromJob(translationJobUid=translationJobUid, fileUri=fileUri)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -320,7 +320,7 @@ class testJobsApi(object):
         translationJobUid=self.test_job_uid
         hashcodes=["e1159037badca0a2a618f62c50eff1bb", ] # use your string hashcodes list here
         localeIds=[self.MY_LOCALE,]
-        res, status = self.api.removeStringsFromJob(translationJobUid=translationJobUid, hashcodes=hashcodes, localeIds=localeIds)
+        res, status = self.jobs_api.removeStringsFromJob(translationJobUid=translationJobUid, hashcodes=hashcodes, localeIds=localeIds)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -334,7 +334,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobLastCompletionDatesPerLocale
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.getJobLastCompletionDatesPerLocale(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.getJobLastCompletionDatesPerLocale(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -348,7 +348,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/findScheduleForTranslationJob
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.findScheduleForTranslationJob(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.findScheduleForTranslationJob(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -363,7 +363,7 @@ class testJobsApi(object):
         '''
         translationJobUid=self.test_job_uid
         targetLocaleId="zh-TW" #use already added locale here
-        res, status = self.api.removeLocaleFromJob(translationJobUid=translationJobUid, targetLocaleId=targetLocaleId)
+        res, status = self.jobs_api.removeLocaleFromJob(translationJobUid=translationJobUid, targetLocaleId=targetLocaleId)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -378,7 +378,7 @@ class testJobsApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
         '''
         jobName=self.jobname
-        res, status = self.api.getJobsByProject(jobName=jobName)
+        res, status = self.jobs_api.getJobsByProject(jobName=jobName)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -399,7 +399,7 @@ class testJobsApi(object):
         callbackUrl='https://www.callback.com/smartling/new_job'
         callbackMethod='POST'
         customFields=[]
-        res, status = self.api.updateJob(translationJobUid=translationJobUid, jobName=jobName, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
+        res, status = self.jobs_api.updateJob(translationJobUid=translationJobUid, jobName=jobName, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -413,7 +413,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobProgress
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.getJobProgress(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.getJobProgress(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -427,7 +427,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobDetails
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.getJobDetails(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.getJobDetails(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -441,7 +441,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/getStringsForTranslationJob
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.getStringsForTranslationJob(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.getStringsForTranslationJob(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -456,7 +456,7 @@ class testJobsApi(object):
         '''
         hashcodes=[]
         localeIds=[self.MY_LOCALE,]
-        res, status = self.api.findJobsByStrings(hashcodes=hashcodes, localeIds=localeIds)
+        res, status = self.jobs_api.findJobsByStrings(hashcodes=hashcodes, localeIds=localeIds)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -472,7 +472,7 @@ class testJobsApi(object):
         fileUris=[]
         hashcodes=[]
         translationJobUids=[self.test_job_uid]
-        res, status = self.api.searchForJob(fileUris=fileUris, hashcodes=hashcodes, translationJobUids=translationJobUids)
+        res, status = self.jobs_api.searchForJob(fileUris=fileUris, hashcodes=hashcodes, translationJobUids=translationJobUids)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -487,7 +487,7 @@ class testJobsApi(object):
         '''
         translationJobUid=self.test_job_uid
         reason='test reason'
-        res, status = self.api.cancelJob(translationJobUid=translationJobUid, reason=reason)
+        res, status = self.jobs_api.cancelJob(translationJobUid=translationJobUid, reason=reason)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -501,7 +501,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/deleteJob
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.deleteJob(translationJobUid=translationJobUid)
+        res, status = self.jobs_api.deleteJob(translationJobUid=translationJobUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -514,7 +514,7 @@ class testJobsApi(object):
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
             details :  https://api-reference.smartling.com/#operation/getProjectCustomFields
         '''
-        res, status = self.api.getProjectCustomFields()
+        res, status = self.jobs_api.getProjectCustomFields()
 
         print('getProjectCustomFields', 'OK')
 
@@ -526,7 +526,7 @@ class testJobsApi(object):
             details :  https://api-reference.smartling.com/#operation/getAccountCustomFields
         '''
         accountUid=self.MY_ACCOUNT_UID
-        res, status = self.api.getAccountCustomFields(accountUid=self.MY_ACCOUNT_UID)
+        res, status = self.jobs_api.getAccountCustomFields(accountUid=self.MY_ACCOUNT_UID)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -541,7 +541,7 @@ class testJobsApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/accounts/$smartlingAccountId/jobs
         '''
         accountUid=self.MY_ACCOUNT_UID
-        res, status = self.api.getJobsByAccount(accountUid=self.MY_ACCOUNT_UID)
+        res, status = self.jobs_api.getJobsByAccount(accountUid=self.MY_ACCOUNT_UID)
 
         print('getJobsByAccount', 'OK')
 

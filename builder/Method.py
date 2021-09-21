@@ -28,11 +28,12 @@ class Method(ApiCore):
     indent3 = indent*3
     indent4 = indent*4
 
-    def __init__(self, api_name, path, method, description_dict, opa_dict):
+    def __init__(self, api_name, api_name_underscore, path, method, description_dict, opa_dict):
         ApiCore.__init__(self, opa_dict)
         for name in ['summary', 'description', 'tags', 'operationId', 'responses', 'x-code-samples', 'requestBody']:
             setattr(self, name, description_dict.get(name, None))
         self.api_name = api_name
+        self.api_name_underscore = api_name_underscore
         self.method = method
         self.path = path
         self.parameters = []
@@ -214,7 +215,7 @@ class Method(ApiCore):
                 body_lines.append(p.getParamForMethodCall(initializers))
 
         call_params = ', '.join(parameters)
-        body_lines.append('res, status = self.api.%s(%s)' % (self.operationId, call_params))
+        body_lines.append('res, status = self.%s_api.%s(%s)' % (self.api_name_underscore, self.operationId, call_params))
         body_lines.append('')
         if self.custom_test_check:
             body_lines += self.custom_test_check.split('\n')

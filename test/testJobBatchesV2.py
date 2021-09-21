@@ -66,7 +66,7 @@ class testJobBatchesV2Api(object):
         else:
             proxySettings = None
 
-        self.api = JobBatchesV2Api(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.job_batches_v2_api = JobBatchesV2Api(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
 
@@ -83,7 +83,7 @@ class testJobBatchesV2Api(object):
         translationJobUid="c4e4b14773bd"  #use real batch job here
         fileUris=[self.file_uri, "file_to_cancel_later"]
         localeWorkflows= [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]
-        res, status = self.api.createJobBatchV2(authorize=authorize, translationJobUid=translationJobUid, fileUris=fileUris, localeWorkflows=localeWorkflows)
+        res, status = self.job_batches_v2_api.createJobBatchV2(authorize=authorize, translationJobUid=translationJobUid, fileUris=fileUris, localeWorkflows=localeWorkflows)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -98,7 +98,7 @@ class testJobBatchesV2Api(object):
             details :  https://api-reference.smartling.com/#operation/getJobBatchesListV2
             as curl :  curl -X GET \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches?translationJobUid={translationJobUid}&status={status}&sortBy=createdDate&orderBy=desc&offset=0&limit=20' \-H "Authorization: Bearer $smartlingToken"
         '''
-        res, status = self.api.getJobBatchesListV2()
+        res, status = self.job_batches_v2_api.getJobBatchesListV2()
 
         print('getJobBatchesListV2', 'OK')
 
@@ -110,7 +110,7 @@ class testJobBatchesV2Api(object):
             details :  https://api-reference.smartling.com/#operation/getJobBatchStatusV2
         '''
         batchUid=self.batch_uid
-        res, status = self.api.getJobBatchStatusV2(batchUid=batchUid)
+        res, status = self.job_batches_v2_api.getJobBatchStatusV2(batchUid=batchUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -131,7 +131,7 @@ class testJobBatchesV2Api(object):
         authorize=False
         localeIdsToAuthorize=["zh-TW",]
         callbackUrl='https://www.callback.com/smartling/python/sdk/jb2.test'
-        res, status = self.api.uploadFileToJobBatchV2(batchUid=batchUid, file=file, fileUri=fileUri, fileType=fileType, authorize=authorize, localeIdsToAuthorize=localeIdsToAuthorize, callbackUrl=callbackUrl)
+        res, status = self.job_batches_v2_api.uploadFileToJobBatchV2(batchUid=batchUid, file=file, fileUri=fileUri, fileType=fileType, authorize=authorize, localeIdsToAuthorize=localeIdsToAuthorize, callbackUrl=callbackUrl)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -149,7 +149,7 @@ class testJobBatchesV2Api(object):
         action='CANCEL_FILE'
         fileUri='file_to_cancel_later'
         reason='test reason'
-        res, status = self.api.processBatchActionV2(batchUid=batchUid, action=action, fileUri=fileUri, reason=reason)
+        res, status = self.job_batches_v2_api.processBatchActionV2(batchUid=batchUid, action=action, fileUri=fileUri, reason=reason)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

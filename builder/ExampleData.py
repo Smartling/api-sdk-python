@@ -93,7 +93,7 @@ class test{API_NAME}(object):
         else:
             proxySettings = None
 
-        self.api = {API_NAME}(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
+        self.{api_name}_api = {API_NAME}(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
 
         print("setUp", "OK", "\\n")
 """

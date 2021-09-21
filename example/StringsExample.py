@@ -66,7 +66,7 @@ class testStringsApi(object):
         else:
             proxySettings = None
 
-        self.api = StringsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.strings_api = StringsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
 
@@ -115,7 +115,7 @@ class testStringsApi(object):
         placeholderFormat='none'
         placeholderFormatCustom=''
         namespace=''
-        res, status = self.api.addStringsToProject(strings=strings, placeholderFormat=placeholderFormat, placeholderFormatCustom=placeholderFormatCustom, namespace=namespace)
+        res, status = self.strings_api.addStringsToProject(strings=strings, placeholderFormat=placeholderFormat, placeholderFormatCustom=placeholderFormatCustom, namespace=namespace)
 
 
         assert_equal(res.data.wordCount, 18)
@@ -140,7 +140,7 @@ class testStringsApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/processes/$processUid
         '''
         processUid=self.processUid
-        res, status = self.api.getAddStringsToProjectRequestStatus(processUid=processUid)
+        res, status = self.strings_api.getAddStringsToProjectRequestStatus(processUid=processUid)
 
 
         assert_equal(res.data.processUid, self.processUid)
@@ -160,7 +160,7 @@ class testStringsApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G -d "fileUri=$smartlingFileUri" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/source-strings
         '''
         hashcodes=[self.hashcode_0,self.hashcode_1]
-        res, status = self.api.getAllSourceStringsByProject(hashcodes=hashcodes)
+        res, status = self.strings_api.getAllSourceStringsByProject(hashcodes=hashcodes)
 
 
         assert_equal(res.data.totalCount, 2)
@@ -182,7 +182,7 @@ class testStringsApi(object):
         '''
         targetLocaleId='zh-TW'
         hashcodes=[self.hashcode_0,self.hashcode_1]
-        res, status = self.api.getAllTranslationsByProject(targetLocaleId=targetLocaleId, hashcodes=hashcodes)
+        res, status = self.strings_api.getAllTranslationsByProject(targetLocaleId=targetLocaleId, hashcodes=hashcodes)
 
 
         assert_equal(res.data.totalCount, 0)

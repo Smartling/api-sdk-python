@@ -26,28 +26,6 @@ from .FileApiBase import FileApiBase
 from .SmartlingDirective import SmartlingDirective
 from .version import version
 
-"""
-Upload File - /files-api/v2/projects/{projectId}/file (POST)
-Download Original File - /files-api/v2/projects/{projectId}/file (GET)
-Download Translated File - Single Locale - /files-api/v2/projects/{projectId}/locales/{localeId}/file (GET)
-Download Translated Files - Multiple Locales as .ZIP - /files-api/v2/projects/{projectId}/files/zip (GET)
-Download Translated File - All Locales as .ZIP - /files-api/v2/projects/{projectId}/locales/all/file/zip (GET)
-Download Translated File - All Locales in one File - CSV - /files-api/v2/projects/{projectId}/locales/all/file (GET)
-List Files - /files-api/v2/projects/{projectId}/files/list (GET)
-List File Types - /files-api/v2/projects/{projectId}/file-types (GET)
-Status - All Locales - /files-api/v2/projects/{projectId}/file/status (GET)
-Status - Single Locale / Extended Response - /files-api/v2/projects/{projectId}/locales/{localeId}/file/status (GET)
-Rename - /files-api/v2/projects/{projectId}/file/rename (POST)
-Delete - /files-api/v2/projects/{projectId}/file/delete (POST)
-Last Modified (by locale) - /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified (GET)
-Last Modified (all locales) - /files-api/v2/projects/{projectId}/file/last-modified (GET)
-Import Translations - /files-api/v2/projects/{projectId}/locales/{localeId}/file/import (POST or PUT)
-List Authorized Locales - /files-api/v2/projects/{projectId}/file/authorized-locales (GET)
-Authorize - /files-api/v2/projects/{projectId}/file/authorized-locales (PUT / POST)
-Unauthorize - /files-api/v2/projects/{projectId}/file/authorized-locales (DELETE)
-Get Translations - /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations (POST)
-"""
-
 class ApiV2(FileApiBase):
     """ Api v2 basic functionality """
     host_prod = 'api.smartling.com'

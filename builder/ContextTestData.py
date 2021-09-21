@@ -60,7 +60,7 @@ test_decortators = {
 assert_equal(res.data.contextType, 'VIDEO')
 assert_equal(res.data.name, '%s')
 
-res_img, status = self.api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
+res_img, status = self.context_api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
 self.context_uid_img = res_img.data.contextUid
 ''' % video_url
     ),
@@ -121,7 +121,7 @@ self.match_id = res.data.matchId
             'contextUid': Code('self.context_uid'),
         },
         custom_test_check = '''
-res2, status = self.api.deleteVisualContext(contextUid=self.context_uid_img)
+res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_img)
 '''
     ),
 

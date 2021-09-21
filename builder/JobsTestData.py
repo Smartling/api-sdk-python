@@ -57,15 +57,15 @@ extra_initializations = '''
         self.deleteTestJobs()
 
     def deleteTestJobs(self):
-        response,code = self.api.getJobsByProject()
+        response,code = self.jobs_api.getJobsByProject()
         c = 0
         sz = len(response.data.items)
         for job in response.data.items:
             c += 1
             if job['jobName'].startswith('test_job_'):
                 uid = job['translationJobUid']
-                cres, cstatus = self.api.cancelJob(uid, 'test reason')
-                res, status = self.api.deleteJob(uid)
+                cres, cstatus = self.jobs_api.cancelJob(uid, 'test reason')
+                res, status = self.jobs_api.deleteJob(uid)
                 print (c, 'of', sz, uid, cstatus, status)
 
     def dateTimeStr(self, offset):
@@ -116,7 +116,7 @@ test_decortators = {
      'CustomFieldAssignmentList': Code('[{"fieldUid":self.fieldUid},]')
     },
 '''
-resp, code = self.api.getAccountCustomFields(self.MY_ACCOUNT_UID)
+resp, code = self.jobs_api.getAccountCustomFields(self.MY_ACCOUNT_UID)
 self.fieldUid=None
 for fld in resp.data.items:
     if 'python-sdk-test' == fld['fieldName']:
@@ -153,8 +153,8 @@ for fld in resp.data.items:
       "description": "Custom field example"
 
     },
-    ['self.api.httpClient.ignore_errors=True'],
-    ['self.api.httpClient.ignore_errors=False'],
+    ['self.jobs_api.httpClient.ignore_errors=True'],
+    ['self.jobs_api.httpClient.ignore_errors=False'],
     custom_test_check = '''
 if 400 == status:
     assert_equal(True, 'Field name must be unique within account' in str(res))

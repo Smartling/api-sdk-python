@@ -40,7 +40,7 @@ tests_order = [
 ]
 
 teardown = '''
-        res, status = self.api.deleteUploadedSourceFile(self.uri16)
+        res, status = self.files_api.deleteUploadedSourceFile(self.uri16)
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 '''
@@ -82,7 +82,7 @@ extra_initializations = '''
         unique_suffix = "_" + repr(time.time())
         self.uri = self.FILE_NAME + unique_suffix 
         self.uri16 = self.FILE_NAME_16 + unique_suffix 
-        res, status = self.api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_16, fileType=self.FILE_TYPE, fileUri = self.uri16, localeIdsToAuthorize = [self.MY_LOCALE] )
+        res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_16, fileType=self.FILE_TYPE, fileUri = self.uri16, localeIdsToAuthorize = [self.MY_LOCALE] )
         
         self.uri_to_rename = self.FILE_NAME_NEW + unique_suffix
         self.uri_import = self.FILE_NAME_IMPORT_ORIG + unique_suffix
@@ -215,7 +215,7 @@ assert_equal(True, "javaProperties" in res.data.items)
 
         },
         custom_test_check = '''
-res, status = self.api.renameUploadedSourceFile(self.uri_to_rename, self.uri) #rename it back so in the end it could be removed
+res, status = self.files_api.renameUploadedSourceFile(self.uri_to_rename, self.uri) #rename it back so in the end it could be removed
 '''
     ),
 
@@ -254,14 +254,14 @@ for l in res.data.items:
             'fileType' : Code('self.FILE_TYPE_IMPORT'),
             'translationState' : 'PUBLISHED',
         },
-        ['res, status = self.api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)'],
+        ['res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)'],
         custom_test_check = '''
 
 assert_equal(res.data.wordCount, 2)
 assert_equal(res.data.stringCount, 2)
 assert_equal(res.data.translationImportErrors, [])
 
-res, status = self.api.deleteUploadedSourceFile(self.uri_import)
+res, status = self.files_api.deleteUploadedSourceFile(self.uri_import)
 assert_equal(200, status)
 assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 

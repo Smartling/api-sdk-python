@@ -66,7 +66,7 @@ class testContextApi(object):
         else:
             proxySettings = None
 
-        self.api = ContextApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.context_api = ContextApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
 
@@ -79,13 +79,13 @@ class testContextApi(object):
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
         '''
         name='https://www.youtube.com/watch?v=0lJykuiS_9s'
-        res, status = self.api.uploadNewVisualContext(name=name)
+        res, status = self.context_api.uploadNewVisualContext(name=name)
 
 
         assert_equal(res.data.contextType, 'VIDEO')
         assert_equal(res.data.name, 'https://www.youtube.com/watch?v=0lJykuiS_9s')
 
-        res_img, status = self.api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
+        res_img, status = self.context_api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
         self.context_uid_img = res_img.data.contextUid
 
         assert_equal(True, status in [200,202])
@@ -100,7 +100,7 @@ class testContextApi(object):
             api url :  /context-api/v2/projects/{projectId}/contexts
             details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
         '''
-        res, status = self.api.getVisualContextsListByProject()
+        res, status = self.context_api.getVisualContextsListByProject()
 
 
         print('Total context count:',len(res.data.items))
@@ -118,7 +118,7 @@ class testContextApi(object):
             details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
         '''
         contextUid=self.context_uid
-        res, status = self.api.getVisualContextInfo(contextUid=contextUid)
+        res, status = self.context_api.getVisualContextInfo(contextUid=contextUid)
 
 
         assert_equal(res.data.contextType, 'VIDEO')
@@ -136,7 +136,7 @@ class testContextApi(object):
             details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
         '''
         contextUid=self.context_uid_img
-        res, status = self.api.downloadVisualContextFileContent(contextUid=contextUid)
+        res, status = self.context_api.downloadVisualContextFileContent(contextUid=contextUid)
 
 
         assert_equal(86324, len(res)) #empty for video context
@@ -154,7 +154,7 @@ class testContextApi(object):
         contentFileUri=''
         stringHashcodes=''
         overrideContextOlderThanDays=1
-        res, status = self.api.runAutomaticContextMatching(contextUid=contextUid, contentFileUri=contentFileUri, stringHashcodes=stringHashcodes, overrideContextOlderThanDays=overrideContextOlderThanDays)
+        res, status = self.context_api.runAutomaticContextMatching(contextUid=contextUid, contentFileUri=contentFileUri, stringHashcodes=stringHashcodes, overrideContextOlderThanDays=overrideContextOlderThanDays)
 
 
         self.match_id = res.data.matchId
@@ -171,7 +171,7 @@ class testContextApi(object):
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
         '''
         content='../resources/ctx_api_test.png'
-        res, status = self.api.uploadAndMatchVisualContext(content=content)
+        res, status = self.context_api.uploadAndMatchVisualContext(content=content)
 
 
         self.match_id_upl_n_match = res.data.matchId
@@ -188,7 +188,7 @@ class testContextApi(object):
             details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
         '''
         matchId=self.match_id_upl_n_match
-        res, status = self.api.getAsyncContextMatchResults(matchId=matchId)
+        res, status = self.context_api.getAsyncContextMatchResults(matchId=matchId)
 
 
 
@@ -205,7 +205,7 @@ class testContextApi(object):
         '''
         bindings=[{'contextUid': self.context_uid, 'stringHashcode': 'ede6083ebd2594ca4e557612aaa05b2e'},
              {'contextUid': self.context_uid_img, 'stringHashcode': '4f25feab674accf572433f22dc516e2e'}]
-        res, status = self.api.createStringToContextBindings(bindings=bindings)
+        res, status = self.context_api.createStringToContextBindings(bindings=bindings)
 
 
         assert_equal(res.data.errors['totalCount'], 0)
@@ -229,7 +229,7 @@ class testContextApi(object):
         contentFileUri=''
         contextUid=''
         bindingUids=[]
-        res, status = self.api.getBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
+        res, status = self.context_api.getBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
 
 
         print('Total bindings count:',len(res.data.items))
@@ -250,7 +250,7 @@ class testContextApi(object):
         contentFileUri=''
         contextUid=''
         bindingUids=[self.binding_uno, self.binding_dos]
-        res, status = self.api.deleteBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
+        res, status = self.context_api.deleteBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
 
 
         assert_equal(res.data.totalCount, 2)
@@ -267,10 +267,10 @@ class testContextApi(object):
             details :  https://api-reference.smartling.com/#operation/deleteVisualContext
         '''
         contextUid=self.context_uid
-        res, status = self.api.deleteVisualContext(contextUid=contextUid)
+        res, status = self.context_api.deleteVisualContext(contextUid=contextUid)
 
 
-        res2, status = self.api.deleteVisualContext(contextUid=self.context_uid_img)
+        res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_img)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

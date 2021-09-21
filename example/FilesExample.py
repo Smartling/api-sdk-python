@@ -79,7 +79,7 @@ class testFilesApi(object):
         else:
             proxySettings = None
 
-        self.api = FilesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.files_api = FilesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
 
@@ -104,7 +104,7 @@ class testFilesApi(object):
         unique_suffix = "_" + repr(time.time())
         self.uri = self.FILE_NAME + unique_suffix 
         self.uri16 = self.FILE_NAME_16 + unique_suffix 
-        res, status = self.api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_16, fileType=self.FILE_TYPE, fileUri = self.uri16, localeIdsToAuthorize = [self.MY_LOCALE] )
+        res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_16, fileType=self.FILE_TYPE, fileUri = self.uri16, localeIdsToAuthorize = [self.MY_LOCALE] )
         
         self.uri_to_rename = self.FILE_NAME_NEW + unique_suffix
         self.uri_import = self.FILE_NAME_IMPORT_ORIG + unique_suffix
@@ -126,7 +126,7 @@ class testFilesApi(object):
         fileUri=self.uri
         fileType=self.FILE_TYPE
         localeIdsToAuthorize=[self.MY_LOCALE]
-        res, status = self.api.uploadSourceFile(file=file, fileUri=fileUri, fileType=fileType, localeIdsToAuthorize=localeIdsToAuthorize)
+        res, status = self.files_api.uploadSourceFile(file=file, fileUri=fileUri, fileType=fileType, localeIdsToAuthorize=localeIdsToAuthorize)
 
 
         assert_equal(res.data.wordCount, 6)
@@ -145,7 +145,7 @@ class testFilesApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
         '''
         fileUri=self.uri
-        res, status = self.api.downloadSourceFile(fileUri=fileUri)
+        res, status = self.files_api.downloadSourceFile(fileUri=fileUri)
 
 
         orig = open(self.FILE_PATH + self.FILE_NAME, "rb").read()
@@ -161,7 +161,7 @@ class testFilesApi(object):
             details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusAllLocales
         '''
         fileUri=self.uri
-        res, status = self.api.getFileTranslationStatusAllLocales(fileUri=fileUri)
+        res, status = self.files_api.getFileTranslationStatusAllLocales(fileUri=fileUri)
 
 
         assert_equal(res.data.fileUri, self.uri)
@@ -180,7 +180,7 @@ class testFilesApi(object):
         '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
-        res, status = self.api.getFileTranslationStatusSingleLocale(localeId=localeId, fileUri=fileUri)
+        res, status = self.files_api.getFileTranslationStatusSingleLocale(localeId=localeId, fileUri=fileUri)
 
 
         assert_equal(res.data.fileUri, self.uri)
@@ -200,7 +200,7 @@ class testFilesApi(object):
         '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
-        res, status = self.api.downloadTranslatedFileSingleLocale(localeId=localeId, fileUri=fileUri)
+        res, status = self.files_api.downloadTranslatedFileSingleLocale(localeId=localeId, fileUri=fileUri)
 
 
         resp_lines_count = len(res.decode('utf-8').split('\n'))
@@ -218,7 +218,7 @@ class testFilesApi(object):
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/{projectId}/locales/all/file/zip?fileUri=yourfile.json&retrievalType=published'
         '''
         fileUri=self.uri
-        res, status = self.api.downloadTranslatedFilesAllLocales(fileUri=fileUri)
+        res, status = self.files_api.downloadTranslatedFilesAllLocales(fileUri=fileUri)
 
 
         zfile = self.getZipFile(res)
@@ -236,7 +236,7 @@ class testFilesApi(object):
         '''
         fileUris=[self.uri,self.uri16]
         localeIds=[self.MY_LOCALE, 'zh-TW']
-        res, status = self.api.downloadMultipleTranslatedFiles(fileUris=fileUris, localeIds=localeIds)
+        res, status = self.files_api.downloadMultipleTranslatedFiles(fileUris=fileUris, localeIds=localeIds)
 
 
         zfile = self.getZipFile(res)
@@ -257,7 +257,7 @@ class testFilesApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/files/list?fileTypes[]=json&uriMask=strings"
         '''
         fileTypes=[FileTypes.android, FileTypes.javaProperties]
-        res, status = self.api.getRecentlyUploadedSourceFilesList(fileTypes=fileTypes)
+        res, status = self.files_api.getRecentlyUploadedSourceFilesList(fileTypes=fileTypes)
 
 
         uris = [x['fileUri'] for x in res.data.items]
@@ -276,7 +276,7 @@ class testFilesApi(object):
             details :  https://api-reference.smartling.com/#operation/getFileTypesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file-types"
         '''
-        res, status = self.api.getFileTypesList()
+        res, status = self.files_api.getFileTypesList()
 
 
         assert_equal(True, "javaProperties" in res.data.items)
@@ -295,10 +295,10 @@ class testFilesApi(object):
         '''
         fileUri=self.uri
         newFileUri=self.uri_to_rename
-        res, status = self.api.renameUploadedSourceFile(fileUri=fileUri, newFileUri=newFileUri)
+        res, status = self.files_api.renameUploadedSourceFile(fileUri=fileUri, newFileUri=newFileUri)
 
 
-        res, status = self.api.renameUploadedSourceFile(self.uri_to_rename, self.uri) #rename it back so in the end it could be removed
+        res, status = self.files_api.renameUploadedSourceFile(self.uri_to_rename, self.uri) #rename it back so in the end it could be removed
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -314,7 +314,7 @@ class testFilesApi(object):
         '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
-        res, status = self.api.getTranslatedFileLastModifiedDateSingleLocale(localeId=localeId, fileUri=fileUri)
+        res, status = self.files_api.getTranslatedFileLastModifiedDateSingleLocale(localeId=localeId, fileUri=fileUri)
 
 
         lm_date = res.data.lastModified[:10]
@@ -333,7 +333,7 @@ class testFilesApi(object):
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/last-modified?fileUri=filename.properties'
         '''
         fileUri=self.uri
-        res, status = self.api.getTranslatedFileLastModifiedDateAllLocales(fileUri=fileUri)
+        res, status = self.files_api.getTranslatedFileLastModifiedDateAllLocales(fileUri=fileUri)
 
 
         assert_equal(True, len(res.data.items) > 0)
@@ -354,13 +354,13 @@ class testFilesApi(object):
             details :  https://api-reference.smartling.com/#operation/importFileTranslations
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F "fileUri=filename.properties" -F "fileType=javaProperties" -F "translationState=PUBLISHED" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/import'
         '''
-        res, status = self.api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)
+        res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)
         localeId=self.MY_LOCALE
         file=self.FILE_PATH + self.FILE_NAME_IMPORT_TRANSLATED
         fileUri=self.uri_import
         fileType=self.FILE_TYPE_IMPORT
         translationState='PUBLISHED'
-        res, status = self.api.importFileTranslations(localeId=localeId, file=file, fileUri=fileUri, fileType=fileType, translationState=translationState)
+        res, status = self.files_api.importFileTranslations(localeId=localeId, file=file, fileUri=fileUri, fileType=fileType, translationState=translationState)
 
 
 
@@ -368,7 +368,7 @@ class testFilesApi(object):
         assert_equal(res.data.stringCount, 2)
         assert_equal(res.data.translationImportErrors, [])
 
-        res, status = self.api.deleteUploadedSourceFile(self.uri_import)
+        res, status = self.files_api.deleteUploadedSourceFile(self.uri_import)
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 
@@ -388,7 +388,7 @@ class testFilesApi(object):
         localeId=self.MY_LOCALE
         file=self.FILE_PATH+self.FILE_NAME
         fileUri=self.uri
-        res, status = self.api.exportFileTranslations(localeId=localeId, file=file, fileUri=fileUri)
+        res, status = self.files_api.exportFileTranslations(localeId=localeId, file=file, fileUri=fileUri)
 
 
         resp_lines_count = len(res.split(newline))
@@ -407,7 +407,7 @@ class testFilesApi(object):
         '''
         publishedAfter=datetime.datetime.fromtimestamp(time.time()-10*24*2600).strftime("%Y-%m-%d")
         localeIds=[self.MY_LOCALE]
-        res, status = self.api.getRecentlyPublishedFilesList(publishedAfter=publishedAfter, localeIds=localeIds)
+        res, status = self.files_api.getRecentlyPublishedFilesList(publishedAfter=publishedAfter, localeIds=localeIds)
 
 
         assert_equal(True, len(res.data.items) > 0)
@@ -425,7 +425,7 @@ class testFilesApi(object):
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/delete'
         '''
         fileUri=self.uri
-        res, status = self.api.deleteUploadedSourceFile(fileUri=fileUri)
+        res, status = self.files_api.deleteUploadedSourceFile(fileUri=fileUri)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

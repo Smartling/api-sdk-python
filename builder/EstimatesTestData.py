@@ -37,6 +37,8 @@ tear_down = '''
         self.jobs_api.deleteJob(translationJobUid=self.test_job_uid)
 '''
 
+imports = "from api.JobsApi import JobsApi"
+
 extra_initializations = '''
         self.addTestJob(proxySettings)
         self.addStringsToJob()
@@ -45,7 +47,6 @@ extra_initializations = '''
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
          
     def addTestJob(self, proxySettings):
-        from api.JobsApi import JobsApi
         self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
         self.jobname = 'test_job_'+str(int(time.time()))
         jobName=self.jobname

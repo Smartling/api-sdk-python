@@ -29,6 +29,7 @@ class ApiSource():
         self.full_name = full_name
         self.methods = []
         self.api_name = api_name
+        self.api_name_underscore = full_name.replace(' ','_').replace('&','').replace('__','_').lower()
 
     def collectMethods(self, opaDict):
         pt = opaDict['paths']
@@ -40,7 +41,7 @@ class ApiSource():
                 if methods_to_build and descr['operationId'] not in methods_to_build: #debug build for specific methods only
                     continue
                 if self.full_name in descr['tags']:
-                    m = Method(self.api_name, k, method, descr, opaDict)
+                    m = Method(self.api_name, self.api_name_underscore, k, method, descr, opaDict)
                     self.patchMethods(descr, m, opaDict)
                     self.methods.append(m)
 
@@ -122,6 +123,7 @@ class ApiSource():
 
         api_name_api = self.api_name + "Api"
         hdr = hdr.replace('{API_NAME}', api_name_api)
+        hdr = hdr.replace('{api_name}', self.api_name_underscore)
         ftr = footer.replace('{API_NAME}', api_name_api)
 
         not_tested_calls = [m.operationId for m in self.methods]

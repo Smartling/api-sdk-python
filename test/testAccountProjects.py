@@ -66,7 +66,7 @@ class testAccountProjectsApi(object):
         else:
             proxySettings = None
 
-        self.api = AccountProjectsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.account_projects_api = AccountProjectsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
 
@@ -79,7 +79,7 @@ class testAccountProjectsApi(object):
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
         '''
         accountUid=self.MY_ACCOUNT_UID
-        res, status = self.api.getProjectsByAccount(accountUid=self.MY_ACCOUNT_UID)
+        res, status = self.account_projects_api.getProjectsByAccount(accountUid=self.MY_ACCOUNT_UID)
 
 
         assert_equal(True, res.data.totalCount > 0)
@@ -101,7 +101,7 @@ class testAccountProjectsApi(object):
             details :  https://api-reference.smartling.com/#operation/getProjectDetails
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
         '''
-        res, status = self.api.getProjectDetails()
+        res, status = self.account_projects_api.getProjectDetails()
 
 
         assert_equal(res.data.projectId, self.MY_PROJECT_ID)
@@ -121,7 +121,7 @@ class testAccountProjectsApi(object):
         '''
         defaultWorkflowUid='748398939979'
         localeId='es-MX'
-        res, status = self.api.addLocaleToProject(defaultWorkflowUid=defaultWorkflowUid, localeId=localeId)
+        res, status = self.account_projects_api.addLocaleToProject(defaultWorkflowUid=defaultWorkflowUid, localeId=localeId)
 
 
         assert_equal(res.data.projectId, self.MY_PROJECT_ID)
@@ -143,7 +143,7 @@ class testAccountProjectsApi(object):
         '''
         projectName='python SDK test'
         targetLocaleIds=['es-MX', 'zh-TW']
-        res, status = self.api.copyProject(projectName=projectName, targetLocaleIds=targetLocaleIds)
+        res, status = self.account_projects_api.copyProject(projectName=projectName, targetLocaleIds=targetLocaleIds)
 
 
         assert_equal(res.code, 'ACCEPTED')
@@ -161,7 +161,7 @@ class testAccountProjectsApi(object):
             details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
         '''
         processUid=self.copy_process_uid
-        res, status = self.api.getProjectCopyRequestStatus(processUid=processUid)
+        res, status = self.account_projects_api.getProjectCopyRequestStatus(processUid=processUid)
 
 
         assert_equal(res.data.processUid, self.copy_process_uid)

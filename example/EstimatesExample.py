@@ -30,7 +30,7 @@ from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
 isPython3 =  sys.version_info[:2] >= (3,0)
-
+from api.JobsApi import JobsApi
 def assert_equal(a,b, comment=''):
     if a != b :
         err = "Assertion Failed: '%s' != '%s' %s" % (a,b, comment)
@@ -69,7 +69,7 @@ class testEstimatesApi(object):
         else:
             proxySettings = None
 
-        self.api = EstimatesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.estimates_api = EstimatesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
 
@@ -80,7 +80,6 @@ class testEstimatesApi(object):
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
          
     def addTestJob(self, proxySettings):
-        from api.JobsApi import JobsApi
         self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
         self.jobname = 'test_job_'+str(int(time.time()))
         jobName=self.jobname
@@ -110,7 +109,7 @@ class testEstimatesApi(object):
         translationJobUid=self.test_job_uid
         contentType='JOB_CONTENT_ALL_CONTENT'
         tags=['some', 'tags']
-        res, status = self.api.generateJobFuzzyEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags)
+        res, status = self.estimates_api.generateJobFuzzyEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags)
 
 
         self.report_uid = res.data.reportUid
@@ -129,7 +128,7 @@ class testEstimatesApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
         '''
         translationJobUid=self.test_job_uid
-        res, status = self.api.getJobFuzzyEstimateReports(translationJobUid=translationJobUid)
+        res, status = self.estimates_api.getJobFuzzyEstimateReports(translationJobUid=translationJobUid)
 
 
         assert_equal(res.data.totalCount, 1)
@@ -152,7 +151,7 @@ class testEstimatesApi(object):
         tags=['some', 'tags']
         localeWorkflows= [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]
         fuzzyProfileUid='624e06b333af'
-        res, status = self.api.generateJobCostEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags, localeWorkflows=localeWorkflows, fuzzyProfileUid=fuzzyProfileUid)
+        res, status = self.estimates_api.generateJobCostEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags, localeWorkflows=localeWorkflows, fuzzyProfileUid=fuzzyProfileUid)
 
 
         assert_equal(res.data.reportType, 'FUZZY')
@@ -171,7 +170,7 @@ class testEstimatesApi(object):
         '''
         translationJobUid=self.test_job_uid
         reportStatus='PENDING'
-        res, status = self.api.getJobCostEstimateReports(translationJobUid=translationJobUid, reportStatus=reportStatus)
+        res, status = self.estimates_api.getJobCostEstimateReports(translationJobUid=translationJobUid, reportStatus=reportStatus)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -185,7 +184,7 @@ class testEstimatesApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
         '''
         reportUid=self.report_uid
-        res, status = self.api.getJobEstimateReportStatus(reportUid=reportUid)
+        res, status = self.estimates_api.getJobEstimateReportStatus(reportUid=reportUid)
 
 
         assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED'))
@@ -202,7 +201,7 @@ class testEstimatesApi(object):
             details :  https://api-reference.smartling.com/#operation/getJobEstimateReport
         '''
         reportUid=self.report_uid
-        res, status = self.api.getJobEstimateReport(reportUid=reportUid)
+        res, status = self.estimates_api.getJobEstimateReport(reportUid=reportUid)
 
 
         assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED'))
@@ -220,7 +219,7 @@ class testEstimatesApi(object):
         '''
         reportUid=self.report_uid
         tags=['tags', 'remodeling']
-        res, status = self.api.modifyJobEstimateReportTags(reportUid=reportUid, tags=tags)
+        res, status = self.estimates_api.modifyJobEstimateReportTags(reportUid=reportUid, tags=tags)
 
 
         assert_equal(res.data.tags[0], 'tags')
@@ -240,7 +239,7 @@ class testEstimatesApi(object):
         projectUid=self.MY_PROJECT_ID
         reportUid=self.report_uid
         format='csv'
-        res, status = self.api.exportJobEstimationReport(projectUid=projectUid, reportUid=reportUid, format=format)
+        res, status = self.estimates_api.exportJobEstimationReport(projectUid=projectUid, reportUid=reportUid, format=format)
 
 
         assert_equal(True, res.decode('utf-8').startswith('Project Name,Job Name,'))
@@ -255,7 +254,7 @@ class testEstimatesApi(object):
             details :  https://api-reference.smartling.com/#operation/deleteJobEstimateReport
         '''
         reportUid=self.report_uid
-        res, status = self.api.deleteJobEstimateReport(reportUid=reportUid)
+        res, status = self.estimates_api.deleteJobEstimateReport(reportUid=reportUid)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
