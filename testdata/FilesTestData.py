@@ -275,6 +275,7 @@ assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
             'file' : Code('self.FILE_PATH+self.FILE_NAME'),
         },
         custom_test_check = '''
+assert_equal(True, res is not None)
 resp_lines_count = len(res.split(newline))
 file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
 assert_equal(resp_lines_count, file_lines_count)

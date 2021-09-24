@@ -391,6 +391,7 @@ class testFilesApi(object):
         res, status = self.files_api.exportFileTranslations(localeId=localeId, file=file, fileUri=fileUri)
 
 
+        assert_equal(True, res is not None)
         resp_lines_count = len(res.split(newline))
         file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
         assert_equal(resp_lines_count, file_lines_count)

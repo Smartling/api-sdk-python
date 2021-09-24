@@ -95,7 +95,7 @@ class ApiSource():
 
     def buildExampleHeader(self):
         #do dynamic imports based on apy_name
-        testDataModule = importlib.import_module('builder.'+self.api_name+'TestData')
+        testDataModule = importlib.import_module('testdata.'+self.api_name+'TestData')
         imports = getattr(testDataModule, 'imports', '')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
         tear_down = getattr(testDataModule, 'tear_down', '')

@@ -195,7 +195,7 @@ class Method(ApiCore):
         parameters = []
         initializers = {}
 
-        test_data_module = importlib.import_module('builder.'+self.api_name+'TestData')
+        test_data_module = importlib.import_module('testdata.'+self.api_name+'TestData')
         decorators = getattr(test_data_module, 'test_decortators')
 
         jobs_test_data = None
