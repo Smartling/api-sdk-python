@@ -410,7 +410,7 @@ class testFilesApi(object):
         res, status = self.files_api.getRecentlyPublishedFilesList(publishedAfter=publishedAfter, localeIds=localeIds)
 
 
-        assert_equal(True, len(res.data.items) > 0)
+        assert_equal(True, hasattr(res.data, 'items'))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

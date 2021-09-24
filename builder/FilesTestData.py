@@ -288,7 +288,7 @@ assert_equal(resp_lines_count, file_lines_count)
             'localeIds' :  Code('[self.MY_LOCALE]'),
         },
         custom_test_check = '''
-assert_equal(True, len(res.data.items) > 0)
+assert_equal(True, hasattr(res.data, 'items'))
 '''
     ),
 

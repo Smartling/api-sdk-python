@@ -20,7 +20,6 @@
 #FileApi class implementation
 
 from .Constants import Params, ReqMethod
-from .UrlV2Helper import UrlV2Helper
 from .ApiV2 import ApiV2
 
 class FileApiV2(ApiV2):
@@ -33,8 +32,7 @@ You still can use it by commenting this exception.
 But it is advised to use new api version.
 Please check examples for current api usage.'''
         raise Exception(outdated)
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
-        self.urlHelper = UrlV2Helper(projectId)
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders)
 
     def commandGet(self, fileUri, locale, directives={}, **kw):
         """ https://developer.smartling.com/v1.0/reference#get_projects-projectid-locales-localeid-file """
