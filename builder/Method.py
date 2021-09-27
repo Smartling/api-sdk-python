@@ -242,6 +242,7 @@ class Method(ApiCore):
         self.mp_params = []
         self.hasDirectives = False
         if not self.requestBody: return
+        self.resolveRequesBodyRef()
         self.type = list(self.requestBody['content'].keys())[0]
         if 'application/json' == self.type:
             self.is_json = True
@@ -269,6 +270,13 @@ class Method(ApiCore):
                     mp.setRequired()
 
         self.rearrangeRequired(self.mp_params)
+
+    def resolveRequesBodyRef(self):
+        for key in self.requestBody:
+            if '$ref' == key:
+                resolved, refname = self.resolveRef(self.requestBody['$ref'])
+                self.requestBody = resolved
+                return
 
     def rearrangeRequired(self, params):
         need_rearrange_idx = []

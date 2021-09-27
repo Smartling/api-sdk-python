@@ -132,7 +132,8 @@ class ApiSource():
 
         for name in tests_order:
             m = self.methodByName(name)
-            not_tested_calls.remove(name)
+            if name in not_tested_calls: # test may occur twice in tests list
+                not_tested_calls.remove(name)
 
             built = m.buildExample()
             capitalized = m.operationId[0].capitalize() + m.operationId[1:]
