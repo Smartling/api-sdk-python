@@ -88,7 +88,7 @@ class Method(ApiCore):
             self.operationId,
             '(self',
             self.buildPrarams(),
-            '):',
+            ', **kwargs):',
         ]
         )
 
@@ -180,7 +180,8 @@ class Method(ApiCore):
                 raise Exception("Uncomaptible parameter format for command")
             body_lines.append(self.indent + "'%s':%s," % (m._name, m._name))
         body_lines.append('}')
-        body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
+        body_lines.append('kw.update(kwargs)')
+        body_lines.append("url = self.urlHelper.getUrl('%s'%s, **kwargs)" % (self.path, self.buildPathParamsStr()))
         cmd = "return self.command('%s', url, %s)" % (self.method.upper(), values_to_pass)
         if self.method.upper() in ('POST', 'PUT') and self.is_json:
             cmd = "return self.commandJson('%s', url, %s)" % (self.method.upper(), values_to_pass)

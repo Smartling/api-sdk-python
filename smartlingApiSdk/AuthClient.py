@@ -54,7 +54,10 @@ class AuthClient:
 
     def authenticate(self):
         body = '{"userIdentifier": "%s", "userSecret": "%s"}' % (self.userIdentifier, self.userSecret)
-        self.request(self.authUri, body)
+        if '@smartling.com' in self.userIdentifier:
+            self.request(self.authUri + '/user', body)
+        else:
+            self.request(self.authUri, body)
 
     def refresh(self):
         body = '{"refreshToken":"%s"}' % self.refreshToken

@@ -47,10 +47,10 @@ class UrlV2Helper:
     def getUrl(self, urlWithPlaceholders, localeId="", accountUid="", projectId="", **kw):
         
         url = urlWithPlaceholders
-        if self.projectId:
-            url = url.replace("{projectId}", self.projectId)
-        elif projectId:
+        if projectId:
             url = url.replace("{projectId}", projectId)
+        else:
+            url = url.replace("{projectId}", self.projectId)
 
         if localeId : 
             url = url.replace("{localeId}", localeId)

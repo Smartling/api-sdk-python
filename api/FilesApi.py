@@ -5,7 +5,7 @@ class FilesApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def uploadSourceFile(self, file, fileUri, fileType, authorize=False, localeIdsToAuthorize=[], callbackUrl='', directives={}):
+    def uploadSourceFile(self, file, fileUri, fileType, authorize=False, localeIdsToAuthorize=[], callbackUrl='', directives={}, **kwargs):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file
@@ -26,7 +26,7 @@ class FilesApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-    def downloadSourceFile(self, fileUri):
+    def downloadSourceFile(self, fileUri, **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file
@@ -36,11 +36,12 @@ class FilesApi(ApiV2):
         kw = {
             'fileUri':fileUri,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getFileTranslationStatusAllLocales(self, fileUri):
+    def getFileTranslationStatusAllLocales(self, fileUri, **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file/status
@@ -49,11 +50,12 @@ class FilesApi(ApiV2):
         kw = {
             'fileUri':fileUri,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/status')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/status', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getFileTranslationStatusSingleLocale(self, localeId, fileUri):
+    def getFileTranslationStatusSingleLocale(self, localeId, fileUri, **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/status
@@ -62,11 +64,12 @@ class FilesApi(ApiV2):
         kw = {
             'fileUri':fileUri,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file/status', localeId=localeId)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file/status', localeId=localeId, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings=''):
+    def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file
@@ -78,11 +81,12 @@ class FilesApi(ApiV2):
             'retrievalType':retrievalType,
             'includeOriginalStrings':includeOriginalStrings,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file', localeId=localeId)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file', localeId=localeId, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def downloadTranslatedFilesAllLocales(self, fileUri, retrievalType='', includeOriginalStrings='', zipFileName=''):
+    def downloadTranslatedFilesAllLocales(self, fileUri, retrievalType='', includeOriginalStrings='', zipFileName='', **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/all/file/zip
@@ -95,11 +99,12 @@ class FilesApi(ApiV2):
             'includeOriginalStrings':includeOriginalStrings,
             'zipFileName':zipFileName,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/all/file/zip')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/all/file/zip', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def downloadMultipleTranslatedFiles(self, fileUris, localeIds, retrievalType='', includeOriginalStrings='', fileNameMode='', localeMode='', zipFileName=''):
+    def downloadMultipleTranslatedFiles(self, fileUris, localeIds, retrievalType='', includeOriginalStrings='', fileNameMode='', localeMode='', zipFileName='', **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/zip
@@ -114,11 +119,12 @@ class FilesApi(ApiV2):
             'localeMode':localeMode,
             'zipFileName':zipFileName,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/files/zip')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/files/zip', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getRecentlyUploadedSourceFilesList(self, uriMask='', fileTypes=[], lastUploadedAfter='', lastUploadedBefore='', orderBy='', limit=100, offset=0):
+    def getRecentlyUploadedSourceFilesList(self, uriMask='', fileTypes=[], lastUploadedAfter='', lastUploadedBefore='', orderBy='', limit=100, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/list
@@ -134,11 +140,12 @@ class FilesApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/files/list')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/files/list', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getFileTypesList(self):
+    def getFileTypesList(self, **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file-types
@@ -147,11 +154,12 @@ class FilesApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file-types')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file-types', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def renameUploadedSourceFile(self, fileUri, newFileUri):
+    def renameUploadedSourceFile(self, fileUri, newFileUri, **kwargs):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file/rename
@@ -162,11 +170,12 @@ class FilesApi(ApiV2):
             'fileUri':fileUri,
             'newFileUri':newFileUri,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/rename')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/rename', **kwargs)
         return self.command('POST', url, kw)
 
 
-    def deleteUploadedSourceFile(self, fileUri):
+    def deleteUploadedSourceFile(self, fileUri, **kwargs):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file/delete
@@ -176,11 +185,12 @@ class FilesApi(ApiV2):
         kw = {
             'fileUri':fileUri,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/delete')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/delete', **kwargs)
         return self.command('POST', url, kw)
 
 
-    def getTranslatedFileLastModifiedDateSingleLocale(self, localeId, fileUri, lastModifiedAfter=''):
+    def getTranslatedFileLastModifiedDateSingleLocale(self, localeId, fileUri, lastModifiedAfter='', **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified
@@ -191,11 +201,12 @@ class FilesApi(ApiV2):
             'fileUri':fileUri,
             'lastModifiedAfter':lastModifiedAfter,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified', localeId=localeId)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified', localeId=localeId, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getTranslatedFileLastModifiedDateAllLocales(self, fileUri, lastModifiedAfter=''):
+    def getTranslatedFileLastModifiedDateAllLocales(self, fileUri, lastModifiedAfter='', **kwargs):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file/last-modified
@@ -206,11 +217,12 @@ class FilesApi(ApiV2):
             'fileUri':fileUri,
             'lastModifiedAfter':lastModifiedAfter,
         }
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/last-modified')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/file/last-modified', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def importFileTranslations(self, localeId, file, fileUri, fileType, translationState, overwrite=''):
+    def importFileTranslations(self, localeId, file, fileUri, fileType, translationState, overwrite='', **kwargs):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/import
@@ -228,7 +240,7 @@ class FilesApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-    def exportFileTranslations(self, localeId, file, fileUri, retrievalType='', includeOriginalStrings=''):
+    def exportFileTranslations(self, localeId, file, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations
@@ -245,7 +257,7 @@ class FilesApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-    def getRecentlyPublishedFilesList(self, publishedAfter, fileUris=[], localeIds=[], offset=0, limit=0):
+    def getRecentlyPublishedFilesList(self, publishedAfter, fileUris=[], localeIds=[], offset=0, limit=0, **kwargs):
         '''
             method  :  GET
             api url :  /published-files-api/v2/projects/{projectId}/files/list/recently-published
@@ -259,6 +271,7 @@ class FilesApi(ApiV2):
             'offset':offset,
             'limit':limit,
         }
-        url = self.urlHelper.getUrl('/published-files-api/v2/projects/{projectId}/files/list/recently-published')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/published-files-api/v2/projects/{projectId}/files/list/recently-published', **kwargs)
         return self.command('GET', url, kw)
 

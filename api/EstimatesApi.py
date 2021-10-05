@@ -5,7 +5,7 @@ class EstimatesApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def getJobFuzzyEstimateReports(self, translationJobUid, reportStatus='', contentCoverage='', creatorUserUids=[], translationJobSchemaContents=[], tags=[], createdFrom='', createdTo='', limit=0, offset=0):
+    def getJobFuzzyEstimateReports(self, translationJobUid, reportStatus='', contentCoverage='', creatorUserUids=[], translationJobSchemaContents=[], tags=[], createdFrom='', createdTo='', limit=0, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
@@ -22,11 +22,12 @@ class EstimatesApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def generateJobFuzzyEstimateReports(self, translationJobUid, contentType, tags):
+    def generateJobFuzzyEstimateReports(self, translationJobUid, contentType, tags, **kwargs):
         '''
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
@@ -36,11 +37,12 @@ class EstimatesApi(ApiV2):
             'contentType':contentType,
             'tags':tags,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getJobCostEstimateReports(self, translationJobUid, reportStatus='', contentCoverage='', creatorUserUids=[], translationJobSchemaContents=[], tags=[], createdFrom='', createdTo='', limit=0, offset=0):
+    def getJobCostEstimateReports(self, translationJobUid, reportStatus='', contentCoverage='', creatorUserUids=[], translationJobSchemaContents=[], tags=[], createdFrom='', createdTo='', limit=0, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
@@ -57,11 +59,12 @@ class EstimatesApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def generateJobCostEstimateReports(self, translationJobUid, contentType, tags, localeWorkflows, fuzzyProfileUid):
+    def generateJobCostEstimateReports(self, translationJobUid, contentType, tags, localeWorkflows, fuzzyProfileUid, **kwargs):
         '''
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
@@ -73,11 +76,12 @@ class EstimatesApi(ApiV2):
             'localeWorkflows':localeWorkflows,
             'fuzzyProfileUid':fuzzyProfileUid,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getJobEstimateReportStatus(self, reportUid, reportStatus='', reportType=''):
+    def getJobEstimateReportStatus(self, reportUid, reportStatus='', reportType='', **kwargs):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
@@ -87,11 +91,12 @@ class EstimatesApi(ApiV2):
             'reportStatus':reportStatus,
             'reportType':reportType,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}/status', reportUid=reportUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}/status', reportUid=reportUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getJobEstimateReport(self, reportUid, reportStatus='', reportType=''):
+    def getJobEstimateReport(self, reportUid, reportStatus='', reportType='', **kwargs):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
@@ -101,11 +106,12 @@ class EstimatesApi(ApiV2):
             'reportStatus':reportStatus,
             'reportType':reportType,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}', reportUid=reportUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}', reportUid=reportUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def deleteJobEstimateReport(self, reportUid):
+    def deleteJobEstimateReport(self, reportUid, **kwargs):
         '''
             method  :  DELETE
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
@@ -113,11 +119,12 @@ class EstimatesApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}', reportUid=reportUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}', reportUid=reportUid, **kwargs)
         return self.command('DELETE', url, kw)
 
 
-    def modifyJobEstimateReportTags(self, reportUid, tags):
+    def modifyJobEstimateReportTags(self, reportUid, tags, **kwargs):
         '''
             method  :  PUT
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
@@ -126,11 +133,12 @@ class EstimatesApi(ApiV2):
         kw = {
             'tags':tags,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags', reportUid=reportUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags', reportUid=reportUid, **kwargs)
         return self.commandJson('PUT', url, kw)
 
 
-    def exportJobEstimationReport(self, projectUid, reportUid, format):
+    def exportJobEstimationReport(self, projectUid, reportUid, format, **kwargs):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
@@ -139,6 +147,7 @@ class EstimatesApi(ApiV2):
         kw = {
             'format':format,
         }
-        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download', projectUid=projectUid, reportUid=reportUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download', projectUid=projectUid, reportUid=reportUid, **kwargs)
         return self.command('GET', url, kw)
 

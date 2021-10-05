@@ -5,7 +5,7 @@ class TagsApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def getTagsListByProject(self, tagMask='', limit=100, offset=0):
+    def getTagsListByProject(self, tagMask='', limit=100, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /tags-api/v2/projects/{projectId}/tags
@@ -17,11 +17,12 @@ class TagsApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/tags')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/tags', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getAllTagsForStrings(self, stringHashcodes):
+    def getAllTagsForStrings(self, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/search
@@ -31,11 +32,12 @@ class TagsApi(ApiV2):
         kw = {
             'stringHashcodes':stringHashcodes,
         }
-        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/search')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/search', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def addTagToStrings(self, tags, stringHashcodes):
+    def addTagToStrings(self, tags, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/add
@@ -46,11 +48,12 @@ class TagsApi(ApiV2):
             'tags':tags,
             'stringHashcodes':stringHashcodes,
         }
-        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/add')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/add', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def removeTagsFromStrings(self, tags, stringHashcodes):
+    def removeTagsFromStrings(self, tags, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove
@@ -61,11 +64,12 @@ class TagsApi(ApiV2):
             'tags':tags,
             'stringHashcodes':stringHashcodes,
         }
-        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/remove')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/remove', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def removeAllTagsFromStrings(self, stringHashcodes):
+    def removeAllTagsFromStrings(self, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove/all
@@ -75,6 +79,7 @@ class TagsApi(ApiV2):
         kw = {
             'stringHashcodes':stringHashcodes,
         }
-        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/remove/all')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/remove/all', **kwargs)
         return self.commandJson('POST', url, kw)
 

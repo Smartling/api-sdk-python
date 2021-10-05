@@ -70,6 +70,3 @@ class ApiV2(FileApiBase):
     def addLibIdDirective(self, params):
         name = "client_lib_id"
         params[SmartlingDirective.sl_prefix + name] = self.clientUid
-
-    def swicthProject(self, projectId):
-        self.urlHelper.projectId = projectId
