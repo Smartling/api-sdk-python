@@ -1,13 +1,11 @@
-from smartlingApiSdk.UrlV2Helper import UrlV2Helper
 from smartlingApiSdk.ApiV2 import ApiV2
 
 class JobBatchesV2Api(ApiV2):
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
-        self.urlHelper = UrlV2Helper(projectId)
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def createJobBatchV2(self, authorize, translationJobUid, fileUris, localeWorkflows):
+    def createJobBatchV2(self, authorize, translationJobUid, fileUris, localeWorkflows, **kwargs):
         '''
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches
@@ -20,11 +18,12 @@ class JobBatchesV2Api(ApiV2):
             'fileUris':fileUris,
             'localeWorkflows':localeWorkflows,
         }
-        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getJobBatchesListV2(self, translationJobUid='', status='', sortBy='createdDate', orderBy='desc', offset=0, limit=20):
+    def getJobBatchesListV2(self, translationJobUid='', status='', sortBy='createdDate', orderBy='desc', offset=0, limit=20, **kwargs):
         '''
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches
@@ -39,11 +38,12 @@ class JobBatchesV2Api(ApiV2):
             'offset':offset,
             'limit':limit,
         }
-        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getJobBatchStatusV2(self, batchUid):
+    def getJobBatchStatusV2(self, batchUid, **kwargs):
         '''
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
@@ -51,11 +51,12 @@ class JobBatchesV2Api(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches/{batchUid}', batchUid=batchUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches/{batchUid}', batchUid=batchUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def processBatchActionV2(self, batchUid, action, fileUri, reason):
+    def processBatchActionV2(self, batchUid, action, fileUri, reason, **kwargs):
         '''
             method  :  PUT
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
@@ -67,11 +68,12 @@ class JobBatchesV2Api(ApiV2):
             'fileUri':fileUri,
             'reason':reason,
         }
-        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches/{batchUid}', batchUid=batchUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches/{batchUid}', batchUid=batchUid, **kwargs)
         return self.commandJson('PUT', url, kw)
 
 
-    def uploadFileToJobBatchV2(self, batchUid, file, fileUri, fileType, authorize=False, localeIdsToAuthorize=[], callbackUrl='', directives={}):
+    def uploadFileToJobBatchV2(self, batchUid, file, fileUri, fileType, authorize=False, localeIdsToAuthorize=[], callbackUrl='', directives={}, **kwargs):
         '''
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}/file

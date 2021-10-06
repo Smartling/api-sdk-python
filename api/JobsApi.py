@@ -1,13 +1,11 @@
-from smartlingApiSdk.UrlV2Helper import UrlV2Helper
 from smartlingApiSdk.ApiV2 import ApiV2
 
 class JobsApi(ApiV2):
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
-        self.urlHelper = UrlV2Helper(projectId)
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def getJobsByAccount(self, accountUid, jobName='', projectIds=[], translationJobStatus=[], withPriority='', limit=0, offset=0, sortBy='', sortDirection=''):
+    def getJobsByAccount(self, accountUid, jobName='', projectIds=[], translationJobStatus=[], withPriority='', limit=0, offset=0, sortBy='', sortDirection='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/accounts/{accountUid}/jobs
@@ -24,11 +22,12 @@ class JobsApi(ApiV2):
             'sortBy':sortBy,
             'sortDirection':sortDirection,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/jobs', accountUid=accountUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/jobs', accountUid=accountUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getJobsByProject(self, jobName='', jobNumber='', translationJobUids=[], translationJobStatus=[], limit=0, offset=0, sortBy='', sortDirection=''):
+    def getJobsByProject(self, jobName='', jobNumber='', translationJobUids=[], translationJobStatus=[], limit=0, offset=0, sortBy='', sortDirection='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs
@@ -45,11 +44,12 @@ class JobsApi(ApiV2):
             'sortBy':sortBy,
             'sortDirection':sortDirection,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def addJob(self, jobName, targetLocaleIds, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields):
+    def addJob(self, jobName, targetLocaleIds, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs
@@ -66,11 +66,12 @@ class JobsApi(ApiV2):
             'callbackMethod':callbackMethod,
             'customFields':customFields,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def findJobsByStrings(self, hashcodes, localeIds):
+    def findJobsByStrings(self, hashcodes, localeIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings
@@ -80,11 +81,12 @@ class JobsApi(ApiV2):
             'hashcodes':hashcodes,
             'localeIds':localeIds,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getStringsForTranslationJob(self, translationJobUid, targetLocaleId='', limit=0, offset=0):
+    def getStringsForTranslationJob(self, translationJobUid, targetLocaleId='', limit=0, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings
@@ -95,11 +97,12 @@ class JobsApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def addStringsToJob(self, translationJobUid, hashcodes, moveEnabled, targetLocaleIds):
+    def addStringsToJob(self, translationJobUid, hashcodes, moveEnabled, targetLocaleIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add
@@ -110,11 +113,12 @@ class JobsApi(ApiV2):
             'moveEnabled':moveEnabled,
             'targetLocaleIds':targetLocaleIds,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def removeStringsFromJob(self, translationJobUid, hashcodes, localeIds):
+    def removeStringsFromJob(self, translationJobUid, hashcodes, localeIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove
@@ -124,11 +128,12 @@ class JobsApi(ApiV2):
             'hashcodes':hashcodes,
             'localeIds':localeIds,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def closeJob(self, translationJobUid):
+    def closeJob(self, translationJobUid, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close
@@ -136,11 +141,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close', translationJobUid=translationJobUid, **kwargs)
         return self.command('POST', url, kw)
 
 
-    def cancelJob(self, translationJobUid, reason):
+    def cancelJob(self, translationJobUid, reason, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel
@@ -149,11 +155,12 @@ class JobsApi(ApiV2):
         kw = {
             'reason':reason,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def authorizeJob(self, translationJobUid, localeWorkflows):
+    def authorizeJob(self, translationJobUid, localeWorkflows, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize
@@ -162,11 +169,12 @@ class JobsApi(ApiV2):
         kw = {
             'localeWorkflows':localeWorkflows,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getJobDetails(self, translationJobUid):
+    def getJobDetails(self, translationJobUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
@@ -174,11 +182,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def updateJob(self, translationJobUid, jobName, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields):
+    def updateJob(self, translationJobUid, jobName, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields, **kwargs):
         '''
             method  :  PUT
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
@@ -193,11 +202,12 @@ class JobsApi(ApiV2):
             'callbackMethod':callbackMethod,
             'customFields':customFields,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('PUT', url, kw)
 
 
-    def deleteJob(self, translationJobUid):
+    def deleteJob(self, translationJobUid, **kwargs):
         '''
             method  :  DELETE
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
@@ -205,11 +215,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid, **kwargs)
         return self.command('DELETE', url, kw)
 
 
-    def searchForJob(self, fileUris, hashcodes, translationJobUids):
+    def searchForJob(self, fileUris, hashcodes, translationJobUids, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/search
@@ -220,11 +231,12 @@ class JobsApi(ApiV2):
             'hashcodes':hashcodes,
             'translationJobUids':translationJobUids,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/search')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/search', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getJobAsyncProcessStatus(self, translationJobUid, processUid):
+    def getJobAsyncProcessStatus(self, translationJobUid, processUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}
@@ -232,11 +244,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}', translationJobUid=translationJobUid, processUid=processUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}', translationJobUid=translationJobUid, processUid=processUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def addFileToJob(self, translationJobUid, fileUri, targetLocaleIds):
+    def addFileToJob(self, translationJobUid, fileUri, targetLocaleIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add
@@ -246,11 +259,12 @@ class JobsApi(ApiV2):
             'fileUri':fileUri,
             'targetLocaleIds':targetLocaleIds,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def removeFileFromJob(self, translationJobUid, fileUri):
+    def removeFileFromJob(self, translationJobUid, fileUri, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove
@@ -259,11 +273,12 @@ class JobsApi(ApiV2):
         kw = {
             'fileUri':fileUri,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getJobFilesList(self, translationJobUid, limit=0, offset=0):
+    def getJobFilesList(self, translationJobUid, limit=0, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files
@@ -273,11 +288,12 @@ class JobsApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def addLocaleToJob(self, translationJobUid, targetLocaleId, syncContent):
+    def addLocaleToJob(self, translationJobUid, targetLocaleId, syncContent, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
@@ -286,11 +302,12 @@ class JobsApi(ApiV2):
         kw = {
             'syncContent':syncContent,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def removeLocaleFromJob(self, translationJobUid, targetLocaleId):
+    def removeLocaleFromJob(self, translationJobUid, targetLocaleId, **kwargs):
         '''
             method  :  DELETE
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
@@ -298,11 +315,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, **kwargs)
         return self.command('DELETE', url, kw)
 
 
-    def getJobFileProgress(self, translationJobUid, fileUri):
+    def getJobFileProgress(self, translationJobUid, fileUri, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress
@@ -311,11 +329,12 @@ class JobsApi(ApiV2):
         kw = {
             'fileUri':fileUri,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getJobProgress(self, translationJobUid, targetLocaleId=''):
+    def getJobProgress(self, translationJobUid, targetLocaleId='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress
@@ -324,11 +343,12 @@ class JobsApi(ApiV2):
         kw = {
             'targetLocaleId':targetLocaleId,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getJobLastCompletionDatesPerLocale(self, translationJobUid):
+    def getJobLastCompletionDatesPerLocale(self, translationJobUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates
@@ -336,11 +356,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def findScheduleForTranslationJob(self, translationJobUid):
+    def findScheduleForTranslationJob(self, translationJobUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
@@ -348,11 +369,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def modifyScheduleItemsForTranslationJob(self, translationJobUid, schedules):
+    def modifyScheduleItemsForTranslationJob(self, translationJobUid, schedules, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
@@ -361,11 +383,12 @@ class JobsApi(ApiV2):
         kw = {
             'schedules':schedules,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getProjectCustomFields(self):
+    def getProjectCustomFields(self, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
@@ -373,11 +396,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def assignCustomFieldsToProject(self, CustomFieldAssignmentList):
+    def assignCustomFieldsToProject(self, CustomFieldAssignmentList, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
@@ -385,11 +409,12 @@ class JobsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields', **kwargs)
         return self.commandJson('POST', url, CustomFieldAssignmentList)
 
 
-    def getAccountCustomFields(self, accountUid, searchableOnly='', enabledOnly=''):
+    def getAccountCustomFields(self, accountUid, searchableOnly='', enabledOnly='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
@@ -399,11 +424,12 @@ class JobsApi(ApiV2):
             'searchableOnly':searchableOnly,
             'enabledOnly':enabledOnly,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def createCustomField(self, accountUid, type, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description):
+    def createCustomField(self, accountUid, type, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
@@ -420,11 +446,12 @@ class JobsApi(ApiV2):
             'defaultValue':defaultValue,
             'description':description,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def updateCustomField(self, accountUid, fieldUid, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description):
+    def updateCustomField(self, accountUid, fieldUid, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description, **kwargs):
         '''
             method  :  PUT
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
@@ -440,6 +467,7 @@ class JobsApi(ApiV2):
             'defaultValue':defaultValue,
             'description':description,
         }
-        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}', accountUid=accountUid, fieldUid=fieldUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}', accountUid=accountUid, fieldUid=fieldUid, **kwargs)
         return self.commandJson('PUT', url, kw)
 

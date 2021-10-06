@@ -68,6 +68,7 @@ class FileApiBase:
             for k, v in list(params.items()):
                 if bool == type(v): continue
                 if not v: del params[k]
+                if k == 'projectId': del params[k]
 
     def uploadMultipart(self, uri, params, response_as_string=False):
         self.filterOutDefaults(params)

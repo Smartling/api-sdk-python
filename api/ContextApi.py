@@ -1,13 +1,11 @@
-from smartlingApiSdk.UrlV2Helper import UrlV2Helper
 from smartlingApiSdk.ApiV2 import ApiV2
 
 class ContextApi(ApiV2):
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
-        self.urlHelper = UrlV2Helper(projectId)
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def uploadNewVisualContext(self, name='', content=''):
+    def uploadNewVisualContext(self, name='', content='', **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts
@@ -22,7 +20,7 @@ class ContextApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-    def getVisualContextsListByProject(self, nameFilter='', offset='', type=''):
+    def getVisualContextsListByProject(self, nameFilter='', offset='', type='', **kwargs):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts
@@ -33,11 +31,12 @@ class ContextApi(ApiV2):
             'offset':offset,
             'type':type,
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getVisualContextInfo(self, contextUid):
+    def getVisualContextInfo(self, contextUid, **kwargs):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
@@ -45,11 +44,12 @@ class ContextApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def deleteVisualContext(self, contextUid):
+    def deleteVisualContext(self, contextUid, **kwargs):
         '''
             method  :  DELETE
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
@@ -57,11 +57,12 @@ class ContextApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid, **kwargs)
         return self.command('DELETE', url, kw)
 
 
-    def downloadVisualContextFileContent(self, contextUid):
+    def downloadVisualContextFileContent(self, contextUid, **kwargs):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
@@ -69,11 +70,12 @@ class ContextApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/content', contextUid=contextUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/content', contextUid=contextUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def runAutomaticContextMatching(self, contextUid, contentFileUri, stringHashcodes, overrideContextOlderThanDays):
+    def runAutomaticContextMatching(self, contextUid, contentFileUri, stringHashcodes, overrideContextOlderThanDays, **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
@@ -84,11 +86,12 @@ class ContextApi(ApiV2):
             'stringHashcodes':stringHashcodes,
             'overrideContextOlderThanDays':overrideContextOlderThanDays,
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async', contextUid=contextUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async', contextUid=contextUid, **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def uploadAndMatchVisualContext(self, content, name='', matchParams=''):
+    def uploadAndMatchVisualContext(self, content, name='', matchParams='', **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
@@ -103,7 +106,7 @@ class ContextApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-    def getAsyncContextMatchResults(self, matchId):
+    def getAsyncContextMatchResults(self, matchId, **kwargs):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/match/{matchId}
@@ -111,11 +114,12 @@ class ContextApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/match/{matchId}', matchId=matchId)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/match/{matchId}', matchId=matchId, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def createStringToContextBindings(self, bindings):
+    def createStringToContextBindings(self, bindings, **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
@@ -124,11 +128,12 @@ class ContextApi(ApiV2):
         kw = {
             'bindings':bindings,
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset=''):
+    def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset='', **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
@@ -141,11 +146,12 @@ class ContextApi(ApiV2):
             'contextUid':contextUid,
             'bindingUids':bindingUids,
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/list')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/list', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids):
+    def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove
@@ -157,6 +163,7 @@ class ContextApi(ApiV2):
             'contextUid':contextUid,
             'bindingUids':bindingUids,
         }
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/remove')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/remove', **kwargs)
         return self.commandJson('POST', url, kw)
 

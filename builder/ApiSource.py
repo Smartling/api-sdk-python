@@ -70,14 +70,12 @@ class ApiSource():
 
     def build(self):
         rows = []
-        rows.append('from smartlingApiSdk.UrlV2Helper import UrlV2Helper')
         rows.append('from smartlingApiSdk.ApiV2 import ApiV2')
         rows.append('')
         rows.append('class %sApi(ApiV2):' % self.api_name)
         rows.append('')
         rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
-        rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)')
-        rows.append('        self.urlHelper = UrlV2Helper(projectId)')
+        rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)')
         rows.append('')
 
         for m in self.methods[:]:
@@ -97,7 +95,7 @@ class ApiSource():
 
     def buildExampleHeader(self):
         #do dynamic imports based on apy_name
-        testDataModule = importlib.import_module('builder.'+self.api_name+'TestData')
+        testDataModule = importlib.import_module('testdata.'+self.api_name+'TestData')
         imports = getattr(testDataModule, 'imports', '')
         extra_initializations = getattr(testDataModule, 'extra_initializations')
         tear_down = getattr(testDataModule, 'tear_down', '')
@@ -134,7 +132,8 @@ class ApiSource():
 
         for name in tests_order:
             m = self.methodByName(name)
-            not_tested_calls.remove(name)
+            if name in not_tested_calls: # test may occur twice in tests list
+                not_tested_calls.remove(name)
 
             built = m.buildExample()
             capitalized = m.operationId[0].capitalize() + m.operationId[1:]

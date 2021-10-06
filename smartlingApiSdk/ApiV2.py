@@ -24,6 +24,7 @@ from .Constants import FileTypes
 from .Constants import Params
 from .FileApiBase import FileApiBase
 from .SmartlingDirective import SmartlingDirective
+from .UrlV2Helper import UrlV2Helper
 from .version import version
 
 class ApiV2(FileApiBase):
@@ -32,13 +33,14 @@ class ApiV2(FileApiBase):
     host_stg = 'api.stg.smartling.net'
     clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
-    def __init__(self, userIdentifier, userSecret, proxySettings=None, permanentHeaders={}, env='prod'):
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         self.host = self.host_prod
         self.userIdentifier = userIdentifier
         if 'stg'==env:
             self.host = self.host_stg
         FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
         self.authClient = AuthClient(self.host, userIdentifier, userSecret, proxySettings)
+        self.urlHelper = UrlV2Helper(projectId)
 
     def addAuth(self, params):
         token = self.authClient.getToken()

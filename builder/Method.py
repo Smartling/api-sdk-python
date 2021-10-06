@@ -88,7 +88,7 @@ class Method(ApiCore):
             self.operationId,
             '(self',
             self.buildPrarams(),
-            '):',
+            ', **kwargs):',
         ]
         )
 
@@ -180,7 +180,8 @@ class Method(ApiCore):
                 raise Exception("Uncomaptible parameter format for command")
             body_lines.append(self.indent + "'%s':%s," % (m._name, m._name))
         body_lines.append('}')
-        body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
+        body_lines.append('kw.update(kwargs)')
+        body_lines.append("url = self.urlHelper.getUrl('%s'%s, **kwargs)" % (self.path, self.buildPathParamsStr()))
         cmd = "return self.command('%s', url, %s)" % (self.method.upper(), values_to_pass)
         if self.method.upper() in ('POST', 'PUT') and self.is_json:
             cmd = "return self.commandJson('%s', url, %s)" % (self.method.upper(), values_to_pass)
@@ -195,7 +196,7 @@ class Method(ApiCore):
         parameters = []
         initializers = {}
 
-        test_data_module = importlib.import_module('builder.'+self.api_name+'TestData')
+        test_data_module = importlib.import_module('testdata.'+self.api_name+'TestData')
         decorators = getattr(test_data_module, 'test_decortators')
 
         jobs_test_data = None
@@ -242,6 +243,7 @@ class Method(ApiCore):
         self.mp_params = []
         self.hasDirectives = False
         if not self.requestBody: return
+        self.resolveRequesBodyRef()
         self.type = list(self.requestBody['content'].keys())[0]
         if 'application/json' == self.type:
             self.is_json = True
@@ -269,6 +271,13 @@ class Method(ApiCore):
                     mp.setRequired()
 
         self.rearrangeRequired(self.mp_params)
+
+    def resolveRequesBodyRef(self):
+        for key in self.requestBody:
+            if '$ref' == key:
+                resolved, refname = self.resolveRef(self.requestBody['$ref'])
+                self.requestBody = resolved
+                return
 
     def rearrangeRequired(self, params):
         need_rearrange_idx = []

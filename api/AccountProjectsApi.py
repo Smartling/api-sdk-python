@@ -1,13 +1,11 @@
-from smartlingApiSdk.UrlV2Helper import UrlV2Helper
 from smartlingApiSdk.ApiV2 import ApiV2
 
 class AccountProjectsApi(ApiV2):
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
-        self.urlHelper = UrlV2Helper(projectId)
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def getProjectsByAccount(self, accountUid, projectNameFilter='', includeArchived='', offset=0, limit=0):
+    def getProjectsByAccount(self, accountUid, projectNameFilter='', includeArchived='', offset=0, limit=0, **kwargs):
         '''
             method  :  GET
             api url :  /accounts-api/v2/accounts/{accountUid}/projects
@@ -20,11 +18,12 @@ class AccountProjectsApi(ApiV2):
             'offset':offset,
             'limit':limit,
         }
-        url = self.urlHelper.getUrl('/accounts-api/v2/accounts/{accountUid}/projects', accountUid=accountUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/accounts-api/v2/accounts/{accountUid}/projects', accountUid=accountUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getProjectDetails(self, includeDisabledLocales=''):
+    def getProjectDetails(self, includeDisabledLocales='', **kwargs):
         '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}
@@ -34,11 +33,12 @@ class AccountProjectsApi(ApiV2):
         kw = {
             'includeDisabledLocales':includeDisabledLocales,
         }
-        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}', **kwargs)
         return self.command('GET', url, kw)
 
 
-    def addLocaleToProject(self, defaultWorkflowUid, localeId):
+    def addLocaleToProject(self, defaultWorkflowUid, localeId, **kwargs):
         '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/targetLocales
@@ -48,11 +48,12 @@ class AccountProjectsApi(ApiV2):
             'defaultWorkflowUid':defaultWorkflowUid,
             'localeId':localeId,
         }
-        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/targetLocales')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/targetLocales', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def copyProject(self, projectName, targetLocaleIds):
+    def copyProject(self, projectName, targetLocaleIds, **kwargs):
         '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/copy
@@ -62,11 +63,12 @@ class AccountProjectsApi(ApiV2):
             'projectName':projectName,
             'targetLocaleIds':targetLocaleIds,
         }
-        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getProjectCopyRequestStatus(self, processUid):
+    def getProjectCopyRequestStatus(self, processUid, **kwargs):
         '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
@@ -74,6 +76,7 @@ class AccountProjectsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy/{processUid}', processUid=processUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy/{processUid}', processUid=processUid, **kwargs)
         return self.command('GET', url, kw)
 

@@ -391,6 +391,7 @@ class testFilesApi(object):
         res, status = self.files_api.exportFileTranslations(localeId=localeId, file=file, fileUri=fileUri)
 
 
+        assert_equal(True, res is not None)
         resp_lines_count = len(res.split(newline))
         file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
         assert_equal(resp_lines_count, file_lines_count)
@@ -410,7 +411,7 @@ class testFilesApi(object):
         res, status = self.files_api.getRecentlyPublishedFilesList(publishedAfter=publishedAfter, localeIds=localeIds)
 
 
-        assert_equal(True, len(res.data.items) > 0)
+        assert_equal(True, hasattr(res.data, 'items'))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

@@ -1,13 +1,11 @@
-from smartlingApiSdk.UrlV2Helper import UrlV2Helper
 from smartlingApiSdk.ApiV2 import ApiV2
 
 class StringsApi(ApiV2):
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, env=env)
-        self.urlHelper = UrlV2Helper(projectId)
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def addStringsToProject(self, strings, placeholderFormat, placeholderFormatCustom, namespace):
+    def addStringsToProject(self, strings, placeholderFormat, placeholderFormatCustom, namespace, **kwargs):
         '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
@@ -20,11 +18,12 @@ class StringsApi(ApiV2):
             'placeholderFormatCustom':placeholderFormatCustom,
             'namespace':namespace,
         }
-        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getAddStringsToProjectRequestStatus(self, processUid):
+    def getAddStringsToProjectRequestStatus(self, processUid, **kwargs):
         '''
             method  :  GET
             api url :  /strings-api/v2/projects/{projectId}/processes/{processUid}
@@ -33,11 +32,12 @@ class StringsApi(ApiV2):
         '''
         kw = {
         }
-        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/processes/{processUid}', processUid=processUid)
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/processes/{processUid}', processUid=processUid, **kwargs)
         return self.command('GET', url, kw)
 
 
-    def getAllSourceStringsByProject(self, hashcodes=[], fileUri='', limit='', offset=''):
+    def getAllSourceStringsByProject(self, hashcodes=[], fileUri='', limit='', offset='', **kwargs):
         '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/source-strings
@@ -50,11 +50,12 @@ class StringsApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/source-strings')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/source-strings', **kwargs)
         return self.commandJson('POST', url, kw)
 
 
-    def getAllTranslationsByProject(self, targetLocaleId, hashcodes=[], retrievalType='', fileUri='', limit='', offset=''):
+    def getAllTranslationsByProject(self, targetLocaleId, hashcodes=[], retrievalType='', fileUri='', limit='', offset='', **kwargs):
         '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/translations
@@ -69,6 +70,7 @@ class StringsApi(ApiV2):
             'limit':limit,
             'offset':offset,
         }
-        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/translations')
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/translations', **kwargs)
         return self.commandJson('POST', url, kw)
 
