@@ -72,7 +72,7 @@ class testApiChanges:
             if 'JobBatchesV2' == api_name:
                 api_name = 'Job Batches V2'
 
-            print ("Cheking:", api_name)
+            print ("Cheking:%s" % api_name)
             apisrc = ApiBuilder(api_name).apisrc
             built_api = apisrc.build()
             self.checkDiff(api_file_name, self.api_path, built_api)

@@ -116,6 +116,7 @@ class Method(ApiCore):
         nested = self.listNestedValues()
         if nested:
             doc_lines.append(nested)
+        #doc_lines.append(self.getResponsesDesciption())
         doc_lines.append(comment_marker)
 
         return '\n'.join(doc_lines)

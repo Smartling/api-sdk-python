@@ -207,6 +207,7 @@ class testContextApi(object):
              {'contextUid': self.context_uid_img, 'stringHashcode': '4f25feab674accf572433f22dc516e2e'}]
         res, status = self.context_api.createStringToContextBindings(bindings=bindings)
 
+
         assert_equal(res.data.errors['totalCount'], 0)
         assert_equal(res.data.created['totalCount'], 2)
         items = res.data.created['items']
