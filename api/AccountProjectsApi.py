@@ -9,8 +9,10 @@ class AccountProjectsApi(ApiV2):
         '''
             method  :  GET
             api url :  /accounts-api/v2/accounts/{accountUid}/projects
-            details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
         '''
         kw = {
             'projectNameFilter':projectNameFilter,
@@ -20,28 +22,34 @@ class AccountProjectsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/accounts-api/v2/accounts/{accountUid}/projects', accountUid=accountUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def getProjectDetails(self, includeDisabledLocales='', **kwargs):
         '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}
-            details :  https://api-reference.smartling.com/#operation/getProjectDetails
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getProjectDetails
         '''
         kw = {
             'includeDisabledLocales':includeDisabledLocales,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}', **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def addLocaleToProject(self, defaultWorkflowUid, localeId, **kwargs):
         '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/targetLocales
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/addLocaleToProject
         '''
         kw = {
@@ -50,13 +58,16 @@ class AccountProjectsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/targetLocales', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def copyProject(self, projectName, targetLocaleIds, **kwargs):
         '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/copy
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/copyProject
         '''
         kw = {
@@ -65,18 +76,22 @@ class AccountProjectsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getProjectCopyRequestStatus(self, processUid, **kwargs):
         '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy/{processUid}', processUid=processUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 

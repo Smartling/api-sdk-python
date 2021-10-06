@@ -9,8 +9,10 @@ class JobsApi(ApiV2):
         '''
             method  :  GET
             api url :  /jobs-api/v3/accounts/{accountUid}/jobs
-            details :  https://api-reference.smartling.com/#operation/getJobsByAccount
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/accounts/$smartlingAccountId/jobs
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getJobsByAccount
         '''
         kw = {
             'jobName':jobName,
@@ -24,15 +26,18 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/jobs', accountUid=accountUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def getJobsByProject(self, jobName='', jobNumber='', translationJobUids=[], translationJobStatus=[], limit=0, offset=0, sortBy='', sortDirection='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs
-            details :  https://api-reference.smartling.com/#operation/getJobsByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getJobsByProject
         '''
         kw = {
             'jobName':jobName,
@@ -46,15 +51,19 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs', **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def addJob(self, jobName, targetLocaleIds, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs
-            details :  https://api-reference.smartling.com/#operation/addJob
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingJobJSON" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
+            Responses:
+                200 : OK
+                400 : Validation error during job creation.
+            details :  https://api-reference.smartling.com/#operation/addJob
         '''
         kw = {
             'jobName':jobName,
@@ -68,13 +77,17 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def findJobsByStrings(self, hashcodes, localeIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings
+            Responses:
+                200 : OK
+                400 : Validation error response
             details :  https://api-reference.smartling.com/#operation/findJobsByStrings
         '''
         kw = {
@@ -83,13 +96,17 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getStringsForTranslationJob(self, translationJobUid, targetLocaleId='', limit=0, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings
+            Responses:
+                200 : OK
+                404 : Job not found error
             details :  https://api-reference.smartling.com/#operation/getStringsForTranslationJob
         '''
         kw = {
@@ -99,13 +116,18 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def addStringsToJob(self, translationJobUid, hashcodes, moveEnabled, targetLocaleIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                400 : Validation error response
             details :  https://api-reference.smartling.com/#operation/addStringsToJob
         '''
         kw = {
@@ -115,13 +137,17 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def removeStringsFromJob(self, translationJobUid, hashcodes, localeIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove
+            Responses:
+                200 : OK
+                202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/removeStringsFromJob
         '''
         kw = {
@@ -130,26 +156,36 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def closeJob(self, translationJobUid, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close
+            Responses:
+                200 : OK
+                400 : Validation error when closing a job
             details :  https://api-reference.smartling.com/#operation/closeJob
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/close', translationJobUid=translationJobUid, **kwargs)
-        return self.command('POST', url, kw)
+        response, status = self.command('POST', url, kw)
+        return response, status
 
 
     def cancelJob(self, translationJobUid, reason, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                400 : Validation error when cancelling a job
+                401 : Authentication error
             details :  https://api-reference.smartling.com/#operation/cancelJob
         '''
         kw = {
@@ -157,13 +193,17 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def authorizeJob(self, translationJobUid, localeWorkflows, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize
+            Responses:
+                200 : OK
+                400 : Validation error when authorizing a job
             details :  https://api-reference.smartling.com/#operation/authorizeJob
         '''
         kw = {
@@ -171,26 +211,35 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getJobDetails(self, translationJobUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            Responses:
+                200 : OK
+                404 : Job not found error
             details :  https://api-reference.smartling.com/#operation/getJobDetails
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def updateJob(self, translationJobUid, jobName, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields, **kwargs):
         '''
             method  :  PUT
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            Responses:
+                200 : OK
+                400 : Validation error on updating a job
+                404 : Job not found error
             details :  https://api-reference.smartling.com/#operation/updateJob
         '''
         kw = {
@@ -204,26 +253,34 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('PUT', url, kw)
+        response, status = self.commandJson('PUT', url, kw)
+        return response, status
 
 
     def deleteJob(self, translationJobUid, **kwargs):
         '''
             method  :  DELETE
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            Responses:
+                200 : OK
+                400 : Validation error when deleting a job
+                401 : Authentication error
             details :  https://api-reference.smartling.com/#operation/deleteJob
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}', translationJobUid=translationJobUid, **kwargs)
-        return self.command('DELETE', url, kw)
+        response, status = self.command('DELETE', url, kw)
+        return response, status
 
 
     def searchForJob(self, fileUris, hashcodes, translationJobUids, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/search
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/searchForJob
         '''
         kw = {
@@ -233,26 +290,35 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/search', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getJobAsyncProcessStatus(self, translationJobUid, processUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobAsyncProcessStatus
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/processes/{processUid}', translationJobUid=translationJobUid, processUid=processUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def addFileToJob(self, translationJobUid, fileUri, targetLocaleIds, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                400 : Validation error adding file to a job
+                423 : The requested file is currently being processed by another operation. The file will be unlocked after the operation completes.
             details :  https://api-reference.smartling.com/#operation/addFileToJob
         '''
         kw = {
@@ -261,13 +327,18 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def removeFileFromJob(self, translationJobUid, fileUri, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                404 : Not found validation error
             details :  https://api-reference.smartling.com/#operation/removeFileFromJob
         '''
         kw = {
@@ -275,13 +346,16 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getJobFilesList(self, translationJobUid, limit=0, offset=0, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobFilesList
         '''
         kw = {
@@ -290,13 +364,17 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def addLocaleToJob(self, translationJobUid, targetLocaleId, syncContent, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
+            Responses:
+                200 : OK
+                202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/addLocaleToJob
         '''
         kw = {
@@ -304,26 +382,33 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def removeLocaleFromJob(self, translationJobUid, targetLocaleId, **kwargs):
         '''
             method  :  DELETE
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
+            Responses:
+                200 : OK
+                202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/removeLocaleFromJob
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}', translationJobUid=translationJobUid, targetLocaleId=targetLocaleId, **kwargs)
-        return self.command('DELETE', url, kw)
+        response, status = self.command('DELETE', url, kw)
+        return response, status
 
 
     def getJobFileProgress(self, translationJobUid, fileUri, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobFileProgress
         '''
         kw = {
@@ -331,13 +416,17 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def getJobProgress(self, translationJobUid, targetLocaleId='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getJobProgress
         '''
         kw = {
@@ -345,39 +434,50 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def getJobLastCompletionDatesPerLocale(self, translationJobUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getJobLastCompletionDatesPerLocale
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def findScheduleForTranslationJob(self, translationJobUid, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/findScheduleForTranslationJob
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def modifyScheduleItemsForTranslationJob(self, translationJobUid, schedules, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/modifyScheduleItemsForTranslationJob
         '''
         kw = {
@@ -385,39 +485,50 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule', translationJobUid=translationJobUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getProjectCustomFields(self, **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getProjectCustomFields
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields', **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def assignCustomFieldsToProject(self, CustomFieldAssignmentList, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/custom-fields', **kwargs)
-        return self.commandJson('POST', url, CustomFieldAssignmentList)
+        response, status = self.commandJson('POST', url, CustomFieldAssignmentList)
+        return response, status
 
 
     def getAccountCustomFields(self, accountUid, searchableOnly='', enabledOnly='', **kwargs):
         '''
             method  :  GET
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getAccountCustomFields
         '''
         kw = {
@@ -426,13 +537,16 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def createCustomField(self, accountUid, type, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description, **kwargs):
         '''
             method  :  POST
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/createCustomField
         '''
         kw = {
@@ -448,13 +562,16 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields', accountUid=accountUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def updateCustomField(self, accountUid, fieldUid, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description, **kwargs):
         '''
             method  :  PUT
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/updateCustomField
         '''
         kw = {
@@ -469,5 +586,6 @@ class JobsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}', accountUid=accountUid, fieldUid=fieldUid, **kwargs)
-        return self.commandJson('PUT', url, kw)
+        response, status = self.commandJson('PUT', url, kw)
+        return response, status
 

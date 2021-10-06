@@ -119,8 +119,12 @@ class testFilesApi(object):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file
-            details :  https://api-reference.smartling.com/#operation/uploadSourceFile
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "file=@$uploadFilePath;type=text/plain" -F "fileUri=$uploadFileSmartlingUri" -F "fileType=$uploadFileSmartlingType" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                423 : The requested file is currently being processed by another operation. The file will be unlocked after the operation completes.
+            details :  https://api-reference.smartling.com/#operation/uploadSourceFile
         '''
         file=self.FILE_PATH + self.FILE_NAME
         fileUri=self.uri
@@ -141,8 +145,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file
-            details :  https://api-reference.smartling.com/#operation/downloadSourceFile
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file"
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/downloadSourceFile
         '''
         fileUri=self.uri
         res, status = self.files_api.downloadSourceFile(fileUri=fileUri)
@@ -158,6 +164,8 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file/status
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusAllLocales
         '''
         fileUri=self.uri
@@ -176,6 +184,8 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/status
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getFileTranslationStatusSingleLocale
         '''
         localeId=self.MY_LOCALE
@@ -195,8 +205,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file
-            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -o $smartlingLocaleId$smartlingFileUri -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file"
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
         '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
@@ -214,8 +226,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/all/file/zip
-            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFilesAllLocales
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/{projectId}/locales/all/file/zip?fileUri=yourfile.json&retrievalType=published'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFilesAllLocales
         '''
         fileUri=self.uri
         res, status = self.files_api.downloadTranslatedFilesAllLocales(fileUri=fileUri)
@@ -232,6 +246,8 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/zip
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/downloadMultipleTranslatedFiles
         '''
         fileUris=[self.uri,self.uri16]
@@ -253,8 +269,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/files/list
-            details :  https://api-reference.smartling.com/#operation/getRecentlyUploadedSourceFilesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/files/list?fileTypes[]=json&uriMask=strings"
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getRecentlyUploadedSourceFilesList
         '''
         fileTypes=[FileTypes.android, FileTypes.javaProperties]
         res, status = self.files_api.getRecentlyUploadedSourceFilesList(fileTypes=fileTypes)
@@ -273,8 +291,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file-types
-            details :  https://api-reference.smartling.com/#operation/getFileTypesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file-types"
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getFileTypesList
         '''
         res, status = self.files_api.getFileTypesList()
 
@@ -290,8 +310,10 @@ class testFilesApi(object):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file/rename
-            details :  https://api-reference.smartling.com/#operation/renameUploadedSourceFile
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" -F "newFileUri=filename2.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/rename'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/renameUploadedSourceFile
         '''
         fileUri=self.uri
         newFileUri=self.uri_to_rename
@@ -309,8 +331,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified
-            details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateSingleLocale
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/last-modified?fileUri=filename.properties'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateSingleLocale
         '''
         localeId=self.MY_LOCALE
         fileUri=self.uri
@@ -329,8 +353,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /files-api/v2/projects/{projectId}/file/last-modified
-            details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateAllLocales
             as curl :  curl -X GET -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/last-modified?fileUri=filename.properties'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getTranslatedFileLastModifiedDateAllLocales
         '''
         fileUri=self.uri
         res, status = self.files_api.getTranslatedFileLastModifiedDateAllLocales(fileUri=fileUri)
@@ -351,8 +377,10 @@ class testFilesApi(object):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/import
-            details :  https://api-reference.smartling.com/#operation/importFileTranslations
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F "fileUri=filename.properties" -F "fileType=javaProperties" -F "translationState=PUBLISHED" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/import'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/importFileTranslations
         '''
         res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)
         localeId=self.MY_LOCALE
@@ -382,8 +410,10 @@ class testFilesApi(object):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations
-            details :  https://api-reference.smartling.com/#operation/exportFileTranslations
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -F "file=@filename.properties" -F 'fileUri=filename.properties' 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file/get-translations'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/exportFileTranslations
         '''
         localeId=self.MY_LOCALE
         file=self.FILE_PATH+self.FILE_NAME
@@ -403,8 +433,10 @@ class testFilesApi(object):
         '''
             method  :  GET
             api url :  /published-files-api/v2/projects/{projectId}/files/list/recently-published
-            details :  https://api-reference.smartling.com/#operation/getRecentlyPublishedFilesList
             as curl :  curl -H "Authorization: Bearer $smartlingToken" 'https://api.smartling.com/published-files-api/v2/projects/$smartlingProjectId/files/list/recently-published?publishedAfter=2019-11-21T11:51:17Z&fileUris[]=files/example1.json&localeIds[]=fr-CA&limit=10&offset=100'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getRecentlyPublishedFilesList
         '''
         publishedAfter=datetime.datetime.fromtimestamp(time.time()-10*24*2600).strftime("%Y-%m-%d")
         localeIds=[self.MY_LOCALE]
@@ -422,8 +454,10 @@ class testFilesApi(object):
         '''
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file/delete
-            details :  https://api-reference.smartling.com/#operation/deleteUploadedSourceFile
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "fileUri=filename.properties" 'https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/file/delete'
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/deleteUploadedSourceFile
         '''
         fileUri=self.uri
         res, status = self.files_api.deleteUploadedSourceFile(fileUri=fileUri)

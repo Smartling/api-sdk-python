@@ -75,8 +75,11 @@ class testStringsApi(object):
         '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
-            details :  https://api-reference.smartling.com/#operation/addStringsToProject
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+            details :  https://api-reference.smartling.com/#operation/addStringsToProject
         '''
         strings=[
                 {
@@ -136,8 +139,10 @@ class testStringsApi(object):
         '''
             method  :  GET
             api url :  /strings-api/v2/projects/{projectId}/processes/{processUid}
-            details :  https://api-reference.smartling.com/#operation/getAddStringsToProjectRequestStatus
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/processes/$processUid
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getAddStringsToProjectRequestStatus
         '''
         processUid=self.processUid
         res, status = self.strings_api.getAddStringsToProjectRequestStatus(processUid=processUid)
@@ -156,8 +161,10 @@ class testStringsApi(object):
         '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/source-strings
-            details :  https://api-reference.smartling.com/#operation/getAllSourceStringsByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G -d "fileUri=$smartlingFileUri" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/source-strings
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getAllSourceStringsByProject
         '''
         hashcodes=[self.hashcode_0,self.hashcode_1]
         res, status = self.strings_api.getAllSourceStringsByProject(hashcodes=hashcodes)
@@ -177,8 +184,10 @@ class testStringsApi(object):
         '''
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/translations
-            details :  https://api-reference.smartling.com/#operation/getAllTranslationsByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/translations
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getAllTranslationsByProject
         '''
         targetLocaleId='zh-TW'
         hashcodes=[self.hashcode_0,self.hashcode_1]

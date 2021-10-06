@@ -104,6 +104,8 @@ class testEstimatesApi(object):
         '''
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/generateJobFuzzyEstimateReports
         '''
         translationJobUid=self.test_job_uid
@@ -125,6 +127,8 @@ class testEstimatesApi(object):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
         '''
         translationJobUid=self.test_job_uid
@@ -144,6 +148,8 @@ class testEstimatesApi(object):
         '''
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/generateJobCostEstimateReports
         '''
         translationJobUid=self.test_job_uid
@@ -166,6 +172,8 @@ class testEstimatesApi(object):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobCostEstimateReports
         '''
         translationJobUid=self.test_job_uid
@@ -181,6 +189,8 @@ class testEstimatesApi(object):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
         '''
         reportUid=self.report_uid
@@ -198,6 +208,8 @@ class testEstimatesApi(object):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobEstimateReport
         '''
         reportUid=self.report_uid
@@ -215,6 +227,8 @@ class testEstimatesApi(object):
         '''
             method  :  PUT
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/modifyJobEstimateReportTags
         '''
         reportUid=self.report_uid
@@ -234,6 +248,8 @@ class testEstimatesApi(object):
         '''
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/exportJobEstimationReport
         '''
         projectUid=self.MY_PROJECT_ID
@@ -251,6 +267,8 @@ class testEstimatesApi(object):
         '''
             method  :  DELETE
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/deleteJobEstimateReport
         '''
         reportUid=self.report_uid

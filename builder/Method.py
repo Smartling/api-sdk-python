@@ -108,18 +108,33 @@ class Method(ApiCore):
             comment_marker,
             self.indent3 + 'method  :  '+ self.method.upper(),
             self.indent3 + 'api url :  '+self.path,
-            self.indent3 + 'details :  https://api-reference.smartling.com/#operation/'+self.operationId,
         ]
         curl_example = self.getCurlExample()
         if curl_example:
             doc_lines.append(curl_example)
+
         nested = self.listNestedValues()
         if nested:
             doc_lines.append(nested)
-        #doc_lines.append(self.getResponsesDesciption())
+        doc_lines = self.getResponsesDesciption(doc_lines)
+        details =  self.indent3 + 'details :  https://api-reference.smartling.com/#operation/'+self.operationId
+        doc_lines.append(details)
         doc_lines.append(comment_marker)
 
         return '\n'.join(doc_lines)
+
+    def getResponsesDesciption(self, doc_lines):
+        result = []
+        responses = getattr(self, 'responses', {})
+        for code, code_dict in responses.items():
+            descr = code_dict.get('description', '')
+            if descr:
+                result.append( self.indent2 + '%s : %s' % (code, descr) )
+        if result:
+            result.insert(0, self.indent + "Responses:")
+            responses = self.joinWithIndent(result, self.indent2)
+            doc_lines.append(responses)
+        return doc_lines
 
     def getCurlExample(self):
         result = []
@@ -183,11 +198,11 @@ class Method(ApiCore):
         body_lines.append('}')
         body_lines.append('kw.update(kwargs)')
         body_lines.append("url = self.urlHelper.getUrl('%s'%s, **kwargs)" % (self.path, self.buildPathParamsStr()))
-        cmd = "return self.command('%s', url, %s)" % (self.method.upper(), values_to_pass)
+        cmd = "response, status = self.command('%s', url, %s)" % (self.method.upper(), values_to_pass)
         if self.method.upper() in ('POST', 'PUT') and self.is_json:
-            cmd = "return self.commandJson('%s', url, %s)" % (self.method.upper(), values_to_pass)
-
+            cmd = "response, status = self.commandJson('%s', url, %s)" % (self.method.upper(), values_to_pass)
         body_lines.append(cmd)
+        body_lines.append("return response, status")
 
         return self.joinWithIndent(body_lines, self.indent2)
 

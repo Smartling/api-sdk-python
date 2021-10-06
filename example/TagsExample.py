@@ -75,8 +75,10 @@ class testTagsApi(object):
         '''
             method  :  GET
             api url :  /tags-api/v2/projects/{projectId}/tags
-            details :  https://api-reference.smartling.com/#operation/getTagsListByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/tags
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getTagsListByProject
         '''
         res, status = self.tags_api.getTagsListByProject()
 
@@ -92,8 +94,10 @@ class testTagsApi(object):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/search
-            details :  https://api-reference.smartling.com/#operation/getAllTagsForStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/search
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getAllTagsForStrings
         '''
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.getAllTagsForStrings(stringHashcodes=stringHashcodes)
@@ -111,8 +115,10 @@ class testTagsApi(object):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/add
-            details :  https://api-reference.smartling.com/#operation/addTagToStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/add
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/addTagToStrings
         '''
         tags=['Uno', 'Dos']
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
@@ -130,8 +136,10 @@ class testTagsApi(object):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove
-            details :  https://api-reference.smartling.com/#operation/removeTagsFromStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/remove
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/removeTagsFromStrings
         '''
         tags=['Uno', 'Dos']
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
@@ -149,8 +157,10 @@ class testTagsApi(object):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/add
-            details :  https://api-reference.smartling.com/#operation/addTagToStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/add
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/addTagToStrings
         '''
         tags=['Uno', 'Dos']
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
@@ -168,8 +178,10 @@ class testTagsApi(object):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove/all
-            details :  https://api-reference.smartling.com/#operation/removeAllTagsFromStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/remove/all
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/removeAllTagsFromStrings
         '''
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.removeAllTagsFromStrings(stringHashcodes=stringHashcodes)

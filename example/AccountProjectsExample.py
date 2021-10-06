@@ -75,8 +75,10 @@ class testAccountProjectsApi(object):
         '''
             method  :  GET
             api url :  /accounts-api/v2/accounts/{accountUid}/projects
-            details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
         '''
         accountUid=self.MY_ACCOUNT_UID
         res, status = self.account_projects_api.getProjectsByAccount(accountUid=self.MY_ACCOUNT_UID)
@@ -98,8 +100,10 @@ class testAccountProjectsApi(object):
         '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}
-            details :  https://api-reference.smartling.com/#operation/getProjectDetails
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getProjectDetails
         '''
         res, status = self.account_projects_api.getProjectDetails()
 
@@ -117,6 +121,8 @@ class testAccountProjectsApi(object):
         '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/targetLocales
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/addLocaleToProject
         '''
         defaultWorkflowUid='748398939979'
@@ -139,6 +145,8 @@ class testAccountProjectsApi(object):
         '''
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/copy
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/copyProject
         '''
         projectName='python SDK test'
@@ -158,6 +166,8 @@ class testAccountProjectsApi(object):
         '''
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
         '''
         processUid=self.copy_process_uid

@@ -9,8 +9,10 @@ class TagsApi(ApiV2):
         '''
             method  :  GET
             api url :  /tags-api/v2/projects/{projectId}/tags
-            details :  https://api-reference.smartling.com/#operation/getTagsListByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/tags
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getTagsListByProject
         '''
         kw = {
             'tagMask':tagMask,
@@ -19,30 +21,36 @@ class TagsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/tags', **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def getAllTagsForStrings(self, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/search
-            details :  https://api-reference.smartling.com/#operation/getAllTagsForStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/search
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getAllTagsForStrings
         '''
         kw = {
             'stringHashcodes':stringHashcodes,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/search', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def addTagToStrings(self, tags, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/add
-            details :  https://api-reference.smartling.com/#operation/addTagToStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/add
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/addTagToStrings
         '''
         kw = {
             'tags':tags,
@@ -50,15 +58,18 @@ class TagsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/add', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def removeTagsFromStrings(self, tags, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove
-            details :  https://api-reference.smartling.com/#operation/removeTagsFromStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/remove
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/removeTagsFromStrings
         '''
         kw = {
             'tags':tags,
@@ -66,20 +77,24 @@ class TagsApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/remove', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def removeAllTagsFromStrings(self, stringHashcodes, **kwargs):
         '''
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove/all
-            details :  https://api-reference.smartling.com/#operation/removeAllTagsFromStrings
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/remove/all
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/removeAllTagsFromStrings
         '''
         kw = {
             'stringHashcodes':stringHashcodes,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/tags-api/v2/projects/{projectId}/strings/tags/remove/all', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 

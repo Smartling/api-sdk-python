@@ -9,8 +9,11 @@ class ContextApi(ApiV2):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts
-            details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
+            Responses:
+                200 : OK
+                400 : Validation error
+            details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
         '''
         kw = {
             'name':name,
@@ -24,6 +27,8 @@ class ContextApi(ApiV2):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
         '''
         kw = {
@@ -33,52 +38,68 @@ class ContextApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts', **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def getVisualContextInfo(self, contextUid, **kwargs):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            Responses:
+                200 : OK
+                404 : Context not found
             details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def deleteVisualContext(self, contextUid, **kwargs):
         '''
             method  :  DELETE
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            Responses:
+                200 : OK
+                404 : Context not found
             details :  https://api-reference.smartling.com/#operation/deleteVisualContext
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}', contextUid=contextUid, **kwargs)
-        return self.command('DELETE', url, kw)
+        response, status = self.command('DELETE', url, kw)
+        return response, status
 
 
     def downloadVisualContextFileContent(self, contextUid, **kwargs):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
+            Responses:
+                200 : OK
+                404 : Context not found
             details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/content', contextUid=contextUid, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def runAutomaticContextMatching(self, contextUid, contentFileUri, stringHashcodes, overrideContextOlderThanDays, **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
+            Responses:
+                202 : ACCEPTED
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/runAutomaticContextMatching
         '''
         kw = {
@@ -88,13 +109,17 @@ class ContextApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async', contextUid=contextUid, **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def uploadAndMatchVisualContext(self, content, name='', matchParams='', **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
+            Responses:
+                202 : ACCEPTED
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
         '''
         kw = {
@@ -110,19 +135,26 @@ class ContextApi(ApiV2):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/match/{matchId}
+            Responses:
+                200 : OK
+                404 : Match request expired or does not exist
             details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
         '''
         kw = {
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/match/{matchId}', matchId=matchId, **kwargs)
-        return self.command('GET', url, kw)
+        response, status = self.command('GET', url, kw)
+        return response, status
 
 
     def createStringToContextBindings(self, bindings, **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
+            Responses:
+                200 : OK
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/createStringToContextBindings
         '''
         kw = {
@@ -130,13 +162,17 @@ class ContextApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset='', **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
+            Responses:
+                200 : OK
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/getBindings
         '''
         kw = {
@@ -148,13 +184,17 @@ class ContextApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/list', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
 
     def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, **kwargs):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove
+            Responses:
+                200 : OK
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/deleteBindings
         '''
         kw = {
@@ -165,5 +205,6 @@ class ContextApi(ApiV2):
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/bindings/remove', **kwargs)
-        return self.commandJson('POST', url, kw)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 

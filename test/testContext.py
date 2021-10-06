@@ -75,8 +75,11 @@ class testContextApi(object):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts
-            details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
+            Responses:
+                200 : OK
+                400 : Validation error
+            details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
         '''
         name='https://www.youtube.com/watch?v=0lJykuiS_9s'
         res, status = self.context_api.uploadNewVisualContext(name=name)
@@ -98,6 +101,8 @@ class testContextApi(object):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
         '''
         res, status = self.context_api.getVisualContextsListByProject()
@@ -115,6 +120,9 @@ class testContextApi(object):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            Responses:
+                200 : OK
+                404 : Context not found
             details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
         '''
         contextUid=self.context_uid
@@ -133,6 +141,9 @@ class testContextApi(object):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
+            Responses:
+                200 : OK
+                404 : Context not found
             details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
         '''
         contextUid=self.context_uid_img
@@ -148,6 +159,9 @@ class testContextApi(object):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
+            Responses:
+                202 : ACCEPTED
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/runAutomaticContextMatching
         '''
         contextUid=self.context_uid_img
@@ -168,6 +182,9 @@ class testContextApi(object):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
+            Responses:
+                202 : ACCEPTED
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
         '''
         content='../resources/ctx_api_test.png'
@@ -185,6 +202,9 @@ class testContextApi(object):
         '''
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/match/{matchId}
+            Responses:
+                200 : OK
+                404 : Match request expired or does not exist
             details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
         '''
         matchId=self.match_id_upl_n_match
@@ -201,6 +221,9 @@ class testContextApi(object):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
+            Responses:
+                200 : OK
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/createStringToContextBindings
         '''
         bindings=[{'contextUid': self.context_uid, 'stringHashcode': 'ede6083ebd2594ca4e557612aaa05b2e'},
@@ -223,6 +246,9 @@ class testContextApi(object):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
+            Responses:
+                200 : OK
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/getBindings
         '''
         stringHashcodes=['ede6083ebd2594ca4e557612aaa05b2e', '4f25feab674accf572433f22dc516e2e']
@@ -244,6 +270,9 @@ class testContextApi(object):
         '''
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove
+            Responses:
+                200 : OK
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/deleteBindings
         '''
         stringHashcodes=[]
@@ -264,6 +293,9 @@ class testContextApi(object):
         '''
             method  :  DELETE
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
+            Responses:
+                200 : OK
+                404 : Context not found
             details :  https://api-reference.smartling.com/#operation/deleteVisualContext
         '''
         contextUid=self.context_uid

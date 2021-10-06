@@ -93,8 +93,11 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs
-            details :  https://api-reference.smartling.com/#operation/addJob
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingJobJSON" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
+            Responses:
+                200 : OK
+                400 : Validation error during job creation.
+            details :  https://api-reference.smartling.com/#operation/addJob
         '''
         jobName=self.jobname
         targetLocaleIds=[self.MY_LOCALE,]
@@ -116,6 +119,9 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
+            Responses:
+                200 : OK
+                202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/addLocaleToJob
         '''
         translationJobUid=self.test_job_uid
@@ -132,6 +138,10 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                400 : Validation error response
             details :  https://api-reference.smartling.com/#operation/addStringsToJob
         '''
         translationJobUid=self.test_job_uid
@@ -150,6 +160,11 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                400 : Validation error adding file to a job
+                423 : The requested file is currently being processed by another operation. The file will be unlocked after the operation completes.
             details :  https://api-reference.smartling.com/#operation/addFileToJob
         '''
         translationJobUid=self.test_job_uid
@@ -166,6 +181,8 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobFilesList
         '''
         translationJobUid=self.test_job_uid
@@ -180,6 +197,8 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/progress
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobFileProgress
         '''
         translationJobUid=self.test_job_uid
@@ -195,6 +214,9 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize
+            Responses:
+                200 : OK
+                400 : Validation error when authorizing a job
             details :  https://api-reference.smartling.com/#operation/authorizeJob
         '''
         translationJobUid=self.test_job_uid
@@ -210,6 +232,8 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/modifyScheduleItemsForTranslationJob
         '''
         translationJobUid=self.test_job_uid
@@ -225,6 +249,8 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/createCustomField
         '''
         self.jobs_api.httpClient.ignore_errors=True
@@ -255,6 +281,8 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
         '''
 
@@ -277,6 +305,8 @@ class testJobsApi(object):
         '''
             method  :  PUT
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/updateCustomField
         '''
         accountUid=self.MY_ACCOUNT_UID
@@ -300,6 +330,10 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                404 : Not found validation error
             details :  https://api-reference.smartling.com/#operation/removeFileFromJob
         '''
         translationJobUid=self.test_job_uid
@@ -315,6 +349,9 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove
+            Responses:
+                200 : OK
+                202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/removeStringsFromJob
         '''
         translationJobUid=self.test_job_uid
@@ -331,6 +368,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales-completion-dates
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getJobLastCompletionDatesPerLocale
         '''
         translationJobUid=self.test_job_uid
@@ -345,6 +385,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/findScheduleForTranslationJob
         '''
         translationJobUid=self.test_job_uid
@@ -359,6 +402,9 @@ class testJobsApi(object):
         '''
             method  :  DELETE
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
+            Responses:
+                200 : OK
+                202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/removeLocaleFromJob
         '''
         translationJobUid=self.test_job_uid
@@ -374,8 +420,10 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs
-            details :  https://api-reference.smartling.com/#operation/getJobsByProject
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/projects/$smartlingProjectId/jobs
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getJobsByProject
         '''
         jobName=self.jobname
         res, status = self.jobs_api.getJobsByProject(jobName=jobName)
@@ -389,6 +437,10 @@ class testJobsApi(object):
         '''
             method  :  PUT
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            Responses:
+                200 : OK
+                400 : Validation error on updating a job
+                404 : Job not found error
             details :  https://api-reference.smartling.com/#operation/updateJob
         '''
         translationJobUid=self.test_job_uid
@@ -410,6 +462,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/progress
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getJobProgress
         '''
         translationJobUid=self.test_job_uid
@@ -424,6 +479,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            Responses:
+                200 : OK
+                404 : Job not found error
             details :  https://api-reference.smartling.com/#operation/getJobDetails
         '''
         translationJobUid=self.test_job_uid
@@ -438,6 +496,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings
+            Responses:
+                200 : OK
+                404 : Job not found error
             details :  https://api-reference.smartling.com/#operation/getStringsForTranslationJob
         '''
         translationJobUid=self.test_job_uid
@@ -452,6 +513,9 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings
+            Responses:
+                200 : OK
+                400 : Validation error response
             details :  https://api-reference.smartling.com/#operation/findJobsByStrings
         '''
         hashcodes=[]
@@ -467,6 +531,8 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/search
+            Responses:
+                200 : OK
             details :  https://api-reference.smartling.com/#operation/searchForJob
         '''
         fileUris=[]
@@ -483,6 +549,11 @@ class testJobsApi(object):
         '''
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel
+            Responses:
+                200 : OK
+                202 : ACCEPTED
+                400 : Validation error when cancelling a job
+                401 : Authentication error
             details :  https://api-reference.smartling.com/#operation/cancelJob
         '''
         translationJobUid=self.test_job_uid
@@ -498,6 +569,10 @@ class testJobsApi(object):
         '''
             method  :  DELETE
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
+            Responses:
+                200 : OK
+                400 : Validation error when deleting a job
+                401 : Authentication error
             details :  https://api-reference.smartling.com/#operation/deleteJob
         '''
         translationJobUid=self.test_job_uid
@@ -512,6 +587,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getProjectCustomFields
         '''
         res, status = self.jobs_api.getProjectCustomFields()
@@ -523,6 +601,9 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
+            Responses:
+                200 : OK
+                404 : Not found error
             details :  https://api-reference.smartling.com/#operation/getAccountCustomFields
         '''
         accountUid=self.MY_ACCOUNT_UID
@@ -537,8 +618,10 @@ class testJobsApi(object):
         '''
             method  :  GET
             api url :  /jobs-api/v3/accounts/{accountUid}/jobs
-            details :  https://api-reference.smartling.com/#operation/getJobsByAccount
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/jobs-api/v3/accounts/$smartlingAccountId/jobs
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getJobsByAccount
         '''
         accountUid=self.MY_ACCOUNT_UID
         res, status = self.jobs_api.getJobsByAccount(accountUid=self.MY_ACCOUNT_UID)
