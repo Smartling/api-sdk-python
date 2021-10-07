@@ -24,7 +24,7 @@ class TestData:
         self.custom_test_check = custom_test_check
         self.is_apiv2_response = is_apiv2_response
 
-exampleHeader="""
+EXAMPLE_HEADER= """
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
@@ -97,7 +97,7 @@ class test{API_NAME}(object):
 
         print("setUp", "OK", "\\n")
 """
-exampleFooter = """
+EXAMPLE_FOOTER = """
 def example():
     t = test{API_NAME}()
     t.setUp()
@@ -107,7 +107,7 @@ def example():
 example()
 """
 
-testsFooter = """
+TESTS_FOOTER = """
     def test_all(self):
         t = self
         %s

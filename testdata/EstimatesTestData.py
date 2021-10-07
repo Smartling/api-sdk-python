@@ -47,7 +47,7 @@ extra_initializations = '''
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
          
     def addTestJob(self, proxySettings):
-        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='prod')
         self.jobname = 'test_job_'+str(int(time.time()))
         jobName=self.jobname
         targetLocaleIds=["zh-TW",]
@@ -68,10 +68,10 @@ extra_initializations = '''
         res, status = self.jobs_api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
 '''
 
-test_evnironment = 'stg'
+test_evnironment = 'prod'
 
 
-test_decortators = {
+test_decorators = {
 
     'getJobFuzzyEstimateReports':TestData(
         {
@@ -113,7 +113,7 @@ assert_equal(res.data.reportStatus, 'PENDING')
             'fuzzyProfileUid' : '624e06b333af',
         },
         custom_test_check = '''
-assert_equal(res.data.reportType, 'FUZZY')
+assert_equal(True, res.data.reportType in ('FUZZY','COST'))
 assert_equal(True, res.data.reportStatus in ('PENDING'))
 '''
     ),

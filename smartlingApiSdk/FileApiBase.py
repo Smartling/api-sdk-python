@@ -41,7 +41,7 @@ class FileApiBase:
         self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
-        sys.stdout = Logger('python-sdk', Settings.log_level)
+        sys.stdout = Logger('python-sdk', Settings.logLevel)
         sys.stderr = Logger('STDERR', logging.ERROR)
 
     def addAuth(self, params):

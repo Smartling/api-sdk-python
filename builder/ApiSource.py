@@ -22,7 +22,7 @@ import collections
 import importlib
 from builder.Parameters import Parameter, MuptipartProperty
 from builder.Method import Method
-from builder.ExampleData import exampleHeader, exampleFooter, testsFooter
+from builder.ExampleData import EXAMPLE_HEADER, EXAMPLE_FOOTER, TESTS_FOOTER
 
 class ApiSource():
     def __init__(self, full_name, api_name, test_evnironment='prod'):
@@ -31,18 +31,18 @@ class ApiSource():
         self.api_name = api_name
         self.api_name_underscore = full_name.replace(' ','_').replace('&','').replace('__','_').lower()
 
-    def collectMethods(self, opaDict):
-        pt = opaDict['paths']
+    def collectMethods(self, opa_dict):
+        pt = opa_dict['paths']
         all_tags = []
         methods_to_build = []
-        for k,v  in opaDict['paths'].items():
+        for k,v  in opa_dict['paths'].items():
             for method, descr in v.items():
                 if method == '$ref': continue
                 if methods_to_build and descr['operationId'] not in methods_to_build: #debug build for specific methods only
                     continue
                 if self.full_name in descr['tags']:
-                    m = Method(self.api_name, self.api_name_underscore, k, method, descr, opaDict)
-                    self.patchMethods(descr, m, opaDict)
+                    m = Method(self.api_name, self.api_name_underscore, k, method, descr, opa_dict)
+                    self.patchMethods(descr, m, opa_dict)
                     self.methods.append(m)
 
     def patchMethods(self, descr, m, opa_dict):
@@ -95,14 +95,14 @@ class ApiSource():
 
     def buildExampleHeader(self):
         #do dynamic imports based on apy_name
-        testDataModule = importlib.import_module('testdata.'+self.api_name+'TestData')
-        imports = getattr(testDataModule, 'imports', '')
-        extra_initializations = getattr(testDataModule, 'extra_initializations')
-        tear_down = getattr(testDataModule, 'tear_down', '')
-        tests_order = getattr(testDataModule, 'tests_order')
-        test_evnironment = getattr(testDataModule, 'test_evnironment', 'prod')
+        test_data_module = importlib.import_module('testdata.'+self.api_name+'TestData')
+        imports = getattr(test_data_module, 'imports', '')
+        extra_initializations = getattr(test_data_module, 'extra_initializations')
+        tear_down = getattr(test_data_module, 'tear_down', '')
+        tests_order = getattr(test_data_module, 'tests_order')
+        test_evnironment = getattr(test_data_module, 'test_evnironment', 'prod')
 
-        hdr = exampleHeader
+        hdr = EXAMPLE_HEADER
         if 'stg' == test_evnironment:
             hdr = hdr.replace('Credentials()', "Credentials('stg')")
             hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
@@ -154,8 +154,8 @@ class ApiSource():
         return '\n'.join(rows)
 
     def buildExample(self):
-        return self.buildTestOrExample(exampleFooter, indent=1)
+        return self.buildTestOrExample(EXAMPLE_FOOTER, indent=1)
 
     def buildTest(self):
-        return self.buildTestOrExample(testsFooter, indent=2)
+        return self.buildTestOrExample(TESTS_FOOTER, indent=2)
 

@@ -47,7 +47,7 @@ class testApiChanges:
     example_path = '../example'
 
     def setUp(self):
-        sys.stdout = Logger('python-sdk', Settings.log_level)
+        sys.stdout = Logger('python-sdk', Settings.logLevel)
 
     def tearDown(self):
         pass

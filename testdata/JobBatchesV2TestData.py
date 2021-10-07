@@ -33,7 +33,7 @@ extra_initializations = '''
 
 test_evnironment = 'stg'
 
-test_decortators = {
+test_decorators = {
 'createJobBatchV2':TestData(
     {
         'authorize' : False,

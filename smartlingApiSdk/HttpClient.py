@@ -75,7 +75,7 @@ class HttpClient:
                     req = multipartHandler.http_request(req, self.force_multipart)
                 else:
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req, timeout=Settings.request_timeout_seconds)
+                response = urllib2.urlopen(req, timeout=Settings.requestTimeoutSeconds)
         except HTTPError as e:
             response = e
 
@@ -99,16 +99,16 @@ class HttpClient:
     def installOpenerWithProxy(self, handler):
         if self.proxySettings:
             if self.proxySettings.username:
-                proxy_str = 'http://%s:%s@%s:%s' % (
+                proxyStr = 'http://%s:%s@%s:%s' % (
                 self.proxySettings.username, self.proxySettings.passwd, self.proxySettings.host,
                 self.proxySettings.port)
             else:
-                proxy_str = 'http://%s:%s' % (self.proxySettings.host, self.proxySettings.port)
+                proxyStr = 'http://%s:%s' % (self.proxySettings.host, self.proxySettings.port)
 
             opener = urllib2.build_opener(
                 handler or urllib2.HTTPHandler(),
                 handler or urllib2.HTTPSHandler(),
-                urllib2.ProxyHandler({"https": proxy_str}))
+                urllib2.ProxyHandler({"https": proxyStr}))
             urllib2.install_opener(opener)
         elif handler:
             opener = urllib2.build_opener(MultipartPostHandler)
@@ -124,10 +124,10 @@ class HttpClient:
                 for single in v:
                     if len(result)>0:
                         result += "&"
-                    key_list = k
+`                    keyList = k
                     if self.list_brackets:
-                        key_list += "[]"
-                    dct = {key_list: single}
+                        keyList += "[]"
+                    dct = {keyList: single}
                     result += urlencode( dct )
 
         if params:

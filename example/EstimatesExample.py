@@ -50,7 +50,7 @@ class testEstimatesApi(object):
         print("tearDown", "OK")
 
     def setUp(self):
-        credentials = Credentials('stg') #Gets your Smartling credetnials from environment variables
+        credentials = Credentials() #Gets your Smartling credetnials from environment variables
         self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
         self.MY_USER_SECRET = credentials.MY_USER_SECRET
         self.MY_PROJECT_ID = credentials.MY_PROJECT_ID
@@ -69,7 +69,7 @@ class testEstimatesApi(object):
         else:
             proxySettings = None
 
-        self.estimates_api = EstimatesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.estimates_api = EstimatesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
 
         print("setUp", "OK", "\n")
 
@@ -80,7 +80,7 @@ class testEstimatesApi(object):
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
          
     def addTestJob(self, proxySettings):
-        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='prod')
         self.jobname = 'test_job_'+str(int(time.time()))
         jobName=self.jobname
         targetLocaleIds=["zh-TW",]
@@ -160,7 +160,7 @@ class testEstimatesApi(object):
         res, status = self.estimates_api.generateJobCostEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags, localeWorkflows=localeWorkflows, fuzzyProfileUid=fuzzyProfileUid)
 
 
-        assert_equal(res.data.reportType, 'FUZZY')
+        assert_equal(True, res.data.reportType in ('FUZZY','COST'))
         assert_equal(True, res.data.reportStatus in ('PENDING'))
 
         assert_equal(True, status in [200,202])

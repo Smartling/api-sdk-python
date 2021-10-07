@@ -17,8 +17,9 @@
  * limit
  '''
 import os, sys
+
 sys.path.append(os.path.abspath('../'))
-isPython3 =  sys.version_info[:2] >= (3,0)
+isPython3 = sys.version_info[:2] >= (3, 0)
 
 import json
 import collections
@@ -26,14 +27,15 @@ from builder.ApiSource import ApiSource
 from smartlingApiSdk.HttpClient import HttpClient
 from smartlingApiSdk.Logger import Logger
 from smartlingApiSdk.Settings import Settings
-import logging
+
 
 class ApiBuilder:
     """
-    builds api based in openapi description for specific Api familiy defined as full_name
+    builds api based in openapi description for specific Api family defined as full_name
     """
+
     def __init__(self, full_name):
-        self.api_name = full_name.replace(' ','').replace('&','')
+        self.api_name = full_name.replace(' ', '').replace('&', '')
         json_dict = self.getApiJson()
         self.apisrc = ApiSource(full_name, self.api_name)
         self.apisrc.collectMethods(json_dict)
@@ -45,7 +47,7 @@ class ApiBuilder:
             raise Exception('Can not load openapi description')
         if isPython3:
             response_data = response_data.decode('utf8')
-        open("openapi3.json",'w').write(response_data)
+        open("openapi3.json", 'w').write(response_data)
         json_string = response_data
         json_dict = json.loads(json_string, object_pairs_hook=collections.OrderedDict)
         return json_dict
@@ -53,30 +55,29 @@ class ApiBuilder:
     def build(self):
         built = self.apisrc.build()
         out_path = '../api/%sApi.py' % self.api_name
-        open(out_path,'w').write(built)
+        open(out_path, 'w').write(built)
         print (built)
-        return self #allow tagged calls : build().buildExample().buildTest()
+        return self  # Allow tagged calls : build().buildExample().buildTest()
 
     def buildExample(self):
         built = self.apisrc.buildExample()
 
         out_path = '../example/%sExample.py' % self.api_name
-        open(out_path,'w').write(built)
+        open(out_path, 'w').write(built)
         print (built)
-        return self #allow tagged calls : build().buildExample().buildTest()
+        return self  # Allow tagged calls : build().buildExample().buildTest()
 
     def buildTest(self):
         built = self.apisrc.buildTest()
 
         out_path = '../test/test%s.py' % self.api_name
-        open(out_path,'w').write(built)
+        open(out_path, 'w').write(built)
         print (built)
-        return self #allow tagged calls : build().buildExample().buildTest()
-
+        return self  # Allow tagged calls : build().buildExample().buildTest()
 
 
 def main():
-    sys.stdout = Logger('python-sdk', Settings.log_level)
+    sys.stdout = Logger('python-sdk', Settings.logLevel)
     ApiBuilder("Jobs").build().buildExample().buildTest()
     ApiBuilder("Job Batches V2").build().buildExample().buildTest()
     ApiBuilder("Strings").build().buildExample().buildTest()
@@ -85,6 +86,7 @@ def main():
     ApiBuilder("Account & Projects").build().buildExample().buildTest()
     ApiBuilder("Files").build().buildExample().buildTest()
     ApiBuilder("Tags").build().buildExample().buildTest()
+
 
 if __name__ == '__main__':
     main()

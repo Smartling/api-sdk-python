@@ -20,5 +20,5 @@
 import logging
 
 class Settings:
-    log_level = logging.INFO
-    request_timeout_seconds = 30
+    logLevel = logging.INFO
+    requestTimeoutSeconds = 30

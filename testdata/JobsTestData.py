@@ -74,7 +74,7 @@ extra_initializations = '''
 
 jobUidCode = Code('self.test_job_uid')
 
-test_decortators = {
+test_decorators = {
 'addJob':TestData(
     {
         'jobName' : Code('self.jobname'),

@@ -27,22 +27,22 @@ class Logger(object):
     collected = []
     def __init__(self, name, loglevel):
         logfile = '/tmp/api-sdk-python.log'
-        log_format = ('[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
+        logFormat = ('[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
 
-        logging.basicConfig(filename=logfile, filemode='a', format=log_format, level=logging.DEBUG)
-        self.stdout_write = sys.stdout.write
+        logging.basicConfig(filename=logfile, filemode='a', format=logFormat, level=logging.DEBUG)
+        self.write = sys.stdout.write
         self.loglevel = loglevel
         name = self.addThreadName(name)
         self.logger = logging.getLogger(name)
 
     def addThreadName(self, name):
-        thread_name = threading.current_thread().name
-        if 'MainThread' != thread_name:
-            name += "-" + thread_name
+        threadName = threading.current_thread().name
+        if 'MainThread' != threadName:
+            name += "-" + threadName
         return name
 
     def write(self, message):
-        self.stdout_write(message)
+        self.write(message)
 
         has_newline = '\n' in message
         if message.startswith("\n"): message = message[1:]

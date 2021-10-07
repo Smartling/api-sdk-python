@@ -56,11 +56,11 @@ class Credentials():
     MY_LOCALE="CHANGE_ME"
 
 
-    creds = ("PROJECT_ID", "ACCOUNT_UID", "USER_IDENTIFIER", "USER_SECRET", "LOCALE")
-    optional_creds = ("ACCOUNT_UID")
+    CREDS = ("PROJECT_ID", "ACCOUNT_UID", "USER_IDENTIFIER", "USER_SECRET", "LOCALE")
+    OPTIONAL_CREDS = ("ACCOUNT_UID")
    
     def __init__(self, env='prod'):
-        for id in self.creds:
+        for id in self.CREDS:
             cred = "MY_"+id
             suffix = ''
             if env == 'stg' and id.startswith("USER_"):
@@ -68,6 +68,6 @@ class Credentials():
             value = getattr(self, cred+suffix, "CHANGE_ME")
             if "CHANGE_ME" == value:
                 value = os.environ.get('SL_'+id+suffix, getattr(self, cred))
-            if "CHANGE_ME" == value and not id in self.optional_creds:
+            if "CHANGE_ME" == value and not id in self.OPTIONAL_CREDS:
                 raise CredentialsNotSet('SL_'+id+suffix, env)
             setattr(self, cred, value)

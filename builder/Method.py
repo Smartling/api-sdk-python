@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,10 +15,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 import json
-import collections
 import importlib
 from builder.Parameters import ApiCore, Parameter, MuptipartProperty
 
@@ -44,14 +43,15 @@ class Method(ApiCore):
 
         self.need_multipart = False
         self.is_json = False
+        self.hasDirectives = False
         self.getMultipartProps()
         self.custom_test_check = ""
 
     def build(self):
-        rows = []
-
-        rows.append(self.buildName())
-        rows.append(self.buildDoc())
+        rows = [
+            self.buildName(),
+            self.buildDoc()
+        ]
 
         if self.need_multipart:
             rows.append(self.buildMultipart())
@@ -61,14 +61,12 @@ class Method(ApiCore):
         return '\n'.join(rows)
 
     def buildExample(self):
-        rows = []
-
-        rows.append(self.buildTestName())
-        rows.append(self.buildDoc())
-
-
-        rows.append(self.buildTestBody())
-        rows.append('')
+        rows = [
+            self.buildTestName(),
+            self.buildDoc(),
+            self.buildTestBody(),
+            ''
+        ]
         joined = '\n'.join(rows)
         joined = joined.replace(self.indent2 + '\n', '\n')# remove whitespaces for separator line
         return joined
@@ -87,12 +85,12 @@ class Method(ApiCore):
             'def ',
             self.operationId,
             '(self',
-            self.buildPrarams(),
+            self.buildParams(),
             ', **kwargs):',
         ]
         )
 
-    def buildPrarams(self):
+    def buildParams(self):
         result = ''
         joined = self.parameters + self.mp_params
         self.rearrangeRequired(joined)
@@ -116,14 +114,14 @@ class Method(ApiCore):
         nested = self.listNestedValues()
         if nested:
             doc_lines.append(nested)
-        doc_lines = self.getResponsesDesciption(doc_lines)
+        doc_lines = self.getResponsesDescription(doc_lines)
         details =  self.indent3 + 'details :  https://api-reference.smartling.com/#operation/'+self.operationId
         doc_lines.append(details)
         doc_lines.append(comment_marker)
 
         return '\n'.join(doc_lines)
 
-    def getResponsesDesciption(self, doc_lines):
+    def getResponsesDescription(self, doc_lines):
         result = []
         responses = getattr(self, 'responses', {})
         for code, code_dict in responses.items():
@@ -193,7 +191,7 @@ class Method(ApiCore):
                 values_to_pass = m._name
                 continue
             if 'binary' == m._format:
-                raise Exception("Uncomaptible parameter format for command")
+                raise Exception("Incompatible parameter format for command")
             body_lines.append(self.indent + "'%s':%s," % (m._name, m._name))
         body_lines.append('}')
         body_lines.append('kw.update(kwargs)')
@@ -213,7 +211,7 @@ class Method(ApiCore):
         initializers = {}
 
         test_data_module = importlib.import_module('testdata.'+self.api_name+'TestData')
-        decorators = getattr(test_data_module, 'test_decortators')
+        decorators = getattr(test_data_module, 'test_decorators')
 
         jobs_test_data = None
         if self.operationId in decorators.keys():
@@ -247,7 +245,7 @@ class Method(ApiCore):
 
         return self.joinWithIndent(body_lines, self.indent2)
 
-    def listPrtoperty(self, name, array):
+    def listProperty(self, name, array):
         if not name:
             raise Exception("Can't determine property name")
         mp = MuptipartProperty(name, {'type':'array'}, self.opa_dict)
@@ -257,9 +255,8 @@ class Method(ApiCore):
 
     def getMultipartProps(self):
         self.mp_params = []
-        self.hasDirectives = False
         if not self.requestBody: return
-        self.resolveRequesBodyRef()
+        self.resolveRequestBodyRef()
         self.type = list(self.requestBody['content'].keys())[0]
         if 'application/json' == self.type:
             self.is_json = True
@@ -272,9 +269,8 @@ class Method(ApiCore):
 
         props = schema.get('properties', None)
         if props is None:
-            type = schema['type']
-            if 'array' == type:
-                self.listPrtoperty(refname, schema['items'])
+            if 'array' == schema['type']:
+                self.listProperty(refname, schema['items'])
                 return
             else:
                 print (schema)
@@ -288,7 +284,7 @@ class Method(ApiCore):
 
         self.rearrangeRequired(self.mp_params)
 
-    def resolveRequesBodyRef(self):
+    def resolveRequestBodyRef(self):
         for key in self.requestBody:
             if '$ref' == key:
                 resolved, refname = self.resolveRef(self.requestBody['$ref'])
@@ -335,24 +331,24 @@ class Method(ApiCore):
         return prop_list
 
     def buildMultipart(self):
-        body_lines = []
-
-        body_lines.append('kw = {')
+        result = [
+            'kw = {',
+        ]
         kw_params = [x for x in self.parameters if x._in == 'query']
         for p in kw_params:
-            body_lines.append(self.indent + "'%s':%s," % (p._name, p._name))
+            result.append(self.indent + "'%s':%s," % (p._name, p._name))
         for m in self.mp_params:
             if 'binary' == m._format:
-                body_lines.append(self.indent + "'%s':self.processFile(%s)," % (m._name, m._name))
+                result.append(self.indent + "'%s':self.processFile(%s)," % (m._name, m._name))
             elif not 'directives' == m._name:
-                body_lines.append(self.indent + "'%s':%s," % (m._name, m._name))
-        body_lines.append('}')
+                result.append(self.indent + "'%s':%s," % (m._name, m._name))
+        result.append('}')
 
-        body_lines += self.addDirectives()
-        body_lines.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
-        body_lines.append("return self.uploadMultipart(url, kw)")
+        result += self.addDirectives()
+        result.append("url = self.urlHelper.getUrl('%s'%s)" % (self.path, self.buildPathParamsStr()))
+        result.append("return self.uploadMultipart(url, kw)")
 
-        return self.joinWithIndent(body_lines, self.indent2)
+        return self.joinWithIndent(result, self.indent2)
 
     def addDirectives(self):
         if self.hasDirectives:

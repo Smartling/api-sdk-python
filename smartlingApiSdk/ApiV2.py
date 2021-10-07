@@ -29,15 +29,15 @@ from .version import version
 
 class ApiV2(FileApiBase):
     """ Api v2 basic functionality """
-    host_prod = 'api.smartling.com'
-    host_stg = 'api.stg.smartling.net'
+    hostProd = 'api.smartling.com'
+    hostStg = 'api.stg.smartling.net'
     clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        self.host = self.host_prod
+        self.host = self.hostProd
         self.userIdentifier = userIdentifier
         if 'stg'==env:
-            self.host = self.host_stg
+            self.host = self.hostStg
         FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
         self.authClient = AuthClient(self.host, userIdentifier, userSecret, proxySettings)
         self.urlHelper = UrlV2Helper(projectId)

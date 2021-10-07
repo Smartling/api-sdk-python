@@ -47,7 +47,7 @@ strings_added = [
     {"hashcode":"b60df7845b7a3755fa00a833a31fa91e","stringText":"Design for Context","parsedStringText":"Design for Context"}
 ]
 
-test_decortators = {
+test_decorators = {
     'uploadNewVisualContext':TestData(
         {
             'name' : video_url

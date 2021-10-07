@@ -96,7 +96,7 @@ extra_initializations = '''
 
 test_evnironment = 'stg'
 
-test_decortators = {
+test_decorators = {
     'uploadSourceFile':TestData(
         {
             "file":Code('self.FILE_PATH + self.FILE_NAME'),
