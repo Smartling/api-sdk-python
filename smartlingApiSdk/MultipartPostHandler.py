@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012 Smartling, Inc.
+""" Copyright 2012 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import sys
 
@@ -47,29 +47,29 @@ class MultipartPostHandler(urllib2.BaseHandler):
         else:
             return type(value) == file
 
-    def http_request(self, request, force_multipart = False):
+    def http_request(self, request, forceMultipart = False):
         if isPython3:
             data = request.data
         else:
             data = request.get_data()
 
         if data is not None and type(data) != str and type(data) != bytes:
-            v_files = []
-            v_vars = []
+            files = []
+            vars = []
             try:
                 for(key, value) in list(data.items()):
                     if self.ifFileInstance(value):
-                        v_files.append((key, value))
+                        files.append((key, value))
                     else:
-                        v_vars.append((key, value))
+                        vars.append((key, value))
             except TypeError:
                 systype, value, traceback = sys.exc_info()
                 raise TypeError("not a valid non-string sequence or mapping object")(traceback)
 
-            if (not force_multipart) and len(v_files) == 0:
-                data = urlencode(v_vars, self.doseq)
+            if (not forceMultipart) and len(files) == 0:
+                data = urlencode(vars, self.doseq)
             else:
-                boundary, data = self.multipartEncode(v_vars, v_files)
+                boundary, data = self.multipartEncode(vars, files)
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
 
                 if(request.has_header('Content-Type')

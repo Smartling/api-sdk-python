@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import os
 import sys
@@ -50,7 +50,7 @@ class testEstimatesApi(object):
         print("tearDown", "OK")
 
     def setUp(self):
-        credentials = Credentials('stg') #Gets your Smartling credetnials from environment variables
+        credentials = Credentials() #Gets your Smartling credetnials from environment variables
         self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
         self.MY_USER_SECRET = credentials.MY_USER_SECRET
         self.MY_PROJECT_ID = credentials.MY_PROJECT_ID
@@ -69,7 +69,7 @@ class testEstimatesApi(object):
         else:
             proxySettings = None
 
-        self.estimates_api = EstimatesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.estimates_api = EstimatesApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings)
 
         print("setUp", "OK", "\n")
 
@@ -80,7 +80,7 @@ class testEstimatesApi(object):
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
          
     def addTestJob(self, proxySettings):
-        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='prod')
         self.jobname = 'test_job_'+str(int(time.time()))
         jobName=self.jobname
         targetLocaleIds=["zh-TW",]
@@ -101,13 +101,13 @@ class testEstimatesApi(object):
         res, status = self.jobs_api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
 
     def checkGenerateJobFuzzyEstimateReports(self):
-        '''
+        """
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/generateJobFuzzyEstimateReports
-        '''
+        """
         translationJobUid=self.test_job_uid
         contentType='JOB_CONTENT_ALL_CONTENT'
         tags=['some', 'tags']
@@ -124,13 +124,13 @@ class testEstimatesApi(object):
 
 
     def checkGetJobFuzzyEstimateReports(self):
-        '''
+        """
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobFuzzyEstimateReports
-        '''
+        """
         translationJobUid=self.test_job_uid
         res, status = self.estimates_api.getJobFuzzyEstimateReports(translationJobUid=translationJobUid)
 
@@ -145,13 +145,13 @@ class testEstimatesApi(object):
 
 
     def checkGenerateJobCostEstimateReports(self):
-        '''
+        """
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/generateJobCostEstimateReports
-        '''
+        """
         translationJobUid=self.test_job_uid
         contentType='JOB_CONTENT_ALL_CONTENT'
         tags=['some', 'tags']
@@ -160,7 +160,7 @@ class testEstimatesApi(object):
         res, status = self.estimates_api.generateJobCostEstimateReports(translationJobUid=translationJobUid, contentType=contentType, tags=tags, localeWorkflows=localeWorkflows, fuzzyProfileUid=fuzzyProfileUid)
 
 
-        assert_equal(res.data.reportType, 'FUZZY')
+        assert_equal(True, res.data.reportType in ('FUZZY','COST'))
         assert_equal(True, res.data.reportStatus in ('PENDING'))
 
         assert_equal(True, status in [200,202])
@@ -169,13 +169,13 @@ class testEstimatesApi(object):
 
 
     def checkGetJobCostEstimateReports(self):
-        '''
+        """
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobCostEstimateReports
-        '''
+        """
         translationJobUid=self.test_job_uid
         reportStatus='PENDING'
         res, status = self.estimates_api.getJobCostEstimateReports(translationJobUid=translationJobUid, reportStatus=reportStatus)
@@ -186,13 +186,13 @@ class testEstimatesApi(object):
 
 
     def checkGetJobEstimateReportStatus(self):
-        '''
+        """
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/status
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobEstimateReportStatus
-        '''
+        """
         reportUid=self.report_uid
         res, status = self.estimates_api.getJobEstimateReportStatus(reportUid=reportUid)
 
@@ -205,13 +205,13 @@ class testEstimatesApi(object):
 
 
     def checkGetJobEstimateReport(self):
-        '''
+        """
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobEstimateReport
-        '''
+        """
         reportUid=self.report_uid
         res, status = self.estimates_api.getJobEstimateReport(reportUid=reportUid)
 
@@ -224,13 +224,13 @@ class testEstimatesApi(object):
 
 
     def checkModifyJobEstimateReportTags(self):
-        '''
+        """
             method  :  PUT
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/modifyJobEstimateReportTags
-        '''
+        """
         reportUid=self.report_uid
         tags=['tags', 'remodeling']
         res, status = self.estimates_api.modifyJobEstimateReportTags(reportUid=reportUid, tags=tags)
@@ -245,13 +245,13 @@ class testEstimatesApi(object):
 
 
     def checkExportJobEstimationReport(self):
-        '''
+        """
             method  :  GET
             api url :  /estimates-api/v2/projects/{projectUid}/reports/{reportUid}/download
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/exportJobEstimationReport
-        '''
+        """
         projectUid=self.MY_PROJECT_ID
         reportUid=self.report_uid
         format='csv'
@@ -264,13 +264,13 @@ class testEstimatesApi(object):
 
 
     def checkDeleteJobEstimateReport(self):
-        '''
+        """
             method  :  DELETE
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/deleteJobEstimateReport
-        '''
+        """
         reportUid=self.report_uid
         res, status = self.estimates_api.deleteJobEstimateReport(reportUid=reportUid)
 

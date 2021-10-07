@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     'uploadSourceFile',
     'downloadSourceFile',
     'getFileTranslationStatusAllLocales',
@@ -60,7 +60,7 @@ else:
     newline = "\\n"
 '''
 
-extra_initializations = '''
+extraInitializations = '''
         self.extraInitializations()
 
     def extraInitializations(self):
@@ -94,9 +94,9 @@ extra_initializations = '''
             return zipfile.ZipFile(StringIO.StringIO(res))
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'stg'
 
-test_decortators = {
+testDecorators = {
     'uploadSourceFile':TestData(
         {
             "file":Code('self.FILE_PATH + self.FILE_NAME'),
@@ -104,7 +104,7 @@ test_decortators = {
             "fileType" : Code('self.FILE_TYPE'),
             'localeIdsToAuthorize' : Code('[self.MY_LOCALE]'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.wordCount, 6)
 assert_equal(res.data.stringCount, 6)
 '''
@@ -120,18 +120,18 @@ assert_equal(res.data.stringCount, 6)
         {
             'fileUri' :  Code('self.uri')
         },
-        custom_test_check = '''
+        customTestCheck='''
 orig = open(self.FILE_PATH + self.FILE_NAME, "rb").read()
 assert_equal(res, orig)
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
     'getFileTranslationStatusAllLocales': TestData(
         {
             'fileUri' :  Code('self.uri')
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.fileUri, self.uri)
 assert_equal(True, len(res.data.items) > 0)
 '''
@@ -142,7 +142,7 @@ assert_equal(True, len(res.data.items) > 0)
             'fileUri' :  Code('self.uri'),
             'localeId' : Code('self.MY_LOCALE')
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.fileUri, self.uri)
 assert_equal(res.data.fileType, self.FILE_TYPE)
 '''
@@ -153,24 +153,24 @@ assert_equal(res.data.fileType, self.FILE_TYPE)
             'fileUri' :  Code('self.uri'),
             'localeId' : Code('self.MY_LOCALE')
         },
-        custom_test_check = '''
+        customTestCheck='''
 resp_lines_count = len(res.decode('utf-8').split('\\n'))
 file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").read().decode('utf-8').split('\\n') )
 assert_equal(resp_lines_count, file_lines_count)
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
     'downloadTranslatedFilesAllLocales' : TestData(
         {
             'fileUri' :  Code('self.uri'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 zfile = self.getZipFile(res)
 names = zfile.namelist()
 assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
     'downloadMultipleTranslatedFiles' : TestData(
@@ -178,7 +178,7 @@ assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
             'fileUris' : Code('[self.uri,self.uri16]'),
             'localeIds': Code("[self.MY_LOCALE, 'zh-TW']"),
         },
-        custom_test_check = '''
+        customTestCheck='''
 zfile = self.getZipFile(res)
 names = zfile.namelist()
 assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
@@ -186,14 +186,14 @@ assert_equal(True, self.MY_LOCALE+'/'+self.uri16 in names)
 assert_equal(True, 'zh-TW'+'/'+self.uri in names)
 assert_equal(True, 'zh-TW'+'/'+self.uri16 in names)
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
     'getRecentlyUploadedSourceFilesList' : TestData(
         {
             'fileTypes' : Code('[FileTypes.android, FileTypes.javaProperties]')
         },
-        custom_test_check = '''
+        customTestCheck='''
 uris = [x['fileUri'] for x in res.data.items]
 assert_equal(True, self.uri in uris)
 assert_equal(True, self.uri16 in uris)
@@ -203,7 +203,7 @@ assert_equal(True, self.uri16 in uris)
     'getFileTypesList' : TestData(
         {
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, "javaProperties" in res.data.items)
 '''
     ),
@@ -214,7 +214,7 @@ assert_equal(True, "javaProperties" in res.data.items)
             'newFileUri' :  Code('self.uri_to_rename'),
 
         },
-        custom_test_check = '''
+        customTestCheck='''
 res, status = self.files_api.renameUploadedSourceFile(self.uri_to_rename, self.uri) #rename it back so in the end it could be removed
 '''
     ),
@@ -226,7 +226,7 @@ res, status = self.files_api.renameUploadedSourceFile(self.uri_to_rename, self.u
             'localeId' : Code('self.MY_LOCALE')
 
         },
-        custom_test_check = '''
+        customTestCheck='''
 lm_date = res.data.lastModified[:10]
 assert_equal(lm_date,  date.today().isoformat())
 '''
@@ -237,7 +237,7 @@ assert_equal(lm_date,  date.today().isoformat())
             'fileUri' :  Code('self.uri'),
 
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, len(res.data.items) > 0)
 for l in res.data.items:
     if l['localeId'] == self.MY_LOCALE:
@@ -255,7 +255,7 @@ for l in res.data.items:
             'translationState' : 'PUBLISHED',
         },
         ['res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)'],
-        custom_test_check = '''
+        customTestCheck='''
 
 assert_equal(res.data.wordCount, 2)
 assert_equal(res.data.stringCount, 2)
@@ -274,13 +274,13 @@ assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
             'localeId' : Code('self.MY_LOCALE'),
             'file' : Code('self.FILE_PATH+self.FILE_NAME'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, res is not None)
 resp_lines_count = len(res.split(newline))
 file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").readlines() )
 assert_equal(resp_lines_count, file_lines_count)
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
     'getRecentlyPublishedFilesList' : TestData(
@@ -288,7 +288,7 @@ assert_equal(resp_lines_count, file_lines_count)
             'publishedAfter': Code('datetime.datetime.fromtimestamp(time.time()-10*24*2600).strftime("%Y-%m-%d")'),
             'localeIds' :  Code('[self.MY_LOCALE]'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, hasattr(res.data, 'items'))
 '''
     ),

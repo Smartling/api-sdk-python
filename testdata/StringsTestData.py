@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,24 +15,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     'addStringsToProject',
     'getAddStringsToProjectRequestStatus',
     'getAllSourceStringsByProject',
     'getAllTranslationsByProject',
 ]
 
-extra_initializations = '''
+extraInitializations = '''
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'stg'
 
-test_decortators = {
+testDecorators = {
     'addStringsToProject':TestData(
         {
             'strings' : Code('''[
@@ -80,7 +80,7 @@ test_decortators = {
             "self.hashcode_0 = res.data.items[0]['hashcode']",
             "self.hashcode_1 = res.data.items[1]['hashcode']",
         ],
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.wordCount, 18)
 assert_equal(res.data.stringCount, 4)
 stringTexts = [res.data.items[0]['stringText'], res.data.items[1]['stringText']]
@@ -91,7 +91,7 @@ assert_equal(True, 'Another Strings API test from python api sdk' in stringTexts
 
     'getAddStringsToProjectRequestStatus': TestData(
         {'processUid':Code('self.processUid')},
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.processUid, self.processUid)
 assert_equal(res.data.processStatistics['requested'], 4)
 assert_equal(res.data.processStatistics['errored'], 0)
@@ -100,7 +100,7 @@ assert_equal(res.data.processStatistics['errored'], 0)
 
     'getAllSourceStringsByProject': TestData(
         {'hashcodes':Code('[self.hashcode_0,self.hashcode_1]')},
-         custom_test_check = '''
+         customTestCheck='''
 assert_equal(res.data.totalCount, 2)
 stringTexts = [res.data.items[0]['stringText'], res.data.items[1]['stringText']]
 assert_equal(True, 'Strings API test from python api sdk' in stringTexts)
@@ -113,7 +113,7 @@ assert_equal(True, 'Another Strings API test from python api sdk' in stringTexts
             'hashcodes':Code('[self.hashcode_0,self.hashcode_1]'),
             'targetLocaleId': 'zh-TW'
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.totalCount, 0)
 '''
     ),

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     "generateJobFuzzyEstimateReports",
     "getJobFuzzyEstimateReports",
     "generateJobCostEstimateReports",
@@ -32,14 +32,14 @@ tests_order = [
     "deleteJobEstimateReport",
 ]
 
-tear_down = '''
+tearDown = '''
         self.jobs_api.cancelJob(self.test_job_uid, 'test reason')
         self.jobs_api.deleteJob(translationJobUid=self.test_job_uid)
 '''
 
 imports = "from api.JobsApi import JobsApi"
 
-extra_initializations = '''
+extraInitializations = '''
         self.addTestJob(proxySettings)
         self.addStringsToJob()
 
@@ -47,7 +47,7 @@ extra_initializations = '''
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
          
     def addTestJob(self, proxySettings):
-        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+        self.jobs_api = JobsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='prod')
         self.jobname = 'test_job_'+str(int(time.time()))
         jobName=self.jobname
         targetLocaleIds=["zh-TW",]
@@ -68,16 +68,16 @@ extra_initializations = '''
         res, status = self.jobs_api.addStringsToJob(translationJobUid=translationJobUid, hashcodes=hashcodes, moveEnabled=moveEnabled, targetLocaleIds=targetLocaleIds)
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'prod'
 
 
-test_decortators = {
+testDecorators = {
 
     'getJobFuzzyEstimateReports':TestData(
         {
             'translationJobUid' : Code('self.test_job_uid')
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.totalCount, 1)
 assert_equal(res.data.items[0]['translationJobUid'], self.test_job_uid)
 
@@ -90,7 +90,7 @@ assert_equal(res.data.items[0]['translationJobUid'], self.test_job_uid)
             'contentType' : 'JOB_CONTENT_ALL_CONTENT',
             'tags': ['some','tags'],
         },
-        custom_test_check = '''
+        customTestCheck='''
 self.report_uid = res.data.reportUid
 assert_equal(res.data.reportType, 'FUZZY')
 assert_equal(res.data.reportStatus, 'PENDING')
@@ -112,8 +112,8 @@ assert_equal(res.data.reportStatus, 'PENDING')
             'localeWorkflows': Code(' [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]'),
             'fuzzyProfileUid' : '624e06b333af',
         },
-        custom_test_check = '''
-assert_equal(res.data.reportType, 'FUZZY')
+        customTestCheck='''
+assert_equal(True, res.data.reportType in ('FUZZY','COST'))
 assert_equal(True, res.data.reportStatus in ('PENDING'))
 '''
     ),
@@ -122,7 +122,7 @@ assert_equal(True, res.data.reportStatus in ('PENDING'))
         {
             'reportUid' : Code('self.report_uid'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED'))
 '''
     ),
@@ -131,7 +131,7 @@ assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED
         {
             'reportUid' : Code('self.report_uid'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED'))
 '''
     ),
@@ -141,7 +141,7 @@ assert_equal(True, res.data.reportStatus in ('PENDING', 'PROCESSING', 'COMPLETED
             'reportUid' : Code('self.report_uid'),
             'tags': ['tags','remodeling'],
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.tags[0], 'tags')
 assert_equal(res.data.tags[1], 'remodeling')
 '''
@@ -155,10 +155,10 @@ assert_equal(res.data.tags[1], 'remodeling')
             'format' : 'csv'
         },
         [],
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, res.decode('utf-8').startswith('Project Name,Job Name,'))
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,21 +15,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
-class TestData:
-    def __init__(self, fields, pre = [], post = [], custom_test_check = '', is_apiv2_response = True):
-        self.fields = fields
-        self.pre_calls = pre
-        self.post_calls = post
-        self.custom_test_check = custom_test_check
-        self.is_apiv2_response = is_apiv2_response
+"""
 
-exampleHeader="""
+
+class TestData:
+    def __init__(self, fields, pre = [], post = [], customTestCheck ='', isApiV2Response = True):
+        self.fields = fields
+        self.preCalls = pre
+        self.postCalls = post
+        self.customTestCheck = customTestCheck
+        self.is_apiv2_response = isApiV2Response
+
+COPYRIGHT_HEADER = '''
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -42,8 +44,10 @@ exampleHeader="""
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+"""
 '''
 
+EXAMPLE_HEADER= COPYRIGHT_HEADER + """
 import os
 import sys
 import time, datetime
@@ -97,7 +101,8 @@ class test{API_NAME}(object):
 
         print("setUp", "OK", "\\n")
 """
-exampleFooter = """
+
+EXAMPLE_FOOTER = """
 def example():
     t = test{API_NAME}()
     t.setUp()
@@ -107,7 +112,7 @@ def example():
 example()
 """
 
-testsFooter = """
+TESTS_FOOTER = """
     def test_all(self):
         t = self
         %s

@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import os
 import sys
@@ -72,14 +72,14 @@ class testTagsApi(object):
 
 
     def checkGetTagsListByProject(self):
-        '''
+        """
             method  :  GET
             api url :  /tags-api/v2/projects/{projectId}/tags
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/tags
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getTagsListByProject
-        '''
+        """
         res, status = self.tags_api.getTagsListByProject()
 
 
@@ -91,14 +91,14 @@ class testTagsApi(object):
 
 
     def checkGetAllTagsForStrings(self):
-        '''
+        """
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/search
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/search
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getAllTagsForStrings
-        '''
+        """
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.getAllTagsForStrings(stringHashcodes=stringHashcodes)
 
@@ -112,14 +112,14 @@ class testTagsApi(object):
 
 
     def checkAddTagToStrings(self):
-        '''
+        """
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/add
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/add
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/addTagToStrings
-        '''
+        """
         tags=['Uno', 'Dos']
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.addTagToStrings(tags=tags, stringHashcodes=stringHashcodes)
@@ -133,14 +133,14 @@ class testTagsApi(object):
 
 
     def checkRemoveTagsFromStrings(self):
-        '''
+        """
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/remove
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/removeTagsFromStrings
-        '''
+        """
         tags=['Uno', 'Dos']
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.removeTagsFromStrings(tags=tags, stringHashcodes=stringHashcodes)
@@ -154,14 +154,14 @@ class testTagsApi(object):
 
 
     def checkAddTagToStrings(self):
-        '''
+        """
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/add
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/add
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/addTagToStrings
-        '''
+        """
         tags=['Uno', 'Dos']
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.addTagToStrings(tags=tags, stringHashcodes=stringHashcodes)
@@ -175,14 +175,14 @@ class testTagsApi(object):
 
 
     def checkRemoveAllTagsFromStrings(self):
-        '''
+        """
             method  :  POST
             api url :  /tags-api/v2/projects/{projectId}/strings/tags/remove/all
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringTagJSON" https://api.smartling.com/tags-api/v2/projects/$smartlingProjectId/strings/tags/remove/all
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/removeAllTagsFromStrings
-        '''
+        """
         stringHashcodes=['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here
         res, status = self.tags_api.removeAllTagsFromStrings(stringHashcodes=stringHashcodes)
 

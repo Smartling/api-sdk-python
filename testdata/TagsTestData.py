@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+ """
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     'getTagsListByProject',
     'getAllTagsForStrings',
     'addTagToStrings',
@@ -29,16 +29,16 @@ tests_order = [
     'removeAllTagsFromStrings'
 ]
 
-extra_initializations = '''
+extraInitializations = '''
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'stg'
 
-test_decortators = {
+testDecorators = {
     'getTagsListByProject':TestData(
         {
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, hasattr(res.data, 'items'))
 '''
     ),
@@ -47,7 +47,7 @@ assert_equal(True, hasattr(res.data, 'items'))
        {
            'stringHashcodes' : Code("['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here")
        },
-       custom_test_check = '''
+       customTestCheck='''
 assert_equal(True, hasattr(res.data, 'items'))
 assert_equal('e1159037badca0a2a618f62c50eff1bb', res.data.items[0]['stringHashcode'])
 '''
@@ -58,7 +58,7 @@ assert_equal('e1159037badca0a2a618f62c50eff1bb', res.data.items[0]['stringHashco
            'stringHashcodes' : Code("['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here"),
            'tags' : Code("['Uno', 'Dos']")
        },
-       custom_test_check = '''
+       customTestCheck='''
 assert_equal([], res.errors)
 '''
    ),
@@ -68,7 +68,7 @@ assert_equal([], res.errors)
            'stringHashcodes' : Code("['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here"),
            'tags' : Code("['Uno', 'Dos']")
        },
-       custom_test_check = '''
+       customTestCheck='''
 assert_equal([], res.errors)
 '''
    ),
@@ -77,7 +77,7 @@ assert_equal([], res.errors)
     {
        'stringHashcodes' : Code("['e1159037badca0a2a618f62c50eff1bb', ] # use your string hashcodes list here"),
     },
-       custom_test_check = '''
+       customTestCheck='''
 assert_equal([], res.errors)
 '''
    ),

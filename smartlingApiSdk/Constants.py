@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,9 +15,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 #constants for File API
+
 
 class Params:
     allowedRetrievalTypes = ('pending', 'published', 'pseudo', 'contextMatchingInstrumented')
@@ -49,11 +50,13 @@ class Uri:
     IMPORT = base + 'import'
     LAST_MODIFIED = base + 'last_modified'
 
+
 class ReqMethod:
     POST   = "POST"
     GET    = "GET"
     DELETE = "DELETE"
     PUT    = "PUT"
+
 
 class FileTypes:
     android        = "android"

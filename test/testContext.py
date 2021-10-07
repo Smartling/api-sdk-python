@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import os
 import sys
@@ -72,7 +72,7 @@ class testContextApi(object):
 
 
     def checkUploadNewVisualContext(self):
-        '''
+        """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -F "content=@context1.png;type=image/png" -F "name=context1.png" "https://api.smartling.com/context-api/v2/projects/$smartlingProjectId/contexts"
@@ -80,7 +80,7 @@ class testContextApi(object):
                 200 : OK
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/uploadNewVisualContext
-        '''
+        """
         name='https://www.youtube.com/watch?v=0lJykuiS_9s'
         res, status = self.context_api.uploadNewVisualContext(name=name)
 
@@ -98,13 +98,13 @@ class testContextApi(object):
 
 
     def checkGetVisualContextsListByProject(self):
-        '''
+        """
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getVisualContextsListByProject
-        '''
+        """
         res, status = self.context_api.getVisualContextsListByProject()
 
 
@@ -117,14 +117,14 @@ class testContextApi(object):
 
 
     def checkGetVisualContextInfo(self):
-        '''
+        """
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
             Responses:
                 200 : OK
                 404 : Context not found
             details :  https://api-reference.smartling.com/#operation/getVisualContextInfo
-        '''
+        """
         contextUid=self.context_uid
         res, status = self.context_api.getVisualContextInfo(contextUid=contextUid)
 
@@ -138,14 +138,14 @@ class testContextApi(object):
 
 
     def checkDownloadVisualContextFileContent(self):
-        '''
+        """
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/content
             Responses:
                 200 : OK
                 404 : Context not found
             details :  https://api-reference.smartling.com/#operation/downloadVisualContextFileContent
-        '''
+        """
         contextUid=self.context_uid_img
         res, status = self.context_api.downloadVisualContextFileContent(contextUid=contextUid)
 
@@ -156,14 +156,14 @@ class testContextApi(object):
 
 
     def checkRunAutomaticContextMatching(self):
-        '''
+        """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
             Responses:
                 202 : ACCEPTED
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/runAutomaticContextMatching
-        '''
+        """
         contextUid=self.context_uid_img
         contentFileUri=''
         stringHashcodes=''
@@ -179,14 +179,14 @@ class testContextApi(object):
 
 
     def checkUploadAndMatchVisualContext(self):
-        '''
+        """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/upload-and-match-async
             Responses:
                 202 : ACCEPTED
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
-        '''
+        """
         content='../resources/ctx_api_test.png'
         res, status = self.context_api.uploadAndMatchVisualContext(content=content)
 
@@ -199,14 +199,14 @@ class testContextApi(object):
 
 
     def checkGetAsyncContextMatchResults(self):
-        '''
+        """
             method  :  GET
             api url :  /context-api/v2/projects/{projectId}/match/{matchId}
             Responses:
                 200 : OK
                 404 : Match request expired or does not exist
             details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
-        '''
+        """
         matchId=self.match_id_upl_n_match
         res, status = self.context_api.getAsyncContextMatchResults(matchId=matchId)
 
@@ -218,14 +218,14 @@ class testContextApi(object):
 
 
     def checkCreateStringToContextBindings(self):
-        '''
+        """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
             Responses:
                 200 : OK
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/createStringToContextBindings
-        '''
+        """
         bindings=[{'contextUid': self.context_uid, 'stringHashcode': 'ede6083ebd2594ca4e557612aaa05b2e'},
              {'contextUid': self.context_uid_img, 'stringHashcode': '4f25feab674accf572433f22dc516e2e'}]
         res, status = self.context_api.createStringToContextBindings(bindings=bindings)
@@ -243,14 +243,14 @@ class testContextApi(object):
 
 
     def checkGetBindings(self):
-        '''
+        """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
             Responses:
                 200 : OK
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/getBindings
-        '''
+        """
         stringHashcodes=['ede6083ebd2594ca4e557612aaa05b2e', '4f25feab674accf572433f22dc516e2e']
         contentFileUri=''
         contextUid=''
@@ -267,14 +267,14 @@ class testContextApi(object):
 
 
     def checkDeleteBindings(self):
-        '''
+        """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove
             Responses:
                 200 : OK
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/deleteBindings
-        '''
+        """
         stringHashcodes=[]
         contentFileUri=''
         contextUid=''
@@ -290,14 +290,14 @@ class testContextApi(object):
 
 
     def checkDeleteVisualContext(self):
-        '''
+        """
             method  :  DELETE
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}
             Responses:
                 200 : OK
                 404 : Context not found
             details :  https://api-reference.smartling.com/#operation/deleteVisualContext
-        '''
+        """
         contextUid=self.context_uid
         res, status = self.context_api.deleteVisualContext(contextUid=contextUid)
 
