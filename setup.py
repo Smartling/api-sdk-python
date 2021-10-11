@@ -30,7 +30,7 @@ setup(
     keywords='translation localization internationalization',
     url="https://docs.smartling.com/display/docs/Files+API",
     long_description="python SDK to work with Smartling API for file translation",
-    packages=['smartlingApiSdk', "simplejson24", "example", "test", "testdata", "builder", "api", "resources"],
+    packages=['smartlingApiSdk', "simplejson24", "example", "test", "testdata", "builder", "smartlingApi", "resources"],
     include_package_data = True,
     package_data = {
         '': ['*.properties', '*.xml', '*.png', '*.csv'],
