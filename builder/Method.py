@@ -108,7 +108,7 @@ class Method(ApiCore):
         return result
 
     def buildDoc(self):
-        commentMarker = self.indent2 + "'''"
+        commentMarker = self.indent2 + '"""'
         docLines = [
             commentMarker,
             self.indent3 + 'method  :  ' + self.method.upper(),

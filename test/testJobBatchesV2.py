@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import os
 import sys
@@ -72,7 +72,7 @@ class testJobBatchesV2Api(object):
 
 
     def checkCreateJobBatchV2(self):
-        '''
+        """
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches
             as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"]}'
@@ -80,7 +80,7 @@ class testJobBatchesV2Api(object):
                 200 : OK
                 404 : provided translationJobUid is not found in the TMS
             details :  https://api-reference.smartling.com/#operation/createJobBatchV2
-        '''
+        """
         self.file_uri = "java.properties.jb2.%d" % time.time()
         authorize=False
         translationJobUid="c4e4b14773bd"  #use real batch job here
@@ -95,28 +95,28 @@ class testJobBatchesV2Api(object):
 
 
     def checkGetJobBatchesListV2(self):
-        '''
+        """
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches
             as curl :  curl -X GET \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches?translationJobUid={translationJobUid}&status={status}&sortBy=createdDate&orderBy=desc&offset=0&limit=20' \-H "Authorization: Bearer $smartlingToken"
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getJobBatchesListV2
-        '''
+        """
         res, status = self.job_batches_v2_api.getJobBatchesListV2()
 
         print('getJobBatchesListV2', 'OK')
 
 
     def checkGetJobBatchStatusV2(self):
-        '''
+        """
             method  :  GET
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
             Responses:
                 200 : OK
                 404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/getJobBatchStatusV2
-        '''
+        """
         batchUid=self.batch_uid
         res, status = self.job_batches_v2_api.getJobBatchStatusV2(batchUid=batchUid)
 
@@ -126,7 +126,7 @@ class testJobBatchesV2Api(object):
 
 
     def checkUploadFileToJobBatchV2(self):
-        '''
+        """
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}/file
             as curl :  curl -X POST \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/{batchUid}/file' \-H "Authorization: Bearer $smartlingToken" \-F "file=@file.properties;type=text/plain" \-F "fileUri=file.properties" \-F "fileType=javaProperties" \-F "localeIdsToAuthorize[]=fr-FR" \-F "localeIdsToAuthorize[]=ru-RU"
@@ -134,7 +134,7 @@ class testJobBatchesV2Api(object):
                 202 : ACCEPTED
                 404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
-        '''
+        """
         batchUid=self.batch_uid
         file='../resources/java.properties'
         fileUri=self.file_uri
@@ -150,7 +150,7 @@ class testJobBatchesV2Api(object):
 
 
     def checkProcessBatchActionV2(self):
-        '''
+        """
             method  :  PUT
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
             as curl :  curl -X PUT \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/$batchUid' \-H "Authorization: Bearer $smartlingToken" \-H "Content-Type: application/json" \-d '{ "action": "CANCEL_FILE", "fileUri": "file1.xml", "reason": "Requested asset doesn't exist in Zendesk" }'
@@ -158,7 +158,7 @@ class testJobBatchesV2Api(object):
                 200 : SUCCESS
                 404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/processBatchActionV2
-        '''
+        """
         batchUid=self.batch_uid
         action='CANCEL_FILE'
         fileUri='file_to_cancel_later'

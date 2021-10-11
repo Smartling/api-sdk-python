@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import os
 import sys
@@ -72,14 +72,14 @@ class testAccountProjectsApi(object):
 
 
     def checkGetProjectsByAccount(self):
-        '''
+        """
             method  :  GET
             api url :  /accounts-api/v2/accounts/{accountUid}/projects
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/projects
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getProjectsByAccount
-        '''
+        """
         accountUid=self.MY_ACCOUNT_UID
         res, status = self.account_projects_api.getProjectsByAccount(accountUid=self.MY_ACCOUNT_UID)
 
@@ -97,14 +97,14 @@ class testAccountProjectsApi(object):
 
 
     def checkGetProjectDetails(self):
-        '''
+        """
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}
             as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getProjectDetails
-        '''
+        """
         res, status = self.account_projects_api.getProjectDetails()
 
 
@@ -118,13 +118,13 @@ class testAccountProjectsApi(object):
 
 
     def checkAddLocaleToProject(self):
-        '''
+        """
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/targetLocales
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/addLocaleToProject
-        '''
+        """
         defaultWorkflowUid='748398939979'
         localeId='es-MX'
         res, status = self.account_projects_api.addLocaleToProject(defaultWorkflowUid=defaultWorkflowUid, localeId=localeId)
@@ -142,13 +142,13 @@ class testAccountProjectsApi(object):
 
 
     def checkCopyProject(self):
-        '''
+        """
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/copy
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/copyProject
-        '''
+        """
         projectName='python SDK test'
         targetLocaleIds=['es-MX', 'zh-TW']
         res, status = self.account_projects_api.copyProject(projectName=projectName, targetLocaleIds=targetLocaleIds)
@@ -163,13 +163,13 @@ class testAccountProjectsApi(object):
 
 
     def checkGetProjectCopyRequestStatus(self):
-        '''
+        """
             method  :  GET
             api url :  /projects-api/v2/projects/{projectId}/copy/{processUid}
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getProjectCopyRequestStatus
-        '''
+        """
         processUid=self.copy_process_uid
         res, status = self.account_projects_api.getProjectCopyRequestStatus(processUid=processUid)
 

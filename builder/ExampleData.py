@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,7 +15,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
+
+
 class TestData:
     def __init__(self, fields, pre = [], post = [], customTestCheck ='', isApiV2Response = True):
         self.fields = fields
@@ -24,12 +26,12 @@ class TestData:
         self.customTestCheck = customTestCheck
         self.is_apiv2_response = isApiV2Response
 
-EXAMPLE_HEADER= """
+COPYRIGHT_HEADER = '''
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -42,8 +44,10 @@ EXAMPLE_HEADER= """
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+"""
 '''
 
+EXAMPLE_HEADER= COPYRIGHT_HEADER + """
 import os
 import sys
 import time, datetime
@@ -97,6 +101,7 @@ class test{API_NAME}(object):
 
         print("setUp", "OK", "\\n")
 """
+
 EXAMPLE_FOOTER = """
 def example():
     t = test{API_NAME}()

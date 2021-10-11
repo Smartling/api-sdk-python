@@ -20,7 +20,7 @@
 import importlib
 from builder.Parameters import MultipartProperty
 from builder.Method import Method
-from builder.ExampleData import EXAMPLE_HEADER, EXAMPLE_FOOTER, TESTS_FOOTER
+from builder.ExampleData import EXAMPLE_HEADER, EXAMPLE_FOOTER, TESTS_FOOTER, COPYRIGHT_HEADER
 
 
 class ApiSource():
@@ -66,7 +66,10 @@ class ApiSource():
                 m.parameters.insert(1, p)
 
     def build(self):
-        header = '''from smartlingApiSdk.ApiV2 import ApiV2
+
+        header = COPYRIGHT_HEADER + '''
+
+from smartlingApiSdk.ApiV2 import ApiV2
 
 class %sApi(ApiV2):
 

@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 import os
 import sys
@@ -72,7 +72,7 @@ class testStringsApi(object):
 
 
     def checkAddStringsToProject(self):
-        '''
+        """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
@@ -80,7 +80,7 @@ class testStringsApi(object):
                 200 : OK
                 202 : ACCEPTED
             details :  https://api-reference.smartling.com/#operation/addStringsToProject
-        '''
+        """
         strings=[
                 {
                     "stringText": "Strings API test from python api sdk",
@@ -136,14 +136,14 @@ class testStringsApi(object):
 
 
     def checkGetAddStringsToProjectRequestStatus(self):
-        '''
+        """
             method  :  GET
             api url :  /strings-api/v2/projects/{projectId}/processes/{processUid}
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/processes/$processUid
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getAddStringsToProjectRequestStatus
-        '''
+        """
         processUid=self.processUid
         res, status = self.strings_api.getAddStringsToProjectRequestStatus(processUid=processUid)
 
@@ -158,14 +158,14 @@ class testStringsApi(object):
 
 
     def checkGetAllSourceStringsByProject(self):
-        '''
+        """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/source-strings
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G -d "fileUri=$smartlingFileUri" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/source-strings
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getAllSourceStringsByProject
-        '''
+        """
         hashcodes=[self.hashcode_0,self.hashcode_1]
         res, status = self.strings_api.getAllSourceStringsByProject(hashcodes=hashcodes)
 
@@ -181,14 +181,14 @@ class testStringsApi(object):
 
 
     def checkGetAllTranslationsByProject(self):
-        '''
+        """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/translations
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -G https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId/translations
             Responses:
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/getAllTranslationsByProject
-        '''
+        """
         targetLocaleId='zh-TW'
         hashcodes=[self.hashcode_0,self.hashcode_1]
         res, status = self.strings_api.getAllTranslationsByProject(targetLocaleId=targetLocaleId, hashcodes=hashcodes)
