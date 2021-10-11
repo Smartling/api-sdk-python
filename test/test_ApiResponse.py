@@ -35,7 +35,7 @@ class test_ApiResponse(object):
     def test_ApiResponse_status(self):
         ar = ApiResponse(self.JSON_STATUS, "200")
 
-        assert_equal(ar.statusСode, "200")
+        assert_equal(ar.statusCode, "200")
         assert_equal(ar.code, "SUCCESS")
         assert_equal(ar.messages, [])
 
