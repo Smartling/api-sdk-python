@@ -25,7 +25,7 @@ import time, datetime
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from api.AccountProjectsApi import AccountProjectsApi
+from smartlingApi.AccountProjectsApi import AccountProjectsApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 

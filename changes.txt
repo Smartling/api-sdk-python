@@ -1,3 +1,11 @@
+Oct 11, 2021 - 3.0.1
+    - renamed api directory into less generic smartlingApi
+    - this file is updated
+
+Oct 11, 2021 - 3.0.0
+    - major release with multiple APIs added
+    - APIs + examples are generated from swagger file
+
 Feb 03, 2020 - 2.2.3
     - fix in ApiClient
     - HttpClient support for python3 versions < 3.4.3

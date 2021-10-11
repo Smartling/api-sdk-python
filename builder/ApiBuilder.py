@@ -55,7 +55,7 @@ class ApiBuilder:
 
     def build(self):
         built = self.apisrc.build()
-        outPath = '../api/%sApi.py' % self.api_name
+        outPath = '../smartlingApi/%sApi.py' % self.api_name
         open(outPath, 'w').write(built)
         print (built)
         return self  # Allow tagged calls : build().buildExample().buildTest()

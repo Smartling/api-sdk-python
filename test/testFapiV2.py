@@ -28,7 +28,7 @@ from nose.tools import assert_equal
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from api.FilesApi import FilesApi
+from smartlingApi.FilesApi import FilesApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.version import version
 from smartlingApiSdk.Credentials import Credentials
