@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     'createJobBatchV2',
     'getJobBatchesListV2',
     'getJobBatchStatusV2',
@@ -28,12 +28,12 @@ tests_order = [
     'processBatchActionV2',
 ]
 
-extra_initializations = '''
+extraInitializations = '''
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'stg'
 
-test_decorators = {
+testDecorators = {
 'createJobBatchV2':TestData(
     {
         'authorize' : False,

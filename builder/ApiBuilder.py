@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,8 +15,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
-import os, sys
+ """
+
+import os
+import sys
 
 sys.path.append(os.path.abspath('../'))
 isPython3 = sys.version_info[:2] >= (3, 0)
@@ -34,44 +36,43 @@ class ApiBuilder:
     builds api based in openapi description for specific Api family defined as full_name
     """
 
-    def __init__(self, full_name):
-        self.api_name = full_name.replace(' ', '').replace('&', '')
+    def __init__(self, fullName):
+        self.api_name = fullName.replace(' ', '').replace('&', '')
         json_dict = self.getApiJson()
-        self.apisrc = ApiSource(full_name, self.api_name)
+        self.apisrc = ApiSource(fullName, self.api_name)
         self.apisrc.collectMethods(json_dict)
 
     def getApiJson(self):
-        http_loader = HttpClient('api-reference.smartling.com')
-        response_data, status_code, headers = http_loader.getHttpResponseAndStatus('GET', '/swagger.json', {})
-        if 200 != status_code:
+        httpLoader = HttpClient('api-reference.smartling.com')
+        responseData, statusCode, headers = httpLoader.getHttpResponseAndStatus('GET', '/swagger.json', {})
+        if 200 != statusCode:
             raise Exception('Can not load openapi description')
         if isPython3:
-            response_data = response_data.decode('utf8')
-        open("openapi3.json", 'w').write(response_data)
-        json_string = response_data
-        json_dict = json.loads(json_string, object_pairs_hook=collections.OrderedDict)
-        return json_dict
+            responseData = responseData.decode('utf8')
+        open("openapi3.json", 'w').write(responseData)
+        jsonString = responseData
+        return json.loads(jsonString, object_pairs_hook=collections.OrderedDict)
 
     def build(self):
         built = self.apisrc.build()
-        out_path = '../api/%sApi.py' % self.api_name
-        open(out_path, 'w').write(built)
+        outPath = '../api/%sApi.py' % self.api_name
+        open(outPath, 'w').write(built)
         print (built)
         return self  # Allow tagged calls : build().buildExample().buildTest()
 
     def buildExample(self):
         built = self.apisrc.buildExample()
 
-        out_path = '../example/%sExample.py' % self.api_name
-        open(out_path, 'w').write(built)
+        outPath = '../example/%sExample.py' % self.api_name
+        open(outPath, 'w').write(built)
         print (built)
         return self  # Allow tagged calls : build().buildExample().buildTest()
 
     def buildTest(self):
         built = self.apisrc.buildTest()
 
-        out_path = '../test/test%s.py' % self.api_name
-        open(out_path, 'w').write(built)
+        outPath = '../test/test%s.py' % self.api_name
+        open(outPath, 'w').write(built)
         print (built)
         return self  # Allow tagged calls : build().buildExample().buildTest()
 

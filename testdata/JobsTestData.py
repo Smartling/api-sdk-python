@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
    'addJob',
    'addLocaleToJob',
    'addStringsToJob',
@@ -51,7 +51,7 @@ tests_order = [
    'getJobsByAccount',
 ]
 
-extra_initializations = '''
+extraInitializations = '''
         # setUp code add-on #
         self.jobname = 'test_job_'+str(int(time.time()))
         self.deleteTestJobs()
@@ -74,7 +74,7 @@ extra_initializations = '''
 
 jobUidCode = Code('self.test_job_uid')
 
-test_decorators = {
+testDecorators = {
 'addJob':TestData(
     {
         'jobName' : Code('self.jobname'),
@@ -155,14 +155,14 @@ for fld in resp.data.items:
     },
     ['self.jobs_api.httpClient.ignore_errors=True'],
     ['self.jobs_api.httpClient.ignore_errors=False'],
-    custom_test_check = '''
+    customTestCheck='''
 if 400 == status:
     assert_equal(True, 'Field name must be unique within account' in str(res))
 else:
     assert_equal(True, status in [200,202])
     assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKED])
 ''',
-    is_apiv2_response = False,
+    isApiV2Response= False,
 ),
 
 'getJobProgress' :                     TestData({'translationJobUid':jobUidCode}),

@@ -39,7 +39,7 @@ class ObsoleteApiV1(FileApiBase):
 
         if (uploadData.directives):
             for index, directive in enumerate(uploadData.directives):
-                params[directive.sl_prefix + directive.name] = directive.value
+                params[directive.SL_PREFIX + directive.name] = directive.value
                 
         if (uploadData.localesToApprove):
             for index, locale in enumerate(uploadData.localesToApprove):

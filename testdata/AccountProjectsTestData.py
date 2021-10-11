@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     "getProjectsByAccount",
     "getProjectDetails",
     "addLocaleToProject",
@@ -28,16 +28,16 @@ tests_order = [
     "getProjectCopyRequestStatus",
 ]
 
-extra_initializations = '''
+extraInitializations = '''
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'stg'
 
-test_decorators = {
+testDecorators = {
     'getProjectsByAccount':TestData(
         {
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(True, res.data.totalCount > 0)
 project_name = ''
 for p in res.data.items:
@@ -50,7 +50,7 @@ assert_equal('test variants', project_name)
     'getProjectDetails':TestData(
         {
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.projectId, self.MY_PROJECT_ID)
 assert_equal(res.data.projectName, 'test variants')
 assert_equal(res.data.accountUid, self.MY_ACCOUNT_UID)
@@ -62,7 +62,7 @@ assert_equal(res.data.accountUid, self.MY_ACCOUNT_UID)
             'defaultWorkflowUid': '748398939979',
             'localeId':'es-MX',
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.projectId, self.MY_PROJECT_ID)
 assert_equal(res.data.projectName, 'test variants')
 assert_equal(res.data.accountUid, self.MY_ACCOUNT_UID)
@@ -77,7 +77,7 @@ assert_equal(True, 'es-MX' in locales)
         },
         [],
         ['self.copy_process_uid  = res.data.processUid'],
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.code, 'ACCEPTED')
 '''),
 
@@ -85,7 +85,7 @@ assert_equal(res.code, 'ACCEPTED')
         {
             'processUid': Code('self.copy_process_uid'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.processUid, self.copy_process_uid)
 assert_equal(True, res.data.processState in ['IN_PROGRESS','COMPLETED'])
 '''),

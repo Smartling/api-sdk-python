@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,69 +15,65 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+ """
 
-import json
-import collections
 import importlib
-from builder.Parameters import Parameter, MuptipartProperty
+from builder.Parameters import MultipartProperty
 from builder.Method import Method
 from builder.ExampleData import EXAMPLE_HEADER, EXAMPLE_FOOTER, TESTS_FOOTER
 
-class ApiSource():
-    def __init__(self, full_name, api_name, test_evnironment='prod'):
-        self.full_name = full_name
-        self.methods = []
-        self.api_name = api_name
-        self.api_name_underscore = full_name.replace(' ','_').replace('&','').replace('__','_').lower()
 
-    def collectMethods(self, opa_dict):
-        pt = opa_dict['paths']
-        all_tags = []
-        methods_to_build = []
-        for k,v  in opa_dict['paths'].items():
+class ApiSource():
+    def __init__(self, fullName, apiName):
+        self.fullName = fullName
+        self.methods = []
+        self.apiName = apiName
+        self.apiNameUnderscore = fullName.replace(' ', '_').replace('&', '').replace('__', '_').lower()
+
+    def collectMethods(self, swaggerDict):
+        toBuild = []
+        for k, v in swaggerDict['paths'].items():
             for method, descr in v.items():
-                if method == '$ref': continue
-                if methods_to_build and descr['operationId'] not in methods_to_build: #debug build for specific methods only
+                if method == '$ref':
                     continue
-                if self.full_name in descr['tags']:
-                    m = Method(self.api_name, self.api_name_underscore, k, method, descr, opa_dict)
-                    self.patchMethods(descr, m, opa_dict)
+                if toBuild and descr['operationId'] not in toBuild:  # Debug build for specific methods only
+                    continue
+                if self.fullName in descr['tags']:
+                    m = Method(self.apiName, self.apiNameUnderscore, k, method, descr, swaggerDict)
+                    self.patchMethods(descr, m, swaggerDict)
                     self.methods.append(m)
 
-    def patchMethods(self, descr, m, opa_dict):
+    def patchMethods(self, descr, m, swaggerDict):
         if descr['operationId'] == 'exportFileTranslations':
-            prop_dict = {
+            propDict = {
                 "type": "string",
                 "format": "binary",
                 "description": "The file contents to upload."
             }
-            mp = MuptipartProperty('file', prop_dict, opa_dict)
+            mp = MultipartProperty('file', propDict, swaggerDict)
             mp.setRequired()
-            m.need_multipart = True
-            m.mp_params.insert(0, mp)
+            m.needMultipart = True
+            m.multipartParameters.insert(0, mp)
         if descr['operationId'] in ('getAllSourceStringsByProject'):
             m.method = 'post'
-            m.is_json = True
+            m.isJson = True
         if descr['operationId'] in ('getAllTranslationsByProject'):
             m.method = 'post'
-            m.is_json = True
+            m.isJson = True
             if m.parameters[0]._name == 'hashcodes':
                 p = m.parameters[0]
                 del (m.parameters[0])
                 m.parameters.insert(1, p)
 
-
     def build(self):
-        rows = []
-        rows.append('from smartlingApiSdk.ApiV2 import ApiV2')
-        rows.append('')
-        rows.append('class %sApi(ApiV2):' % self.api_name)
-        rows.append('')
-        rows.append("    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):")
-        rows.append('        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)')
-        rows.append('')
+        header = '''from smartlingApiSdk.ApiV2 import ApiV2
 
+class %sApi(ApiV2):
+
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
+''' % self.apiName
+        rows = header.split('\n')
         for m in self.methods[:]:
             built = m.build()
             if built:
@@ -86,7 +82,6 @@ class ApiSource():
                 rows.append('')
         return '\n'.join(rows)
 
-
     def methodByName(self, name):
         for m in self.methods:
             if m.operationId == name:
@@ -94,63 +89,61 @@ class ApiSource():
         raise Exception("Can't find method:"+name)
 
     def buildExampleHeader(self):
-        #do dynamic imports based on apy_name
-        test_data_module = importlib.import_module('testdata.'+self.api_name+'TestData')
-        imports = getattr(test_data_module, 'imports', '')
-        extra_initializations = getattr(test_data_module, 'extra_initializations')
-        tear_down = getattr(test_data_module, 'tear_down', '')
-        tests_order = getattr(test_data_module, 'tests_order')
-        test_evnironment = getattr(test_data_module, 'test_evnironment', 'prod')
+        # Do dynamic imports based on apy_name
+        testDataModule = importlib.import_module('testdata.'+self.apiName+'TestData')
+        imports = getattr(testDataModule, 'imports', '')
+        extraInitializations = getattr(testDataModule, 'extraInitializations')
+        tearDown = getattr(testDataModule, 'tearDown', '')
+        testsOrder = getattr(testDataModule, 'testsOrder')
+        testEnvironment = getattr(testDataModule, 'testEnvironment', 'prod')
 
         hdr = EXAMPLE_HEADER
-        if 'stg' == test_evnironment:
+        if 'stg' == testEnvironment:
             hdr = hdr.replace('Credentials()', "Credentials('stg')")
             hdr = hdr.replace('proxySettings)', "proxySettings, env='stg')")
-        tear_down_marker = '        print("tearDown", "OK")'
-        hdr = hdr.replace(tear_down_marker, tear_down+tear_down_marker)
+        tearDownMarker = '        print("tearDown", "OK")'
+        hdr = hdr.replace(tearDownMarker, tearDown+tearDownMarker)
         hdr = hdr.replace("{EXTRA_IMPORTS}\n", imports)
-        hdr += extra_initializations
+        hdr += extraInitializations
 
-        return hdr, tests_order
-
+        return hdr, testsOrder
 
     def buildTestOrExample(self, footer, indent):
         rows = []
 
-        hdr, tests_order = self.buildExampleHeader()
+        hdr, testsOrder = self.buildExampleHeader()
 
-        api_name_api = self.api_name + "Api"
-        hdr = hdr.replace('{API_NAME}', api_name_api)
-        hdr = hdr.replace('{api_name}', self.api_name_underscore)
-        ftr = footer.replace('{API_NAME}', api_name_api)
+        apiNameApi = self.apiName + "Api"
+        hdr = hdr.replace('{API_NAME}', apiNameApi)
+        hdr = hdr.replace('{api_name}', self.apiNameUnderscore)
+        ftr = footer.replace('{API_NAME}', apiNameApi)
 
-        not_tested_calls = [m.operationId for m in self.methods]
-        not_tested_calls.insert(0, "'''")
-        not_tested_calls.insert(0, '# not covered by tests #')
+        notTestedCalls = [m.operationId for m in self.methods]
+        notTestedCalls.insert(0, "'''")
+        notTestedCalls.insert(0, '# not covered by tests #')
         rows.append(hdr)
-        test_calls = []
+        testCalls = []
 
-        for name in tests_order:
+        for name in testsOrder:
             m = self.methodByName(name)
-            if name in not_tested_calls: # test may occur twice in tests list
-                not_tested_calls.remove(name)
+            if name in notTestedCalls:  # Test may occur twice in tests list
+                notTestedCalls.remove(name)
 
             built = m.buildExample()
             capitalized = m.operationId[0].capitalize() + m.operationId[1:]
 
-            test_call = 't.check%s()' % capitalized
-            test_calls.append(test_call)
+            testCalls.append('t.check%s()' % capitalized)
 
             if built:
                 rows.append(built)
                 rows.append('')
 
-        not_tested_calls.append("'''")
-        if len(not_tested_calls) > 3:
-            test_calls += not_tested_calls
+        notTestedCalls.append("'''")
+        if len(notTestedCalls) > 3:
+            testCalls += notTestedCalls
 
-        newline_w_indent = '\n'+ '    ' * indent
-        rows.append(ftr % newline_w_indent.join(test_calls))
+        newlineWithIndent = '\n' + '    ' * indent
+        rows.append(ftr % newlineWithIndent.join(testCalls))
         return '\n'.join(rows)
 
     def buildExample(self):
@@ -158,4 +151,5 @@ class ApiSource():
 
     def buildTest(self):
         return self.buildTestOrExample(TESTS_FOOTER, indent=2)
+
 

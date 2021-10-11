@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,32 +15,38 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+ """
+
 
 class Code:
     def __init__(self, value):
         self.value = value
+
     def __str__(self):
         return self.value
 
-class ApiCore():
-    def __init__(self, opa_dict):
-        self.opa_dict = opa_dict
+
+class ApiCore:
+    def __init__(self, swaggerDict):
+        self.swaggerDict = swaggerDict
 
     def resolveRef(self, ref):
         if not ref.startswith('#/'):
             raise Exception('Unknown $ref:%s' % ref)
         pth = ref[2:].split('/')
-        dct = self.opa_dict
+        dct = self.swaggerDict
         lastname = ''
         for p in pth:
             dct = dct[p]
             lastname = p
         return dct, lastname
 
+
 class Parameter(ApiCore):
-    def __init__(self, param_dict, opa_dict):
-        ApiCore.__init__(self, opa_dict)
+    def __init__(self, param_dict, swaggerDict):
+        ApiCore.__init__(self, swaggerDict)
+        self._required = False
+        self._name = ""
         param_names = ['name', 'description', 'in', 'required', 'schema']
         self.processParams(param_names, param_dict)
         self._type = "string"
@@ -77,28 +83,31 @@ class Parameter(ApiCore):
         default = getattr(self, '_default', None)
         if default is None:
             default = "''"
-        if "string" == self._type and  default != "''":
-            default = "'"+default+"'"
+        if "string" == self._type and default != "''":
+            default = "'" + default + "'"
         if 'array' == self._type:
             return '[]'
-        if 'integer' == self._type and  default == "''":
+        if 'integer' == self._type and default == "''":
             return '0'
         return default
 
-class MuptipartProperty(Parameter):
-    def __init__(self, name, param_dict, opa_dict):
+
+class MultipartProperty(Parameter):
+    def __init__(self, name, paramDict, swaggerDict):
+        self._format = None
+        self._type = None
         param_names = ['description', 'format', 'type', 'default', 'example']
-        self.processParams(param_names, param_dict)
+        self.processParams(param_names, paramDict)
         self._required = False
-        self._name = name.replace('[]','').split(' ')[0]
-        self.is_request_body = False
-        self.opa_dict = opa_dict
+        self._name = name.replace('[]', '').split(' ')[0]
+        self.isRequestBody = False
+        self.swaggerDict = swaggerDict
 
     def setRequired(self):
         self._required = True
 
     def __str__(self):
         if self._format:
-            return "%s : %s-%s"  % (self._name, self._type, self._format)
+            return "%s : %s-%s" % (self._name, self._type, self._format)
         return "%s : %s" % (self._name, self._type)
 

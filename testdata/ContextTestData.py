@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,12 +15,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limit
- '''
+"""
 
 from builder.Parameters import Code
 from builder.ExampleData import TestData
 
-tests_order = [
+testsOrder = [
     'uploadNewVisualContext',
     'getVisualContextsListByProject',
     'getVisualContextInfo',
@@ -34,53 +34,53 @@ tests_order = [
     'deleteVisualContext',
 ]
 
-extra_initializations = '''
+extraInitializations = '''
 '''
 
-test_evnironment = 'stg'
+testEnvironment = 'stg'
 
-video_url = 'https://www.youtube.com/watch?v=0lJykuiS_9s'
+videoUrl = 'https://www.youtube.com/watch?v=0lJykuiS_9s'
 
-strings_added = [
+stringsAdded = [
     {"hashcode":"ede6083ebd2594ca4e557612aaa05b2e","stringText":"Usability Testing","parsedStringText":"Usability Testing"},
     {"hashcode":"4f25feab674accf572433f22dc516e2e","stringText":"Service","parsedStringText":"Service"},
     {"hashcode":"b60df7845b7a3755fa00a833a31fa91e","stringText":"Design for Context","parsedStringText":"Design for Context"}
 ]
 
-test_decorators = {
+testDecorators = {
     'uploadNewVisualContext':TestData(
         {
-            'name' : video_url
+            'name' : videoUrl
         },
         [],
         [
             'self.context_uid = res.data.contextUid',
         ],
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.contextType, 'VIDEO')
 assert_equal(res.data.name, '%s')
 
 res_img, status = self.context_api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
 self.context_uid_img = res_img.data.contextUid
-''' % video_url
+''' % videoUrl
     ),
 
     'getVisualContextsListByProject':
-        TestData({},custom_test_check = '''
+        TestData({}, customTestCheck='''
 print('Total context count:',len(res.data.items))
 assert_equal(len(res.data.items) > 0, True)
 '''
-    ),
+                 ),
 
 
     'getVisualContextInfo' : TestData(
         {
             'contextUid': Code('self.context_uid'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.contextType, 'VIDEO')
 assert_equal(res.data.name, '%s')
-''' % video_url
+''' % videoUrl
     ),
 
 
@@ -88,10 +88,10 @@ assert_equal(res.data.name, '%s')
         {
             'contextUid': Code('self.context_uid_img'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(86324, len(res)) #empty for video context
 ''',
-        is_apiv2_response = False,
+        isApiV2Response= False,
     ),
 
 
@@ -102,7 +102,7 @@ assert_equal(86324, len(res)) #empty for video context
             'stringHashcodes' : '',
             'overrideContextOlderThanDays' : 1,
         },
-        custom_test_check = '''
+        customTestCheck='''
 self.match_id = res.data.matchId
 '''
     ),
@@ -111,7 +111,7 @@ self.match_id = res.data.matchId
         {
             'matchId': Code('self.match_id_upl_n_match'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 '''
     ),
 
@@ -120,7 +120,7 @@ self.match_id = res.data.matchId
         {
             'contextUid': Code('self.context_uid'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_img)
 '''
     ),
@@ -129,7 +129,7 @@ res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_
         {
             'content' : '../resources/ctx_api_test.png',
         },
-        custom_test_check = '''
+        customTestCheck='''
 self.match_id_upl_n_match = res.data.matchId
 '''
     ),
@@ -138,7 +138,7 @@ self.match_id_upl_n_match = res.data.matchId
         {
             'bindings': Code("[{'contextUid': self.context_uid, 'stringHashcode': 'ede6083ebd2594ca4e557612aaa05b2e'},\n             {'contextUid': self.context_uid_img, 'stringHashcode': '4f25feab674accf572433f22dc516e2e'}]"),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.errors['totalCount'], 0)
 assert_equal(res.data.created['totalCount'], 2)
 items = res.data.created['items']
@@ -154,7 +154,7 @@ self.binding_dos = items[1]['bindingUid']
             'contextUid' : '',
             'bindingUids' : [],
         },
-        custom_test_check = '''
+        customTestCheck='''
 print('Total bindings count:',len(res.data.items))
 assert_equal(len(res.data.items), 2)
 '''
@@ -167,7 +167,7 @@ assert_equal(len(res.data.items), 2)
             'contextUid' : '',
             'bindingUids' : Code('[self.binding_uno, self.binding_dos]'),
         },
-        custom_test_check = '''
+        customTestCheck='''
 assert_equal(res.data.totalCount, 2)
 '''
     ),
