@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012 Smartling, Inc.
+''' Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -17,7 +17,7 @@
  * limitations under the License.
 '''
 
-#FileApi class implementation
+# FileApi class implementation
 
 from .AuthClient import AuthClient
 from .Constants import FileTypes
@@ -26,6 +26,7 @@ from .FileApiBase import FileApiBase
 from .SmartlingDirective import SmartlingDirective
 from .UrlV2Helper import UrlV2Helper
 from .version import version
+
 
 class ApiV2(FileApiBase):
     """ Api v2 basic functionality """
@@ -45,28 +46,28 @@ class ApiV2(FileApiBase):
     def addAuth(self, params):
         token = self.authClient.getToken()
         if token is None:
-            raise Exception("Error getting token, check your credentials for userIdentifier:%s" % (self.userIdentifier))
-        return {"Authorization" : "Bearer "+ token}
+            raise Exception("Error getting token, userIdentifier:%s" % (self.userIdentifier))
+        return {"Authorization": "Bearer " + token}
 
     def validateFileTypes(self, kw):
-        fileTypes = kw.get("fileTypes",[])
+        fileTypes = kw.get("fileTypes", [])
         if type(fileTypes) != type([]) and type(fileTypes) != type(()):
             fileTypes = [fileTypes]
-        for t in fileTypes: 
+        for t in fileTypes:
             if not getattr(FileTypes, t, None):
                 unsupported = "\nUnsupported file type:%s\n" % t
                 raise Exception(unsupported)
 
     def checkRetrievalType(self, kw):
         if Params.RETRIEVAL_TYPE in kw and not kw[Params.RETRIEVAL_TYPE] in Params.allowedRetrievalTypes:
-            Exception( "Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
-                                                                             Params.RETRIEVAL_TYPE,
-                                                                             Params.allowedRetrievalTypes) )
+            Exception("Not allowed value `%s` for parameter:%s try one of %s" % (kw[Params.RETRIEVAL_TYPE],
+                                                                                 Params.RETRIEVAL_TYPE,
+                                                                                 Params.allowedRetrievalTypes))
 
     def processDirectives(self, params, directives):
         for name, value in list(directives.items()):
-           params[SmartlingDirective.sl_prefix + name] = value
+            params[SmartlingDirective.SL_PREFIX + name] = value
 
     def addLibIdDirective(self, params):
         name = "client_lib_id"
-        params[SmartlingDirective.sl_prefix + name] = self.clientUid
+        params[SmartlingDirective.SL_PREFIX + name] = self.clientUid

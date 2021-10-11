@@ -21,10 +21,12 @@ import sys
 import logging
 import threading
 
-isPython3 =  sys.version_info[:2] >= (3,0)
+isPython3 = sys.version_info[:2] >= (3, 0)
+
 
 class Logger(object):
     collected = []
+
     def __init__(self, name, loglevel):
         logfile = '/tmp/api-sdk-python.log'
         logFormat = ('[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
@@ -44,12 +46,13 @@ class Logger(object):
     def write(self, message):
         self.write(message)
 
-        has_newline = '\n' in message
-        if message.startswith("\n"): message = message[1:]
+        hasNewline = '\n' in message
+        if message.startswith("\n"):
+            message = message[1:]
 
         if isPython3:
             self.collected.append(message)
-            if not has_newline:
+            if not hasNewline:
                 return
             message = ''.join(self.collected)
             self.collected = []

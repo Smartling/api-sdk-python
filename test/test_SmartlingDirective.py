@@ -64,5 +64,5 @@ class test_SmartlingDirective(object):
         apiV2.clientUid = "test_test"
         params = {}
         apiV2.addLibIdDirective(params)
-        assert_equal(True, SmartlingDirective.sl_prefix + 'client_lib_id' in params)
-        assert_equal(params[SmartlingDirective.sl_prefix + 'client_lib_id'], "test_test")
+        assert_equal(True, SmartlingDirective.SL_PREFIX + 'client_lib_id' in params)
+        assert_equal(params[SmartlingDirective.SL_PREFIX + 'client_lib_id'], "test_test")

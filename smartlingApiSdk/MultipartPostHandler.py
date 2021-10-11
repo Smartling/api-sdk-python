@@ -55,7 +55,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
 
         if data is not None and type(data) != str and type(data) != bytes:
             files = []
-`            vars = []
+            vars = []
             try:
                 for(key, value) in list(data.items()):
                     if self.ifFileInstance(value):

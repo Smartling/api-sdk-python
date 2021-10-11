@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-''' Copyright 2012 Smartling, Inc.
+""" Copyright 2012-2021 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -15,19 +15,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-'''
+"""
 
 from .HttpClient import HttpClient
 from .ApiResponse import ApiResponse
 from .Constants import ReqMethod
 
 import time
-import os
+
 
 class AuthClient:
     authUri = "/auth-api/v2/authenticate"
     refreshUri = "/auth-api/v2/authenticate/refresh"
-    timeJitter = 5 #seconds off server expiration time
+    timeJitter = 5  # Seconds off server expiration time
 
     def __init__(self, host, userIdentifier, userSecret, proxySettings=None):
         self.httpClient = HttpClient(host, proxySettings)
@@ -39,7 +39,8 @@ class AuthClient:
     def request(self, uri, body):
         header = {"Content-Type": "application/json"}
         body = body.encode()
-        response_data, status_code, headers = self.httpClient.getHttpResponseAndStatus(ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
+        response_data, status_code, headers = self.httpClient.getHttpResponseAndStatus(
+            ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
         apiResponse = ApiResponse(response_data, status_code)
 
         now = time.time()
@@ -64,14 +65,14 @@ class AuthClient:
         self.request(self.refreshUri, body)
 
     def getToken(self):
-        if not getattr(self,'accessToken', None):
+        if not getattr(self, 'accessToken', None):
             self.authenticate()
             return self.accessToken
 
         now = time.time()
         if now >= self.accessExpiresAt:
             if now >= self.refreshExpiresAt:
-               self.refresh()
+                self.refresh()
             else:
                 self.authenticate()
         return self.accessToken
