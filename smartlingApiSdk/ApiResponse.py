@@ -17,10 +17,7 @@
  * limitations under the License.
 """
 
-try:
-    import json
-except ImportError:
-    import simplejson24 as json
+import json
 
 
 class Data:

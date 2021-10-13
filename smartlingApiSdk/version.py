@@ -17,4 +17,4 @@
  * limitations under the License.
 """
 
-version = "3.0.1"
+version = "3.0.2"

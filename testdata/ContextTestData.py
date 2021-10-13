@@ -60,7 +60,8 @@ testDecorators = {
 assert_equal(res.data.contextType, 'VIDEO')
 assert_equal(res.data.name, '%s')
 
-res_img, status = self.context_api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
+content = smartlingApiSdk.__path__[0]+'/resources/ctx_api_test.png'
+res_img, status = self.context_api.uploadNewVisualContext(content=content)
 self.context_uid_img = res_img.data.contextUid
 ''' % videoUrl
     ),
@@ -127,7 +128,7 @@ res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_
 
     'uploadAndMatchVisualContext' : TestData(
         {
-            'content' : '../resources/ctx_api_test.png',
+            'content' : Code("smartlingApiSdk.__path__[0]+'/resources/ctx_api_test.png'"),
         },
         customTestCheck='''
 self.match_id_upl_n_match = res.data.matchId

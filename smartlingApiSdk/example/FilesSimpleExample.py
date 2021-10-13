@@ -21,17 +21,18 @@ import os
 import sys
 import threading
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApi.FilesApi import FilesApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
+
+import smartlingApiSdk
+from smartlingApiSdk.api.FilesApi import FilesApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
 #File attributes to upload to Smartling server
 FILE_TYPE = "javaProperties"
 FILE_NAME = "java.properties"
-FILE_PATH = "../resources/"
+FILE_PATH = smartlingApiSdk.__path__[0]+"/resources/"
 
 #set Smartling creadentials via helper Credentials class
 credentials = Credentials() #Gets your Smartling credetnials from environment variables

@@ -22,7 +22,6 @@ import sys
 isPython3 = sys.version_info[:2] >= (3,0)
 
 if isPython3:
-    import ssl
     import urllib.request as urllib2
     import urllib.error
     HTTPError = urllib.error.HTTPError
@@ -32,6 +31,7 @@ else:
     HTTPError = urllib2.HTTPError
     from urllib import urlencode
 
+import ssl
 from .Constants import ReqMethod
 from .Settings import Settings
 from .MultipartPostHandler import MultipartPostHandler
@@ -82,8 +82,8 @@ class HttpClient:
             response = e
 
         except Exception as e:
-            if type(getattr(e, "reason", None)) == ssl.SSLCertVerificationError:
-                raise Exception("\nSome python3 versions require installation of local ssl certificate!\nuse command:\npip install certifi\nor on macos run command:\nopen /Applications/Python*/Install\ Certificates.command")
+            if type(getattr(e, "reason", None)) == getattr(ssl,'SSLCertVerificationError', None):
+                raise Exception("\nSome python versions require installation of local ssl certificate!\nuse command:\npip install certifi\nor on macos run command:\nopen /Applications/Python*/Install\ Certificates.command")
             raise e
 
         if sys.version_info[:2] >= (2, 6):

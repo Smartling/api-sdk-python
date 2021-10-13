@@ -22,10 +22,10 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.JobBatchesV2Api import JobBatchesV2Api
+import smartlingApiSdk
+from smartlingApiSdk.api.JobBatchesV2Api import JobBatchesV2Api
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -136,7 +136,7 @@ class testJobBatchesV2Api(object):
             details :  https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
         """
         batchUid=self.batch_uid
-        file='../resources/java.properties'
+        file=smartlingApiSdk.__path__[0]+'/resources/java.properties'
         fileUri=self.file_uri
         fileType='javaProperties'
         authorize=False
@@ -181,4 +181,5 @@ def example():
     t.checkProcessBatchActionV2()
     t.tearDown()
 
-example()
+if __name__ == '__main__':
+    example()

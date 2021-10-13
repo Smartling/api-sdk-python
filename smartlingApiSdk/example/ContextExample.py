@@ -22,10 +22,10 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.ContextApi import ContextApi
+import smartlingApiSdk
+from smartlingApiSdk.api.ContextApi import ContextApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -88,7 +88,8 @@ class testContextApi(object):
         assert_equal(res.data.contextType, 'VIDEO')
         assert_equal(res.data.name, 'https://www.youtube.com/watch?v=0lJykuiS_9s')
 
-        res_img, status = self.context_api.uploadNewVisualContext(content='../resources/ctx_api_test.png')
+        content = smartlingApiSdk.__path__[0]+'/resources/ctx_api_test.png'
+        res_img, status = self.context_api.uploadNewVisualContext(content=content)
         self.context_uid_img = res_img.data.contextUid
 
         assert_equal(True, status in [200,202])
@@ -187,7 +188,7 @@ class testContextApi(object):
                 400 : Validation error
             details :  https://api-reference.smartling.com/#operation/uploadAndMatchVisualContext
         """
-        content='../resources/ctx_api_test.png'
+        content=smartlingApiSdk.__path__[0]+'/resources/ctx_api_test.png'
         res, status = self.context_api.uploadAndMatchVisualContext(content=content)
 
 
@@ -326,4 +327,5 @@ def example():
     t.checkDeleteVisualContext()
     t.tearDown()
 
-example()
+if __name__ == '__main__':
+    example()

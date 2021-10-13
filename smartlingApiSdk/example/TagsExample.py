@@ -22,10 +22,10 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.TagsApi import TagsApi
+import smartlingApiSdk
+from smartlingApiSdk.api.TagsApi import TagsApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -206,4 +206,5 @@ def example():
     t.checkRemoveAllTagsFromStrings()
     t.tearDown()
 
-example()
+if __name__ == '__main__':
+    example()

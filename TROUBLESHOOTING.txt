@@ -1,0 +1,96 @@
+This python SDK is designed to work with Smartling Translation Platform (https://www.smartling.com)
+So first you have to be registered to Smartling and have API credentials.
+Here's link describing how to do so:
+https://help.smartling.com/hc/en-us/articles/1260804661570-Getting-Started-with-the-API
+
+###############################################################
+CredentialsNotSet exception
+###############################################################
+The most common problem is API credentials are not set properly.
+Here is how error stack trace looks like:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/example/EstimatesExample.py", line 285, in example
+    t.setUp()
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/example/EstimatesExample.py", line 53, in setUp
+    credentials = Credentials() #Gets your Smartling credentials from environment variables
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/Credentials.py", line 73, in __init__
+    raise CredentialsNotSet('SL_' + id + suffix, env)
+smartlingApiSdk.Credentials.CredentialsNotSet: Missing:SL_PROJECT_ID
+     don't forget to set real MY_PROJECT_ID, MY_USER_IDENTIFIER, MY_USER_SECRET, MY_LOCALE
+     in Credentials class
+     or use environment variables:
+     export SL_LOCALE=**-**
+     export SL_USER_IDENTIFIER=******************************
+     export SL_USER_SECRET=*******************************************************
+
+     #optional
+     export SL_ACCOUNT_UID=******* #required only to list projects api call
+     export SL_PROJECT_ID=******* #required for api calls `projects` and `project_details`
+
+For *nix based systems the easiest way to set credentials is to export them as environment variables,
+same as traceback suggests.
+
+Another option is to set credentials when calling API constructor:
+#-----------------------------------
+strings_api = StringsApi(MY_USER_IDENTIFIER, MY_USER_SECRET, MY_PROJECT_ID)
+#-----------------------------------
+
+
+###############################################################
+Mixed production / staging credentials
+###############################################################
+
+Second possible issue mixing stg / prod credentials.
+One can debug API SDK based code on stg and it has own credentials and own
+env variable so both stg and prod could be used in same code.
+
+The traceback above shows different variable names.
+
+Production:
+     export SL_USER_IDENTIFIER=******************************
+     export SL_USER_SECRET=*******************************************************
+
+Staging:
+     export SL_USER_IDENTIFIER_STG=******************************
+     export SL_USER_SECRET_STG=*******************************************************
+
+some examples like StringsExample use stg
+others (like EstimatesExample) are set up to use prod
+The difference is in adding env='stg' to constructor of Credentials class like:
+#-----------------------------------
+Credentials(env='stg')
+#-----------------------------------
+
+or API class like:
+#-----------------------------------
+strings_api = StringsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
+#-----------------------------------
+
+
+###############################################################
+urllib2.URLError: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+###############################################################
+
+Following error happens when there's no internet connection
+
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/example/StringsExample.py", line 208, in example
+    t.checkAddStringsToProject()
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/example/StringsExample.py", line 121, in checkAddStringsToProject
+    res, status = self.strings_api.addStringsToProject(strings=strings, placeholderFormat=placeholderFormat, placeholderFormatCustom=placeholderFormatCustom, namespace=namespace)
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/api/StringsApi.py", line 47, in addStringsToProject
+    response, status = self.commandJson('POST', url, kw)
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/FileApiBase.py", line 87, in commandJson
+    authHeader = self.addAuth(params)
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/ApiV2.py", line 47, in addAuth
+    token = self.authClient.getToken()
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/AuthClient.py", line 69, in getToken
+    self.authenticate()
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/AuthClient.py", line 61, in authenticate
+    self.request(self.authUri, body)
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/AuthClient.py", line 43, in request
+    ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
+  File "/Library/Python/2.7/site-packages/smartlingApiSdk/HttpClient.py", line 87, in getHttpResponseAndStatus
+    raise e
+urllib2.URLError: <urlopen error [Errno 8] nodename nor servname provided, or not known>

@@ -17,18 +17,20 @@
  * limitations under the License.
 """
 
+import io
 import os
 import sys
 import time
 import zipfile
-import io
 from datetime import date
+
 from nose.tools import assert_equal
 
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApi.FilesApi import FilesApi
+import smartlingApiSdk
+from smartlingApiSdk.api.FilesApi import FilesApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.version import version
 from smartlingApiSdk.Credentials import Credentials
@@ -48,7 +50,7 @@ class testFapiV2(object):
     FILE_NAME_16 = "javaUTF16.properties"
     FILE_TYPE = "javaProperties"
     FILE_TYPE_CSV = "csv"
-    FILE_PATH = "../resources/"
+    FILE_PATH = smartlingApiSdk.__path__[0]+"/resources/"
     FILE_NAME_NEW = "java.properties.renamed"
     FILE_NAME_NEW_16 = "javaUTF16.properties.renamed"
     FILE_NAME_CSV = "test.csv"

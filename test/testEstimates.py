@@ -22,15 +22,15 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.EstimatesApi import EstimatesApi
+import smartlingApiSdk
+from smartlingApiSdk.api.EstimatesApi import EstimatesApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
 isPython3 =  sys.version_info[:2] >= (3,0)
-from smartlingApi.JobsApi import JobsApi
+from smartlingApiSdk.api.JobsApi import JobsApi
 def assert_equal(a,b, comment=''):
     if a != b :
         err = "Assertion Failed: '%s' != '%s' %s" % (a,b, comment)

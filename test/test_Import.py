@@ -24,6 +24,7 @@ import time
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
+import smartlingApiSdk
 from smartlingApiSdk.ObsoleteSmartlingFileApi import ObsoleteSmartlingFileApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.UploadData import UploadData
@@ -41,7 +42,7 @@ class testImport(object):
     MY_PROJECT_ID = "YOUR_PROJECT_ID"
     SL_LOCALE = "ru-RU"
 
-    FILE_PATH = "../resources/"
+    FILE_PATH = smartlingApiSdk.__path__[0]+"/resources/"
     CALLBACK_URL = "http://google.com/?q=hello"
 
     FILE_NAME = "test_import.xml"

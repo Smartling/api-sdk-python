@@ -22,10 +22,10 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.FilesApi import FilesApi
+import smartlingApiSdk
+from smartlingApiSdk.api.FilesApi import FilesApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -90,7 +90,7 @@ class testFilesApi(object):
         self.FILE_NAME_16 = "javaUTF16.properties"
         self.FILE_TYPE = "javaProperties"
         self.FILE_TYPE_CSV = "csv"
-        self.FILE_PATH = "../resources/"
+        self.FILE_PATH = smartlingApiSdk.__path__[0]+"/resources/"
         self.FILE_NAME_NEW = "java.properties.renamed"
         self.FILE_NAME_NEW_16 = "javaUTF16.properties.renamed"
         self.FILE_NAME_CSV = "test.csv"
@@ -489,4 +489,5 @@ def example():
     t.checkDeleteUploadedSourceFile()
     t.tearDown()
 
-example()
+if __name__ == '__main__':
+    example()

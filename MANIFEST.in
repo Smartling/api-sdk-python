@@ -1,1 +1,2 @@
 graft resources
+global-exclude *.py[cod]

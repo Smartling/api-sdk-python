@@ -56,7 +56,7 @@ testDecorators = {
 
 'uploadFileToJobBatchV2': TestData({
     'batchUid': Code('self.batch_uid'),
-    'file' : '../resources/java.properties',
+    'file' : Code("smartlingApiSdk.__path__[0]+'/resources/java.properties'"),
     'fileUri': Code('self.file_uri'),
     'fileType':'javaProperties',
     'authorize':False,

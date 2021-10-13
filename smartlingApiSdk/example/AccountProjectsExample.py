@@ -22,10 +22,10 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.AccountProjectsApi import AccountProjectsApi
+import smartlingApiSdk
+from smartlingApiSdk.api.AccountProjectsApi import AccountProjectsApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -193,4 +193,5 @@ def example():
     t.checkGetProjectCopyRequestStatus()
     t.tearDown()
 
-example()
+if __name__ == '__main__':
+    example()

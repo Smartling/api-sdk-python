@@ -31,6 +31,7 @@ else:
 lib_path = os.path.abspath('../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
+import smartlingApiSdk
 from smartlingApiSdk.ObsoleteSmartlingFileApi import ObsoleteSmartlingFileApi, SmartlingFileApiFactory
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.UploadData import UploadData
@@ -49,7 +50,7 @@ class testFapi(object):
     FILE_NAME = "java.properties"
     FILE_NAME_16 = "javaUTF16.properties"
     FILE_TYPE = "javaProperties"
-    FILE_PATH = "../resources/"
+    FILE_PATH = smartlingApiSdk.__path__[0]+"/resources/"
     FILE_NAME_NEW = "java.properties.renamed"
     FILE_NAME_NEW_16 = "javaUTF16.properties.renamed"
 

@@ -1,3 +1,7 @@
+Oct 13, 2021 - 3.0.2
+    - reorganised pip package to store all modules, examples, resources within smartlingApiSdk directory
+    - added TROUBLESHOOTING.txt mini-guide
+
 Oct 11, 2021 - 3.0.1
     - renamed api directory into less generic smartlingApi
     - this file is updated
@@ -50,7 +54,7 @@ Apr 27, 2015 - v 1.2.6
     - reworked proxy support
     
 Dec 25, 2014 - v 1.2.5
-    - added encoding definition to all py files and changes for publishig sdk to pypi https://pypi.python.org/pypi/SmartlingApiSdk
+    - added encoding definition to all py files and changes for publishing sdk to pypi https://pypi.python.org/pypi/SmartlingApiSdk
 
 Dec 11, 2014 - v 1.2.4
     - added optional support for proxy with basic authentication 
@@ -72,8 +76,8 @@ Jun 05, 2014 - v 1.2
     - added import command support
     - added last_modified command support
     - added json parsing
-    - imporved documentation
-    - added http error handings for http post
+    - improved documentation
+    - added http error handlings for http post
 
 Feb 11, 2014 - v 1.1.6
     - remove trailing whitespace

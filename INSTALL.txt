@@ -16,54 +16,25 @@ use environment variables:
      #optional
      export SL_ACCOUNT_UID=******* #required only to list projects api call
      export SL_PROJECT_ID=******* #required for api calls `projects` and `project_details`
-or set credential explicitly in class smartlingApiSdk/Credentials.py
 
-After credentials are set do:
+or for Windows users set credential explicitly in class smartlingApiSdk/Credentials.py
 
-cd example
-python SimpleExample.py
+After credentials are set try our examples, each API has own example covering almost every API call.
 
-or
-python IntermediateExample.py
+You can start with Strings API example:
 
-or
-python AdvancedExample.py
+from smartlingApiSdk.example.StringsExample import example
+example()
 
-or
-python ProjectsExample.py
+or try other examples:
 
-Tests.
-
-Test uses nose python framework.
-Information about installing nose is here http://readthedocs.org/docs/nose/en/latest.
-Nose framework is used for test only and is not necessary for file API SDK to be used.
-
-
-To run test do following:
-obtain api key and project id from smartling
-export api key, project id, locale:
-
-export SL_API_KEY=********-****-****-****-************
-export SL_PROJECT_ID=*********
-export SL_LOCALE=**-**
-
-export SL_USER_IDENTIFIER=******************************
-export SL_USER_SECRET=*******************************************************
-export SL_ACCOUNT_UID=******* #required only to list projects api call
-cd test
-
-nosetests testFapiV2.py
-
-Correct tests output looks like this:
-
-nosetests testFapiV2.py
-...................
-----------------------------------------------------------------------
-Ran 19 tests in 110.315s
-
-OK
-
-
-export SL_API_KEY=********-****-****-****-************ is necessary for v1 api tests :
-testFAPI.py
-test_Import.py
+from smartlingApiSdk.example.FilesSimpleExample import example
+from smartlingApiSdk.example.FilesExample import example
+from smartlingApiSdk.example.AccountProjectsExample import example
+from smartlingApiSdk.example.ContextExample import example
+from smartlingApiSdk.example.EstimatesExample import example
+from smartlingApiSdk.example.JobsExample import example
+from smartlingApiSdk.example.JobBatchesV2Example import example
+from smartlingApiSdk.example.TagsExample import example
+from smartlingApiSdk.example.MultipleAccountsExample import example
+from smartlingApiSdk.example.MultipleProjectsExample import example

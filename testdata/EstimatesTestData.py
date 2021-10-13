@@ -37,7 +37,7 @@ tearDown = '''
         self.jobs_api.deleteJob(translationJobUid=self.test_job_uid)
 '''
 
-imports = "from smartlingApi.JobsApi import JobsApi"
+imports = "from smartlingApiSdk.api.JobsApi import JobsApi"
 
 extraInitializations = '''
         self.addTestJob(proxySettings)

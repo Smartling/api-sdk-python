@@ -20,14 +20,13 @@
 
 import os
 import sys
-import time, datetime
 
-lib_path = os.path.abspath('../')
+lib_path = os.path.abspath('../../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApi.StringsApi import StringsApi
-from smartlingApi.FilesApi   import FilesApi
-from smartlingApi.AccountProjectsApi   import AccountProjectsApi
+from smartlingApiSdk.api.StringsApi import StringsApi
+from smartlingApiSdk.api.FilesApi import FilesApi
+from smartlingApiSdk.api.AccountProjectsApi import AccountProjectsApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 

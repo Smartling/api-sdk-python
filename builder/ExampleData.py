@@ -52,10 +52,10 @@ import os
 import sys
 import time, datetime
 
-lib_path = os.path.abspath('../')
-sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
+sys.path += [os.path.abspath('../'), os.path.abspath('../../')]  # allow to import ../smartlingApiSdk.api
 
-from smartlingApi.{API_NAME} import {API_NAME}
+import smartlingApiSdk
+from smartlingApiSdk.api.{API_NAME} import {API_NAME}
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.Credentials import Credentials
 
@@ -109,7 +109,8 @@ def example():
     %s
     t.tearDown()
 
-example()
+if __name__ == '__main__':
+    example()
 """
 
 TESTS_FOOTER = """

@@ -43,8 +43,8 @@ def assert_diff_is_empty(diff, cmd):
         raise Exception(repr(err))
 
 class testApiChanges:
-    api_path = '../smartlingApi'
-    example_path = '../example'
+    api_path = '../smartlingApiSdk/api'
+    example_path = '../smartlingApiSdk/example'
 
     def setUp(self):
         sys.stdout = Logger('python-sdk', Settings.logLevel)

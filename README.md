@@ -1,4 +1,4 @@
-[Smartling File Translation API](https://developer.smartling.com/docs/sdks-2)
+[Smartling File Translation API](https://api-reference.smartling.com/)
 =================
 
 This repository contains the Python SDK for accessing the Smartling Translation API.
@@ -9,8 +9,16 @@ or application by automating the translation and integration of content.
 Developers can upload resource files and download the translated file(s) in a locale of their choosing.
 There are options allowing to use professional translation, community translation or machine translation.
 
-For a full description of the Smartling File Translation API, please read File API section of the docs at: https://developer.smartling.com/docs/sdks-2 
-
+For a full description of the Smartling File Translation API, please read File API section of the docs at: https://api-reference.smartling.com/
+This SDK covers several of Smartling APIs:
+Jobs
+Job Batches V2
+Strings
+Context
+Estimates
+Account & Projects
+Files
+Tags
 
 Quick start
 -----------
@@ -18,16 +26,26 @@ Quick start
 Clone the repo: `git clone git@github.com:Smartling/api-sdk-python.git`.
 You may start with examples in ./example directory.
 Set your credentials as described in smartlingApiSdk/Credentials.py file.
-There are 4 examples:
 
-SimpleExample.py - contains basic file API SDK operartions
+There are quite extensive examples, each SDK has own examples covering almost every API call.
 
-IntermediateExample.py - introduces a bit more advanced file API example: rename, import and SmartlingDirectives
+You can start with Strings API example:
 
-AdvancedExample.py - calls every file API call and tests response values
+from smartlingApiSdk.example.StringsExample import example
+example()
 
-ProjectsExample.py - calls projects API and tests response values
+or try other examples:
 
+from smartlingApiSdk.example.FilesSimpleExample import example
+from smartlingApiSdk.example.FilesExample import example
+from smartlingApiSdk.example.AccountProjectsExample import example
+from smartlingApiSdk.example.ContextExample import example
+from smartlingApiSdk.example.EstimatesExample import example
+from smartlingApiSdk.example.JobsExample import example
+from smartlingApiSdk.example.JobBatchesV2Example import example
+from smartlingApiSdk.example.TagsExample import example
+from smartlingApiSdk.example.MultipleAccountsExample import example
+from smartlingApiSdk.example.MultipleProjectsExample import example
 
 Versioning
 ----------
@@ -74,7 +92,7 @@ Greg Jones
 Copyright and license
 ---------------------
 
-Copyright 2012-2020 Smartling, Inc.
+Copyright 2012-2021 Smartling, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this work except in compliance with the License.

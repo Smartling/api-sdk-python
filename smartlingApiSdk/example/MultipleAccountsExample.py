@@ -20,13 +20,11 @@
 
 import os
 import sys
-import time, datetime
 
-lib_path = os.path.abspath('../')
+lib_path = os.path.abspath('../../')
 sys.path.append(lib_path)  # allow to import ../smartlingApiSdk/SmartlingFileApi
 
-from smartlingApi.FilesApi   import FilesApi
-from smartlingApiSdk.ProxySettings import ProxySettings
+from smartlingApiSdk.api.FilesApi import FilesApi
 from smartlingApiSdk.Credentials import Credentials
 
 isPython3 =  sys.version_info[:2] >= (3,0)
