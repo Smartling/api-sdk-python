@@ -76,7 +76,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def addJob(self, jobName, targetLocaleIds, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields, **kwargs):
+    def addJob(self, jobName, targetLocaleIds=[], description='', dueDate='', referenceNumber='', callbackUrl='', callbackMethod='', customFields=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs
@@ -102,7 +102,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def findJobsByStrings(self, hashcodes, localeIds, **kwargs):
+    def findJobsByStrings(self, hashcodes=[], localeIds=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/find-jobs-by-strings
@@ -141,7 +141,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def addStringsToJob(self, translationJobUid, hashcodes, moveEnabled, targetLocaleIds, **kwargs):
+    def addStringsToJob(self, translationJobUid, hashcodes, moveEnabled=False, targetLocaleIds=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/add
@@ -162,7 +162,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def removeStringsFromJob(self, translationJobUid, hashcodes, localeIds, **kwargs):
+    def removeStringsFromJob(self, translationJobUid, hashcodes=[], localeIds=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings/remove
@@ -198,7 +198,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def cancelJob(self, translationJobUid, reason, **kwargs):
+    def cancelJob(self, translationJobUid, reason='', **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/cancel
@@ -218,7 +218,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def authorizeJob(self, translationJobUid, localeWorkflows, **kwargs):
+    def authorizeJob(self, translationJobUid, localeWorkflows=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/authorize
@@ -253,7 +253,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def updateJob(self, translationJobUid, jobName, description, dueDate, referenceNumber, callbackUrl, callbackMethod, customFields, **kwargs):
+    def updateJob(self, translationJobUid, jobName, description='', dueDate='', referenceNumber='', callbackUrl='', callbackMethod='', customFields=[], **kwargs):
         """
             method  :  PUT
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}
@@ -296,7 +296,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def searchForJob(self, fileUris, hashcodes, translationJobUids, **kwargs):
+    def searchForJob(self, fileUris=[], hashcodes=[], translationJobUids=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/search
@@ -331,7 +331,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def addFileToJob(self, translationJobUid, fileUri, targetLocaleIds, **kwargs):
+    def addFileToJob(self, translationJobUid, fileUri, targetLocaleIds=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/add
@@ -352,7 +352,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def removeFileFromJob(self, translationJobUid, fileUri, **kwargs):
+    def removeFileFromJob(self, translationJobUid, fileUri='', **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/file/remove
@@ -389,7 +389,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def addLocaleToJob(self, translationJobUid, targetLocaleId, syncContent, **kwargs):
+    def addLocaleToJob(self, translationJobUid, targetLocaleId, syncContent=True, **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/locales/{targetLocaleId}
@@ -493,7 +493,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def modifyScheduleItemsForTranslationJob(self, translationJobUid, schedules, **kwargs):
+    def modifyScheduleItemsForTranslationJob(self, translationJobUid, schedules=[], **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/schedule
@@ -562,7 +562,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def createCustomField(self, accountUid, type, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description, **kwargs):
+    def createCustomField(self, accountUid, required, type='', fieldName='', enabled='', searchable='', displayToTranslators='', options=[], defaultValue='', description='', **kwargs):
         """
             method  :  POST
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields
@@ -571,10 +571,10 @@ class JobsApi(ApiV2):
             details :  https://api-reference.smartling.com/#operation/createCustomField
         """
         kw = {
+            'required':required,
             'type':type,
             'fieldName':fieldName,
             'enabled':enabled,
-            'required':required,
             'searchable':searchable,
             'displayToTranslators':displayToTranslators,
             'options':options,
@@ -587,7 +587,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def updateCustomField(self, accountUid, fieldUid, fieldName, enabled, required, searchable, displayToTranslators, options, defaultValue, description, **kwargs):
+    def updateCustomField(self, accountUid, fieldUid, required, fieldName='', enabled='', searchable='', displayToTranslators='', options=[], defaultValue='', description='', **kwargs):
         """
             method  :  PUT
             api url :  /jobs-api/v3/accounts/{accountUid}/custom-fields/{fieldUid}
@@ -596,9 +596,9 @@ class JobsApi(ApiV2):
             details :  https://api-reference.smartling.com/#operation/updateCustomField
         """
         kw = {
+            'required':required,
             'fieldName':fieldName,
             'enabled':enabled,
-            'required':required,
             'searchable':searchable,
             'displayToTranslators':displayToTranslators,
             'options':options,

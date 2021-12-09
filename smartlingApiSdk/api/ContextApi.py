@@ -97,6 +97,23 @@ class ContextApi(ApiV2):
         return response, status
 
 
+    def deleteVisualContextsAsync(self, contextUids=[], **kwargs):
+        """
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/contexts/remove/async
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/deleteVisualContextsAsync
+        """
+        kw = {
+            'contextUids':contextUids,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/remove/async', **kwargs)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
+
+
     def downloadVisualContextFileContent(self, contextUid, **kwargs):
         """
             method  :  GET
@@ -114,7 +131,7 @@ class ContextApi(ApiV2):
         return response, status
 
 
-    def runAutomaticContextMatching(self, contextUid, contentFileUri, stringHashcodes, overrideContextOlderThanDays, **kwargs):
+    def runAutomaticContextMatching(self, contextUid, contentFileUri='', stringHashcodes=[], overrideContextOlderThanDays=0, **kwargs):
         """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
@@ -169,7 +186,24 @@ class ContextApi(ApiV2):
         return response, status
 
 
-    def createStringToContextBindings(self, bindings, **kwargs):
+    def getAsyncProcessResults(self, processUid, **kwargs):
+        """
+            method  :  GET
+            api url :  /context-api/v2/projects/{projectId}/processes/{processUid}
+            Responses:
+                200 : OK
+                404 : Process request expired or does not exist
+            details :  https://api-reference.smartling.com/#operation/getAsyncProcessResults
+        """
+        kw = {
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/processes/{processUid}', processUid=processUid, **kwargs)
+        response, status = self.command('GET', url, kw)
+        return response, status
+
+
+    def createStringToContextBindings(self, bindings=[], **kwargs):
         """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings
@@ -187,7 +221,7 @@ class ContextApi(ApiV2):
         return response, status
 
 
-    def getBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, offset='', **kwargs):
+    def getBindings(self, offset='', stringHashcodes=[], contentFileUri='', contextUid='', bindingUids=[], **kwargs):
         """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/list
@@ -209,7 +243,7 @@ class ContextApi(ApiV2):
         return response, status
 
 
-    def deleteBindings(self, stringHashcodes, contentFileUri, contextUid, bindingUids, **kwargs):
+    def deleteBindings(self, stringHashcodes=[], contentFileUri='', contextUid='', bindingUids=[], **kwargs):
         """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/bindings/remove

@@ -88,6 +88,5 @@ def main():
     ApiBuilder("Files").build().buildExample().buildTest()
     ApiBuilder("Tags").build().buildExample().buildTest()
 
-
 if __name__ == '__main__':
     main()

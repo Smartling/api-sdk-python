@@ -325,6 +325,11 @@ def example():
     t.checkGetBindings()
     t.checkDeleteBindings()
     t.checkDeleteVisualContext()
+    # not covered by tests #
+    '''
+    deleteVisualContextsAsync
+    getAsyncProcessResults
+    '''
     t.tearDown()
 
 if __name__ == '__main__':

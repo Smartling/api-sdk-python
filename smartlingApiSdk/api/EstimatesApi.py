@@ -51,7 +51,7 @@ class EstimatesApi(ApiV2):
         return response, status
 
 
-    def generateJobFuzzyEstimateReports(self, translationJobUid, contentType, tags, **kwargs):
+    def generateJobFuzzyEstimateReports(self, translationJobUid, contentType='', tags=[], **kwargs):
         """
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
@@ -94,7 +94,7 @@ class EstimatesApi(ApiV2):
         return response, status
 
 
-    def generateJobCostEstimateReports(self, translationJobUid, contentType, tags, localeWorkflows, fuzzyProfileUid, **kwargs):
+    def generateJobCostEstimateReports(self, translationJobUid, contentType='', tags=[], localeWorkflows=[], fuzzyProfileUid='', **kwargs):
         """
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
@@ -166,7 +166,7 @@ class EstimatesApi(ApiV2):
         return response, status
 
 
-    def modifyJobEstimateReportTags(self, reportUid, tags, **kwargs):
+    def modifyJobEstimateReportTags(self, reportUid, tags=[], **kwargs):
         """
             method  :  PUT
             api url :  /estimates-api/v2/projects/{projectId}/reports/{reportUid}/tags

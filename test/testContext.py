@@ -324,3 +324,8 @@ class testContextApi(object):
         t.checkGetBindings()
         t.checkDeleteBindings()
         t.checkDeleteVisualContext()
+        # not covered by tests #
+        '''
+        deleteVisualContextsAsync
+        getAsyncProcessResults
+        '''

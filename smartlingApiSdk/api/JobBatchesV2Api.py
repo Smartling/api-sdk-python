@@ -26,7 +26,7 @@ class JobBatchesV2Api(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def createJobBatchV2(self, authorize, translationJobUid, fileUris, localeWorkflows, **kwargs):
+    def createJobBatchV2(self, authorize, translationJobUid, fileUris, localeWorkflows=[], **kwargs):
         """
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches
@@ -88,7 +88,7 @@ class JobBatchesV2Api(ApiV2):
         return response, status
 
 
-    def processBatchActionV2(self, batchUid, action, fileUri, reason, **kwargs):
+    def processBatchActionV2(self, batchUid, action, fileUri, reason='', **kwargs):
         """
             method  :  PUT
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
