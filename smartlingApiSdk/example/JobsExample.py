@@ -255,16 +255,16 @@ class testJobsApi(object):
         """
         self.jobs_api.httpClient.ignore_errors=True
         accountUid=self.MY_ACCOUNT_UID
+        required=False
         type='SHORT_TEXT'
         fieldName='python-sdk-test'
         enabled=True
-        required=False
         searchable=True
         displayToTranslators=True
         options=[]
         defaultValue='default field value'
         description='Custom field example'
-        res, status = self.jobs_api.createCustomField(accountUid=self.MY_ACCOUNT_UID, type=type, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
+        res, status = self.jobs_api.createCustomField(accountUid=self.MY_ACCOUNT_UID, required=required, type=type, fieldName=fieldName, enabled=enabled, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
 
 
         if 400 == status:
@@ -311,15 +311,15 @@ class testJobsApi(object):
         """
         accountUid=self.MY_ACCOUNT_UID
         fieldUid=self.fieldUid
+        required=False
         fieldName='python-sdk-test'
         enabled=True
-        required=False
         searchable=True
         displayToTranslators=True
         options=[]
         defaultValue='New default field value'
         description='New custom field example'
-        res, status = self.jobs_api.updateCustomField(accountUid=self.MY_ACCOUNT_UID, fieldUid=fieldUid, fieldName=fieldName, enabled=enabled, required=required, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
+        res, status = self.jobs_api.updateCustomField(accountUid=self.MY_ACCOUNT_UID, fieldUid=fieldUid, required=required, fieldName=fieldName, enabled=enabled, searchable=searchable, displayToTranslators=displayToTranslators, options=options, defaultValue=defaultValue, description=description)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

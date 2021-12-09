@@ -329,7 +329,8 @@ class Method(ApiCore):
             propList.append(mp)
 
             if 'application/json' == self.type:
-                mp.setRequired()
+                if mp._description and 'required' in mp._description:
+                    mp.setRequired()
 
             if propDict.get('properties', None):
                 mp.prop_list = self.parseProperties(propDict['properties'])

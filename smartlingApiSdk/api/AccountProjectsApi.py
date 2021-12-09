@@ -65,7 +65,7 @@ class AccountProjectsApi(ApiV2):
         return response, status
 
 
-    def addLocaleToProject(self, defaultWorkflowUid, localeId, **kwargs):
+    def addLocaleToProject(self, defaultWorkflowUid='', localeId='', **kwargs):
         """
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/targetLocales
@@ -83,7 +83,7 @@ class AccountProjectsApi(ApiV2):
         return response, status
 
 
-    def copyProject(self, projectName, targetLocaleIds, **kwargs):
+    def copyProject(self, projectName='', targetLocaleIds=[], **kwargs):
         """
             method  :  POST
             api url :  /projects-api/v2/projects/{projectId}/copy
