@@ -43,6 +43,10 @@ teardown = '''
         res, status = self.files_api.deleteUploadedSourceFile(self.uri16)
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
+
+        res, status = self.files_api.deleteUploadedSourceFile(self.uri_json)
+        assert_equal(200, status)
+        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 '''
 
 imports = '''
@@ -87,6 +91,10 @@ extraInitializations = '''
         self.uri_to_rename = self.FILE_NAME_NEW + unique_suffix
         self.uri_import = self.FILE_NAME_IMPORT_ORIG + unique_suffix
 
+        self.file_json = "simple.json"
+        self.uri_json = unique_suffix + self.file_json
+        res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.file_json, fileType="json", fileUri=self.uri_json, localeIdsToAuthorize = [self.MY_LOCALE] )
+
     def getZipFile(self, res):
         if isPython3:
             return zipfile.ZipFile(io.BytesIO(res))
@@ -118,10 +126,10 @@ assert_equal(res.data.stringCount, 6)
 
     'downloadSourceFile' : TestData(
         {
-            'fileUri' :  Code('self.uri')
+            'fileUri' :  Code('self.uri_json')
         },
         customTestCheck='''
-orig = open(self.FILE_PATH + self.FILE_NAME, "rb").read()
+orig = open(self.FILE_PATH + self.file_json , "rb").read()
 assert_equal(res, orig)
 ''',
         isApiV2Response= False,

@@ -116,4 +116,7 @@ class FileApiBase:
         data, code, headers = self.getResponseAndStatus(method, uri, params)
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
-        return  ApiResponse(data, code), code
+        result = ApiResponse(data, code)
+        if result.isApiResonse:
+            return result, code
+        return data, code

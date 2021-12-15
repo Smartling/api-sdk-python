@@ -109,6 +109,10 @@ class testFilesApi(object):
         self.uri_to_rename = self.FILE_NAME_NEW + unique_suffix
         self.uri_import = self.FILE_NAME_IMPORT_ORIG + unique_suffix
 
+        self.file_json = "simple.json"
+        self.uri_json = unique_suffix + self.file_json
+        res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.file_json, fileType="json", fileUri=self.uri_json, localeIdsToAuthorize = [self.MY_LOCALE] )
+
     def getZipFile(self, res):
         if isPython3:
             return zipfile.ZipFile(io.BytesIO(res))
@@ -150,11 +154,11 @@ class testFilesApi(object):
                 200 : OK
             details :  https://api-reference.smartling.com/#operation/downloadSourceFile
         """
-        fileUri=self.uri
+        fileUri=self.uri_json
         res, status = self.files_api.downloadSourceFile(fileUri=fileUri)
 
 
-        orig = open(self.FILE_PATH + self.FILE_NAME, "rb").read()
+        orig = open(self.FILE_PATH + self.file_json , "rb").read()
         assert_equal(res, orig)
 
         print('downloadSourceFile', 'OK')

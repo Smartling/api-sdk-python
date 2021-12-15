@@ -191,7 +191,7 @@ else:
     'targetLocaleIds' : Code('[self.MY_LOCALE,]'),
     'translationJobUid': jobUidCode,
 }, [], [
-    'assert_equal(1, res.data.successCount, "addStringsToJob will fail if string was already in other job")',
+    'assert_equal(0, res.data.failCount, "addStringsToJob will fail if string was already in other job")',
 ]
 ),
 
