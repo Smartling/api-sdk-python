@@ -38,13 +38,15 @@ class ApiResponse:
     def __init__(self, responseString, statusCode):
         self.statusCode = statusCode
         self.responseString = responseString
-        self.responsDict = json.loads(responseString)
-        self.parseResponse(responseString)
+        self.responseDict = json.loads(responseString)
+        self.isApiResonse = self.responseDict.get('response', None) and dict == type(self.responseDict['response'])
+        if self.isApiResonse:
+            self.parseResponse(responseString)
 
     def parseResponse(self, responseString):
         """ parses json and fills object attributes according json attributes """
 
-        for k, v in list(self.responsDict['response'].items()):
+        for k, v in list(self.responseDict['response'].items()):
             if k == 'data':
                 self.data = Data(v)
             else:
@@ -52,8 +54,8 @@ class ApiResponse:
 
     def __getattr__(self, key):
         """ provides string object methods to be available for response to behave like a string """
-        if hasattr(self.responsDict, key):
-            return getattr(self.responsDict, key)
+        if hasattr(self.responseDict, key):
+            return getattr(self.responseDict, key)
 
         try:
             return getattr(self, key)

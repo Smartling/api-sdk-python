@@ -168,8 +168,6 @@ assert_equal(len(res.data.items), 2)
             'contextUid' : '',
             'bindingUids' : Code('[self.binding_uno, self.binding_dos]'),
         },
-        customTestCheck='''
-assert_equal(res.data.totalCount, 2)
-'''
+        customTestCheck=''
     ),
 }
