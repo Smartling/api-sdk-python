@@ -282,9 +282,6 @@ class testContextApi(object):
         bindingUids=[self.binding_uno, self.binding_dos]
         res, status = self.context_api.deleteBindings(stringHashcodes=stringHashcodes, contentFileUri=contentFileUri, contextUid=contextUid, bindingUids=bindingUids)
 
-
-        assert_equal(res.data.totalCount, 2)
-
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('deleteBindings', 'OK')
