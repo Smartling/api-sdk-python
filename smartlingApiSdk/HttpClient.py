@@ -50,7 +50,7 @@ class HttpClient:
         self.list_brackets = True  # Add [] suffix to GET list keys in urls, like &hashcodes[]=abcd, required by Files API
         self.force_multipart = True
 
-    def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders={}, requestBody=""):
+    def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders={}, requestBody="", context=None):
         self.installOpenerWithProxy(handler)
         if handler:
             prarms = self.encodeListParams(params)
@@ -70,14 +70,14 @@ class HttpClient:
 
         try:
             if requestBody:
-                response = urllib2.urlopen(req, requestBody)
+                response = urllib2.urlopen(req, requestBody, context=context)
             else:
                 if handler:
                     multipartHandler = MultipartPostHandler()
                     req = multipartHandler.http_request(req, self.force_multipart)
                 else:
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req, timeout=Settings.requestTimeoutSeconds)
+                response = urllib2.urlopen(req, timeout=Settings.requestTimeoutSeconds, context=context)
         except HTTPError as e:
             response = e
 

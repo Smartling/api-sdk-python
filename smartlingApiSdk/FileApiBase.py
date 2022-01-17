@@ -66,6 +66,8 @@ class FileApiBase:
     def filterOutDefaults(self, params):
         if hasattr(params, 'items'):
             for k, v in list(params.items()):
+                if k == 'namespace':
+                    continue #when namespace is not specified it's replaced with 'smartling.strings-api.default.namespace' for strings api
                 if bool == type(v): continue
                 if not v: del params[k]
                 if k == 'projectId': del params[k]

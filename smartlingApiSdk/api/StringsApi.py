@@ -26,7 +26,7 @@ class StringsApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def addStringsToProject(self, strings, placeholderFormat='', placeholderFormatCustom='', namespace='', **kwargs):
+    def addStringsToProject(self, strings, placeholderFormat='', placeholderFormatCustom='', namespace='smartling.strings-api.default.namespace', **kwargs):
         """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
