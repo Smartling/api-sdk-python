@@ -71,7 +71,7 @@ class AuthClient:
 
         now = time.time()
         if now >= self.accessExpiresAt:
-            if now >= self.refreshExpiresAt:
+            if now < self.refreshExpiresAt:
                 self.refresh()
             else:
                 self.authenticate()

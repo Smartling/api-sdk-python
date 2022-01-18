@@ -5,6 +5,7 @@ Jan 18, 2022 - 3.1.0
     - added response headers as attribute of ApiResponse object for possible further use
     - upload string instead of file - added example to testJobBatchesV2Api.checkUploadFileToJobBatchV2
     - fixed logging + changed logging to log to current directory
+    - fixed refesh timestamp check
 
 Dec 15, 2021 - 3.0.3
     - json request body parameters can be optional
