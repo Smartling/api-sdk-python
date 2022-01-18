@@ -70,6 +70,9 @@ class testStringsApi(object):
 
         print("setUp", "OK", "\n")
 
+        # example of custom user-agent setup
+        from smartlingApiSdk.Settings import Settings
+        Settings.userAgent = "My Custom User Agent"
 
     def checkAddStringsToProject(self):
         """

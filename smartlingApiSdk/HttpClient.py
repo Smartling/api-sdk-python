@@ -31,15 +31,11 @@ else:
     HTTPError = urllib2.HTTPError
     from urllib import urlencode
 
-import ssl
 from .Constants import ReqMethod
 from .Settings import Settings
 from .MultipartPostHandler import MultipartPostHandler
-from .version import version
-
 
 class HttpClient:
-    headers = {"User-Agent": "Python SDK client v%s py:%s" % (version, sys.version.split()[0])}
     protocol = 'https://'
 
     def __init__(self, host, proxySettings=None, permanentHeaders={}):
@@ -57,8 +53,8 @@ class HttpClient:
         else:
             params = self.encodeParametersAsString(params)
 
-        headers = {}
-        for k, v in list(self.headers.items())+list(extraHeaders.items())+list(self.permanentHeaders.items()):
+        headers = {"User-Agent": Settings.userAgent}
+        for k, v in list(extraHeaders.items())+list(self.permanentHeaders.items()):
             headers[k] = v
         headers = self.setContentType(method, headers)
 

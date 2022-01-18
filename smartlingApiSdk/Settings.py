@@ -18,8 +18,10 @@
 """
 
 import logging
-
+import sys
+from .version import version
 
 class Settings:
     logLevel = logging.INFO
     requestTimeoutSeconds = 30
+    userAgent = "Python SDK client v%s py:%s" % (version, sys.version.split()[0])

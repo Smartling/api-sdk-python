@@ -28,6 +28,9 @@ testsOrder = [
 ]
 
 extraInitializations = '''
+        # example of custom user-agent setup
+        from smartlingApiSdk.Settings import Settings
+        Settings.userAgent = "My Custom User Agent"
 '''
 
 testEnvironment = 'stg'
