@@ -83,7 +83,7 @@ class FileApiBase:
         response_data = response_data.strip()
         if self.response_as_string or response_as_string or not self.isJsonResponse(headers):
             return response_data, status_code
-        return ApiResponse(response_data, status_code), status_code
+        return ApiResponse(response_data, status_code, headers), status_code
 
     def commandJson(self, method, uri, params):
         authHeader = self.addAuth(params)
@@ -93,11 +93,13 @@ class FileApiBase:
 
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
         if not code in [200,202]:
-            print ("code:%d jsonBody=%s" % (code, jsonBody))
+            rId = headers.get("X-SL-RequestId","Unknown")
+            print ("code:%d RequestId:%s jsonBody=%s" % (code, rId, jsonBody))
+
 
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
-        return  ApiResponse(data, code), code
+        return  ApiResponse(data, code, headers), code
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = None):
         return self.httpClient.getHttpResponseAndStatus(method, uri, params, handler, extraHeaders = extraHeaders)
@@ -118,7 +120,7 @@ class FileApiBase:
         data, code, headers = self.getResponseAndStatus(method, uri, params)
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
-        result = ApiResponse(data, code)
+        result = ApiResponse(data, code, headers)
         if result.isApiResonse:
             return result, code
         return data, code

@@ -35,11 +35,12 @@ class Data:
 class ApiResponse:
     """ response object to store parsed json response as python object, it also behaves like string for backward
         compatibility with previous SDK versions where response was a string """
-    def __init__(self, responseString, statusCode):
+    def __init__(self, responseString, statusCode, headers):
         self.statusCode = statusCode
         self.responseString = responseString
         self.responseDict = json.loads(responseString)
         self.isApiResonse = self.responseDict.get('response', None) and dict == type(self.responseDict['response'])
+        self.headers = headers
         if self.isApiResonse:
             self.parseResponse(responseString)
 

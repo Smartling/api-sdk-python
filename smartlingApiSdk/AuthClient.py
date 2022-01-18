@@ -41,7 +41,7 @@ class AuthClient:
         body = body.encode()
         response_data, status_code, headers = self.httpClient.getHttpResponseAndStatus(
             ReqMethod.POST, uri, params={}, extraHeaders=header, requestBody=body)
-        apiResponse = ApiResponse(response_data, status_code)
+        apiResponse = ApiResponse(response_data, status_code, headers)
 
         now = time.time()
         try:
