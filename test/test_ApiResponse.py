@@ -33,11 +33,12 @@ class test_ApiResponse(object):
         pass
         
     def test_ApiResponse_status(self):
-        ar = ApiResponse(self.JSON_STATUS, "200")
+        ar = ApiResponse(self.JSON_STATUS, "200", {"Content-Type":"application-json"})
 
         assert_equal(ar.statusCode, "200")
         assert_equal(ar.code, "SUCCESS")
         assert_equal(ar.messages, [])
+        assert_equal(ar.headers.get("Content-Type"), "application-json")
 
         assert_equal(ar.data.lastUploaded, '2014-06-10T12:29:17')
         assert_equal(ar.data.fileType, 'javaProperties')
