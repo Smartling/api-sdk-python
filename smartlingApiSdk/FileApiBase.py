@@ -61,6 +61,7 @@ class FileApiBase:
         except:
             f = io.StringIO(file)
             f.seek(0)
+            f.name = 'String'
         return f
 
     def filterOutDefaults(self, params):

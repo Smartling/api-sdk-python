@@ -135,8 +135,9 @@ class testJobBatchesV2Api(object):
                 404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
         """
+        textData = open(smartlingApiSdk.__path__[0]+'/resources/java.properties', 'rb').read().decode('utf-8', 'ignore')
         batchUid=self.batch_uid
-        file=smartlingApiSdk.__path__[0]+'/resources/java.properties'
+        file=textData
         fileUri=self.file_uri
         fileType='javaProperties'
         authorize=False

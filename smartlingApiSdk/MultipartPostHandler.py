@@ -31,7 +31,7 @@ else:
     from urllib import urlencode
 
 import mimetypes
-from io import IOBase
+import io
 
 class MultipartPostHandler(urllib2.BaseHandler):
     """ handler for multipart HTTP POST, helper object to provide POST functionality """
@@ -43,15 +43,16 @@ class MultipartPostHandler(urllib2.BaseHandler):
 
     def ifFileInstance(self, value):
         if isPython3:
-            return isinstance(value, IOBase)
+            return isinstance(value, io.IOBase) or type(value) == io.StringIO
         else:
-            return type(value) == file
+            return type(value) == file or type(value) == io.StringIO
 
     def http_request(self, request, forceMultipart = False):
         if isPython3:
             data = request.data
         else:
             data = request.get_data()
+            if hasattr(data,'encode'): data = data.encode('utf-8', 'ignore')
 
         if data is not None and type(data) != str and type(data) != bytes:
             files = []
@@ -100,7 +101,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
             buffer += 'Content-Type: %s\r\n' % contenttype
             fd.seek(0)
             if isPython3:
-                buffer = buffer.encode() + b'\r\n' + fd.read() + b'\r\n'
+                buffer = buffer.encode() + b'\r\n' + fd.read().encode() + b'\r\n'
             else:
                 buffer += '\r\n' + fd.read() + '\r\n'
 

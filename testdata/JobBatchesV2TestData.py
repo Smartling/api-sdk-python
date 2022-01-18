@@ -56,13 +56,15 @@ testDecorators = {
 
 'uploadFileToJobBatchV2': TestData({
     'batchUid': Code('self.batch_uid'),
-    'file' : Code("smartlingApiSdk.__path__[0]+'/resources/java.properties'"),
+    'file' : Code('textData'),
     'fileUri': Code('self.file_uri'),
     'fileType':'javaProperties',
     'authorize':False,
     'localeIdsToAuthorize':Code('["zh-TW",]'),
     'callbackUrl' : 'https://www.callback.com/smartling/python/sdk/jb2.test',
-}),
+},
+    ["textData = open(smartlingApiSdk.__path__[0]+'/resources/java.properties', 'rb').read().decode('utf-8', 'ignore')"]
+),
 
 
 
