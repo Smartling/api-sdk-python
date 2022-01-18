@@ -57,7 +57,7 @@ class Credentials():
     MY_USER_SECRET = "CHANGE_ME"
     MY_LOCALE ="CHANGE_ME"
 
-    CREDS = ("PROJECT_ID", "ACCOUNT_UID", "USER_IDENTIFIER", "USER_SECRET")
+    CREDS = ("PROJECT_ID", "ACCOUNT_UID", "USER_IDENTIFIER", "USER_SECRET", "LOCALE")
     OPTIONAL_CREDS = ("ACCOUNT_UID", "LOCALE")
    
     def __init__(self, env='prod'):
