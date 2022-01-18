@@ -52,8 +52,8 @@ class MultipartPostHandler(urllib2.BaseHandler):
             data = request.data
         else:
             data = request.get_data()
-            if hasattr(data,'encode'): data = data.encode('utf-8', 'ignore')
-
+            try: data = data.encode('utf-8', 'ignore')
+            except: pass
         if data is not None and type(data) != str and type(data) != bytes:
             files = []
             vars = []
