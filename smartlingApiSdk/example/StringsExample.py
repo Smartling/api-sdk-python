@@ -31,6 +31,16 @@ from smartlingApiSdk.Credentials import Credentials
 
 isPython3 =  sys.version_info[:2] >= (3,0)
 
+# example of custom user-agent setup
+from smartlingApiSdk.Settings import Settings
+Settings.userAgent = "My Custom User Agent"
+
+# example of custom logger settings
+from smartlingApiSdk.Settings import Settings
+import logging
+Settings.logPath = '/tmp/python.sdk.log'
+Settings.logLevel = logging.DEBUG
+
 def assert_equal(a,b, comment=''):
     if a != b :
         err = "Assertion Failed: '%s' != '%s' %s" % (a,b, comment)
@@ -69,10 +79,6 @@ class testStringsApi(object):
         self.strings_api = StringsApi(self.MY_USER_IDENTIFIER, self.MY_USER_SECRET, self.MY_PROJECT_ID, proxySettings, env='stg')
 
         print("setUp", "OK", "\n")
-
-        # example of custom user-agent setup
-        from smartlingApiSdk.Settings import Settings
-        Settings.userAgent = "My Custom User Agent"
 
     def checkAddStringsToProject(self):
         """

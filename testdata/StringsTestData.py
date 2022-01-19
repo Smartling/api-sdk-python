@@ -27,11 +27,19 @@ testsOrder = [
     'getAllTranslationsByProject',
 ]
 
-extraInitializations = '''
-        # example of custom user-agent setup
-        from smartlingApiSdk.Settings import Settings
-        Settings.userAgent = "My Custom User Agent"
+imports = '''
+# example of custom user-agent setup
+from smartlingApiSdk.Settings import Settings
+Settings.userAgent = "My Custom User Agent"
+
+# example of custom logger settings
+from smartlingApiSdk.Settings import Settings
+import logging
+Settings.logPath = '/tmp/python.sdk.log'
+Settings.logLevel = logging.DEBUG
 '''
+
+extraInitializations = ''
 
 testEnvironment = 'stg'
 
