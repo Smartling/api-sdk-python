@@ -89,6 +89,30 @@ class testJobsApi(object):
     def dateTimeStr(self, offset):
         return datetime.datetime.fromtimestamp(time.time()+offset).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    def checkAssignCustomFieldsToProject(self):
+        """
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/custom-fields
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
+        """
+
+        resp, code = self.jobs_api.getAccountCustomFields(self.MY_ACCOUNT_UID)
+        self.fieldUid=None
+        for fld in resp.data.items:
+            if 'python-sdk-test' == fld['fieldName']:
+                self.fieldUid = fld['fieldUid']
+
+
+        CustomFieldAssignmentList=[{"fieldUid":self.fieldUid},]
+        res, status = self.jobs_api.assignCustomFieldsToProject(CustomFieldAssignmentList=CustomFieldAssignmentList)
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('assignCustomFieldsToProject', 'OK')
+
+
     def checkAddJob(self):
         """
             method  :  POST
@@ -106,7 +130,7 @@ class testJobsApi(object):
         referenceNumber='testReferenceNumber'
         callbackUrl='https://www.callback.com/smartling/job'
         callbackMethod='GET'
-        customFields=[]
+        customFields=[{"fieldUid": self.fieldUid, "fieldValue": "Test Field Value"}]
         res, status = self.jobs_api.addJob(jobName=jobName, targetLocaleIds=targetLocaleIds, description=description, dueDate=dueDate, referenceNumber=referenceNumber, callbackUrl=callbackUrl, callbackMethod=callbackMethod, customFields=customFields)
 
         assert_equal(True, status in [200,202])
@@ -275,30 +299,6 @@ class testJobsApi(object):
 
         print('createCustomField', 'OK')
         self.jobs_api.httpClient.ignore_errors=False
-
-
-    def checkAssignCustomFieldsToProject(self):
-        """
-            method  :  POST
-            api url :  /jobs-api/v3/projects/{projectId}/custom-fields
-            Responses:
-                200 : OK
-            details :  https://api-reference.smartling.com/#operation/assignCustomFieldsToProject
-        """
-
-        resp, code = self.jobs_api.getAccountCustomFields(self.MY_ACCOUNT_UID)
-        self.fieldUid=None
-        for fld in resp.data.items:
-            if 'python-sdk-test' == fld['fieldName']:
-                self.fieldUid = fld['fieldUid']
-
-
-        CustomFieldAssignmentList=[{"fieldUid":self.fieldUid},]
-        res, status = self.jobs_api.assignCustomFieldsToProject(CustomFieldAssignmentList=CustomFieldAssignmentList)
-
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print('assignCustomFieldsToProject', 'OK')
 
 
     def checkUpdateCustomField(self):
@@ -633,6 +633,7 @@ class testJobsApi(object):
 def example():
     t = testJobsApi()
     t.setUp()
+    t.checkAssignCustomFieldsToProject()
     t.checkAddJob()
     t.checkAddLocaleToJob()
     t.checkAddStringsToJob()
@@ -642,7 +643,6 @@ def example():
     t.checkAuthorizeJob()
     t.checkModifyScheduleItemsForTranslationJob()
     t.checkCreateCustomField()
-    t.checkAssignCustomFieldsToProject()
     t.checkUpdateCustomField()
     t.checkRemoveFileFromJob()
     t.checkRemoveStringsFromJob()

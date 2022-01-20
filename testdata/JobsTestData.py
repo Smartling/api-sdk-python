@@ -21,6 +21,7 @@ from builder.Parameters import Code
 from builder.ExampleData import TestData
 
 testsOrder = [
+   'assignCustomFieldsToProject', #result is used in addJob
    'addJob',
    'addLocaleToJob',
    'addStringsToJob',
@@ -30,7 +31,6 @@ testsOrder = [
    'authorizeJob',
    'modifyScheduleItemsForTranslationJob',
    'createCustomField',
-   'assignCustomFieldsToProject',
    'updateCustomField',
    'removeFileFromJob',
    'removeStringsFromJob',
@@ -84,7 +84,7 @@ testDecorators = {
         'referenceNumber' : 'testReferenceNumber',
         'callbackUrl' : 'https://www.callback.com/smartling/job',
         'callbackMethod': 'GET',
-        'customFields' : [],
+        'customFields' : Code('[{"fieldUid": self.fieldUid, "fieldValue": "Test Field Value"}]'),
     },
     [],
     ["self.test_job_uid = res.data.translationJobUid",]

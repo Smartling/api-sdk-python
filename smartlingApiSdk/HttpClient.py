@@ -34,6 +34,7 @@ else:
 from .Constants import ReqMethod
 from .Settings import Settings
 from .MultipartPostHandler import MultipartPostHandler
+import ssl
 
 class HttpClient:
     protocol = 'https://'
