@@ -93,7 +93,7 @@ class HttpClient:
         response_data = response.read()
         if status_code not in [200, 202] and not self.ignore_errors:
             print("Non 200 response:%s   RequestId:%s   URL:%s   response:%s" %
-                  (status_code, headers.get("x-sl-requestid","Unknown"), url, response_data)
+                  (status_code, headers.get("X-SL-Requestid","Unknown"), url, response_data)
                  )
         return response_data, status_code, headers
 
