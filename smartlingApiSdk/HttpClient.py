@@ -31,15 +31,12 @@ else:
     HTTPError = urllib2.HTTPError
     from urllib import urlencode
 
-import ssl
 from .Constants import ReqMethod
 from .Settings import Settings
 from .MultipartPostHandler import MultipartPostHandler
-from .version import version
-
+import ssl
 
 class HttpClient:
-    headers = {"User-Agent": "Python SDK client v%s py:%s" % (version, sys.version.split()[0])}
     protocol = 'https://'
 
     def __init__(self, host, proxySettings=None, permanentHeaders={}):
@@ -50,15 +47,15 @@ class HttpClient:
         self.list_brackets = True  # Add [] suffix to GET list keys in urls, like &hashcodes[]=abcd, required by Files API
         self.force_multipart = True
 
-    def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders={}, requestBody=""):
+    def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders={}, requestBody="", context=None):
         self.installOpenerWithProxy(handler)
         if handler:
             prarms = self.encodeListParams(params)
         else:
             params = self.encodeParametersAsString(params)
 
-        headers = {}
-        for k, v in list(self.headers.items())+list(extraHeaders.items())+list(self.permanentHeaders.items()):
+        headers = {"User-Agent": Settings.userAgent}
+        for k, v in list(extraHeaders.items())+list(self.permanentHeaders.items()):
             headers[k] = v
         headers = self.setContentType(method, headers)
 
@@ -70,14 +67,14 @@ class HttpClient:
 
         try:
             if requestBody:
-                response = urllib2.urlopen(req, requestBody)
+                response = urllib2.urlopen(req, requestBody, context=context)
             else:
                 if handler:
                     multipartHandler = MultipartPostHandler()
                     req = multipartHandler.http_request(req, self.force_multipart)
                 else:
                     req.data = req.data.encode()
-                response = urllib2.urlopen(req, timeout=Settings.requestTimeoutSeconds)
+                response = urllib2.urlopen(req, timeout=Settings.requestTimeoutSeconds, context=context)
         except HTTPError as e:
             response = e
 
@@ -95,7 +92,9 @@ class HttpClient:
 
         response_data = response.read()
         if status_code not in [200, 202] and not self.ignore_errors:
-            print("Non 200 response:",url, status_code, "response=", response_data)
+            print("Non 200 response:%s   RequestId:%s   URL:%s   response:%s" %
+                  (status_code, headers.get("X-SL-Requestid","Unknown"), url, response_data)
+                 )
         return response_data, status_code, headers
 
     def installOpenerWithProxy(self, handler):

@@ -57,6 +57,10 @@ class ApiSource():
         if descr['operationId'] in ('getAllSourceStringsByProject'):
             m.method = 'post'
             m.isJson = True
+        if descr['operationId'] in ('addStringsToProject'):
+            for p in m.parameters+m.multipartParameters:
+                if p._name == 'namespace':
+                    p._default = 'smartling.strings-api.default.namespace'
         if descr['operationId'] in ('getAllTranslationsByProject'):
             m.method = 'post'
             m.isJson = True

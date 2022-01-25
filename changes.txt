@@ -1,4 +1,16 @@
-Dec 15, 2022 - 3.0.3
+Jan 19, 2022 - 3.1.0
+    - optional context for http request to bypass certificate check
+    - allow empty namespace in Strings API
+    - logged X-SL-RequestId header for non-200 responses
+    - added response headers as attribute of ApiResponse object for possible further use
+    - upload string instead of file - added example to testJobBatchesV2Api.checkUploadFileToJobBatchV2
+    - fixed logging + changed logging to log to current directory
+    - fixed refesh timestamp check
+    - user-agent could be customized in Settings.userAgent
+    - logs path could be customized in Settings.logPath
+    - Credentials.LOCALE is optional
+
+Dec 15, 2021 - 3.0.3
     - json request body parameters can be optional
     - fixed download json file error
 

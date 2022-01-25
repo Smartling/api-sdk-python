@@ -27,12 +27,11 @@ isPython3 = sys.version_info[:2] >= (3, 0)
 class Logger(object):
     collected = []
 
-    def __init__(self, name, loglevel):
-        logfile = '/tmp/api-sdk-python.log'
+    def __init__(self, name, loglevel, logfile="smartling-api-sdk-python.log"):
         logFormat = ('[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s')
 
         logging.basicConfig(filename=logfile, filemode='a', format=logFormat, level=logging.DEBUG)
-        self.write = sys.stdout.write
+        self.sys_write = sys.stdout.write
         self.loglevel = loglevel
         name = self.addThreadName(name)
         self.logger = logging.getLogger(name)
@@ -44,7 +43,7 @@ class Logger(object):
         return name
 
     def write(self, message):
-        self.write(message)
+        self.sys_write(message)
 
         hasNewline = '\n' in message
         if message.startswith("\n"):

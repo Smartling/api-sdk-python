@@ -41,8 +41,8 @@ class FileApiBase:
         self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
-        sys.stdout = Logger('python-sdk', Settings.logLevel)
-        sys.stderr = Logger('STDERR', logging.ERROR)
+        sys.stdout = Logger('python-sdk', Settings.logLevel, Settings.logPath)
+        sys.stderr = Logger('STDERR', logging.ERROR, Settings.logPath)
 
     def addAuth(self, params):
         params[Params.API_KEY] = self.apiKey
@@ -61,11 +61,14 @@ class FileApiBase:
         except:
             f = io.StringIO(file)
             f.seek(0)
+            f.name = 'String'
         return f
 
     def filterOutDefaults(self, params):
         if hasattr(params, 'items'):
             for k, v in list(params.items()):
+                if k == 'namespace':
+                    continue #when namespace is not specified it's replaced with 'smartling.strings-api.default.namespace' for strings api
                 if bool == type(v): continue
                 if not v: del params[k]
                 if k == 'projectId': del params[k]
@@ -81,7 +84,7 @@ class FileApiBase:
         response_data = response_data.strip()
         if self.response_as_string or response_as_string or not self.isJsonResponse(headers):
             return response_data, status_code
-        return ApiResponse(response_data, status_code), status_code
+        return ApiResponse(response_data, status_code, headers), status_code
 
     def commandJson(self, method, uri, params):
         authHeader = self.addAuth(params)
@@ -91,11 +94,13 @@ class FileApiBase:
 
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
         if not code in [200,202]:
-            print ("code:%d jsonBody=%s" % (code, jsonBody))
+            rId = headers.get("X-SL-RequestId","Unknown")
+            print ("code:%d RequestId:%s jsonBody=%s" % (code, rId, jsonBody))
+
 
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
-        return  ApiResponse(data, code), code
+        return  ApiResponse(data, code, headers), code
 
     def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = None):
         return self.httpClient.getHttpResponseAndStatus(method, uri, params, handler, extraHeaders = extraHeaders)
@@ -116,7 +121,7 @@ class FileApiBase:
         data, code, headers = self.getResponseAndStatus(method, uri, params)
         if self.response_as_string or not self.isJsonResponse(headers):
             return data, code
-        result = ApiResponse(data, code)
+        result = ApiResponse(data, code, headers)
         if result.isApiResonse:
             return result, code
         return data, code
