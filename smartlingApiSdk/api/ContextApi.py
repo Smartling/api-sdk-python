@@ -169,23 +169,6 @@ class ContextApi(ApiV2):
         return self.uploadMultipart(url, kw)
 
 
-    def getAsyncContextMatchResults(self, matchId, **kwargs):
-        """
-            method  :  GET
-            api url :  /context-api/v2/projects/{projectId}/match/{matchId}
-            Responses:
-                200 : OK
-                404 : Match request expired or does not exist
-            details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
-        """
-        kw = {
-        }
-        kw.update(kwargs)
-        url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/match/{matchId}', matchId=matchId, **kwargs)
-        response, status = self.command('GET', url, kw)
-        return response, status
-
-
     def getAsyncProcessResults(self, processUid, **kwargs):
         """
             method  :  GET

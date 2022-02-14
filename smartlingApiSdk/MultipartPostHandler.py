@@ -101,7 +101,10 @@ class MultipartPostHandler(urllib2.BaseHandler):
             buffer += 'Content-Type: %s\r\n' % contenttype
             fd.seek(0)
             if isPython3:
-                buffer = buffer.encode() + b'\r\n' + fd.read().encode() + b'\r\n'
+                fileData = fd.read()
+                if type(fileData) is str :
+                    fileData = fileData.encode()
+                buffer = buffer.encode() + b'\r\n' + fileData + b'\r\n'
             else:
                 buffer += '\r\n' + fd.read() + '\r\n'
 
