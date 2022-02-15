@@ -199,25 +199,6 @@ class testContextApi(object):
         print('uploadAndMatchVisualContext', 'OK')
 
 
-    def checkGetAsyncContextMatchResults(self):
-        """
-            method  :  GET
-            api url :  /context-api/v2/projects/{projectId}/match/{matchId}
-            Responses:
-                200 : OK
-                404 : Match request expired or does not exist
-            details :  https://api-reference.smartling.com/#operation/getAsyncContextMatchResults
-        """
-        matchId=self.match_id_upl_n_match
-        res, status = self.context_api.getAsyncContextMatchResults(matchId=matchId)
-
-
-
-        assert_equal(True, status in [200,202])
-        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        print('getAsyncContextMatchResults', 'OK')
-
-
     def checkCreateStringToContextBindings(self):
         """
             method  :  POST
@@ -260,7 +241,7 @@ class testContextApi(object):
 
 
         print('Total bindings count:',len(res.data.items))
-        assert_equal(len(res.data.items), 2)
+        assert_equal(len(res.data.items) >= 2, True)
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -299,12 +280,49 @@ class testContextApi(object):
         contextUid=self.context_uid
         res, status = self.context_api.deleteVisualContext(contextUid=contextUid)
 
-
-        res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_img)
-
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('deleteVisualContext', 'OK')
+
+
+    def checkDeleteVisualContextsAsync(self):
+        """
+            method  :  POST
+            api url :  /context-api/v2/projects/{projectId}/contexts/remove/async
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/deleteVisualContextsAsync
+        """
+        contextUids=[self.context_uid_img,]
+        res, status = self.context_api.deleteVisualContextsAsync(contextUids=contextUids)
+
+        self.processUid = res.data.processUid
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('deleteVisualContextsAsync', 'OK')
+
+
+    def checkGetAsyncProcessResults(self):
+        """
+            method  :  GET
+            api url :  /context-api/v2/projects/{projectId}/processes/{processUid}
+            Responses:
+                200 : OK
+                404 : Process request expired or does not exist
+            details :  https://api-reference.smartling.com/#operation/getAsyncProcessResults
+        """
+        processUid=self.processUid
+        res, status = self.context_api.getAsyncProcessResults(processUid=processUid)
+
+
+        assert_equal(res.data.processUid, self.processUid)
+        assert_equal(res.data.processType, 'DELETE_CONTEXTS')
+        assert_equal(True, res.data.processState in ['IN_PROGRESS', 'COMPLETED'])
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('getAsyncProcessResults', 'OK')
 
 
 
@@ -317,16 +335,12 @@ def example():
     t.checkDownloadVisualContextFileContent()
     t.checkRunAutomaticContextMatching()
     t.checkUploadAndMatchVisualContext()
-    t.checkGetAsyncContextMatchResults()
     t.checkCreateStringToContextBindings()
     t.checkGetBindings()
     t.checkDeleteBindings()
     t.checkDeleteVisualContext()
-    # not covered by tests #
-    '''
-    deleteVisualContextsAsync
-    getAsyncProcessResults
-    '''
+    t.checkDeleteVisualContextsAsync()
+    t.checkGetAsyncProcessResults()
     t.tearDown()
 
 if __name__ == '__main__':

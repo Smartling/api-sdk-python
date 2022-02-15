@@ -27,11 +27,12 @@ testsOrder = [
     'downloadVisualContextFileContent',
     'runAutomaticContextMatching',
     'uploadAndMatchVisualContext',
-    'getAsyncContextMatchResults',
     'createStringToContextBindings',
     'getBindings',
     'deleteBindings',
     'deleteVisualContext',
+    'deleteVisualContextsAsync',
+    'getAsyncProcessResults',
 ]
 
 extraInitializations = '''
@@ -108,11 +109,23 @@ self.match_id = res.data.matchId
 '''
     ),
 
-    'getAsyncContextMatchResults' : TestData(
+    'deleteVisualContextsAsync' : TestData(
         {
-            'matchId': Code('self.match_id_upl_n_match'),
+            'contextUids': Code('[self.context_uid_img,]'),
+        },
+        customTestCheck='''self.processUid = res.data.processUid
+'''
+    ),
+
+
+    'getAsyncProcessResults' : TestData(
+        {
+            'processUid': Code('self.processUid'),
         },
         customTestCheck='''
+assert_equal(res.data.processUid, self.processUid)
+assert_equal(res.data.processType, 'DELETE_CONTEXTS')
+assert_equal(True, res.data.processState in ['IN_PROGRESS', 'COMPLETED'])
 '''
     ),
 
@@ -120,10 +133,7 @@ self.match_id = res.data.matchId
     'deleteVisualContext' : TestData(
         {
             'contextUid': Code('self.context_uid'),
-        },
-        customTestCheck='''
-res2, status = self.context_api.deleteVisualContext(contextUid=self.context_uid_img)
-'''
+        }
     ),
 
     'uploadAndMatchVisualContext' : TestData(
@@ -157,7 +167,7 @@ self.binding_dos = items[1]['bindingUid']
         },
         customTestCheck='''
 print('Total bindings count:',len(res.data.items))
-assert_equal(len(res.data.items), 2)
+assert_equal(len(res.data.items) >= 2, True)
 '''
     ),
 

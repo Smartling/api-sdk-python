@@ -34,7 +34,7 @@ class Method(ApiCore):
         self.type = ''
         self.multipartParameters = []
         self.requestBody = ''
-        for name in ['summary', 'description', 'tags', 'operationId', 'responses', 'x-code-samples', 'requestBody']:
+        for name in ['summary', 'description', 'tags', 'operationId', 'responses', 'x-code-samples', 'requestBody', 'deprecated']:
             setattr(self, name, descriptionDict.get(name, None))
         self.apiName = apiName
         self.apiNameUnderscore = apiNameUnderscore

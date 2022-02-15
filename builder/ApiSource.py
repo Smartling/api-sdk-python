@@ -82,6 +82,7 @@ class %sApi(ApiV2):
 ''' % self.apiName
         rows = header.split('\n')
         for m in self.methods[:]:
+            if m.deprecated: continue
             built = m.build()
             if built:
                 rows.append(built)
@@ -125,7 +126,7 @@ class %sApi(ApiV2):
         hdr = hdr.replace('{api_name}', self.apiNameUnderscore)
         ftr = footer.replace('{API_NAME}', apiNameApi)
 
-        notTestedCalls = [m.operationId for m in self.methods]
+        notTestedCalls = [m.operationId for m in self.methods if not m.deprecated]
         notTestedCalls.insert(0, "'''")
         notTestedCalls.insert(0, '# not covered by tests #')
         rows.append(hdr)
