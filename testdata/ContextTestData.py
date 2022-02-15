@@ -125,7 +125,7 @@ self.match_id = res.data.matchId
         customTestCheck='''
 assert_equal(res.data.processUid, self.processUid)
 assert_equal(res.data.processType, 'DELETE_CONTEXTS')
-assert_equal(res.data.processState, 'COMPLETED')
+assert_equal(True, res.data.processState in ['IN_PROGRESS', 'COMPLETED'])
 '''
     ),
 
