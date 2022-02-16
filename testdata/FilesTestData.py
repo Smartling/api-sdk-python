@@ -265,13 +265,14 @@ for l in res.data.items:
         ['res, status = self.files_api.uploadSourceFile(self.FILE_PATH + self.FILE_NAME_IMPORT_ORIG, fileType = self.FILE_TYPE_IMPORT , fileUri=self.uri_import)'],
         customTestCheck='''
 
-assert_equal(res.data.wordCount, 2)
-assert_equal(res.data.stringCount, 2)
-assert_equal(res.data.translationImportErrors, [])
+if str(status) == '423':
+    assert_equal('RESOURCE_LOCKED', res.code)
+else:
+    assert_equal(res.data.wordCount, 2)
+    assert_equal(res.data.stringCount, 2)
+    assert_equal(res.data.translationImportErrors, [])
 
-res, status = self.files_api.deleteUploadedSourceFile(self.uri_import)
-assert_equal(200, status)
-assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
+    res, status = self.files_api.deleteUploadedSourceFile(self.uri_import)
 
 '''
     ),
