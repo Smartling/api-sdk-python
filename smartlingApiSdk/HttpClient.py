@@ -67,7 +67,7 @@ class HttpClient:
 
         try:
             if requestBody:
-                response = urllib2.urlopen(req, requestBody, context=context)
+                response = urllib2.urlopen(req, requestBody, timeout=Settings.requestTimeoutSeconds, context=context)
             else:
                 if handler:
                     multipartHandler = MultipartPostHandler()
