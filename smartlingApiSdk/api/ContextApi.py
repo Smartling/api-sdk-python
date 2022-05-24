@@ -131,7 +131,7 @@ class ContextApi(ApiV2):
         return response, status
 
 
-    def runAutomaticContextMatching(self, contextUid, contentFileUri='', stringHashcodes=[], overrideContextOlderThanDays=0, **kwargs):
+    def runAutomaticContextMatching(self, contextUid, contentFileUri='', stringHashcodes=[], translationJobUids=[], overrideContextOlderThanDays=0, **kwargs):
         """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
@@ -143,6 +143,7 @@ class ContextApi(ApiV2):
         kw = {
             'contentFileUri':contentFileUri,
             'stringHashcodes':stringHashcodes,
+            'translationJobUids':translationJobUids,
             'overrideContextOlderThanDays':overrideContextOlderThanDays,
         }
         kw.update(kwargs)
