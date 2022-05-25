@@ -177,7 +177,7 @@ class testJobsApi(object):
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('addStringsToJob', 'OK')
-        assert_equal(0, res.data.failCount, "addStringsToJob will fail if string was already in other job")
+        assert_equal(0, res.data.failCount, "addStringsToJob will fail if string e1159037badca0a2a618f62c50eff1bb was already in other job")
 
 
     def checkAddFileToJob(self):
