@@ -82,6 +82,7 @@ class testFapi(object):
 
 
     def tearDown(self):
+        time.sleep(10)
         res, status = self.fapi.delete(self.uri)
         res, status = self.fapi.delete(self.uri16)
 
