@@ -1,5 +1,8 @@
+May 24, 2022 - 3.1.4
+    - old tests updated to handle 423 errors for FilesAPI
+
 May 24, 2022 - 3.1.3
-    - Context API changes upadted
+    - Context API changes updated
 
 Feb 22, 2022 - 3.1.2
     - Timeout fix for requests with body

@@ -97,12 +97,18 @@ class testFapiV2(object):
 
     def tearDown(self):
         res, status = self.fapi.deleteUploadedSourceFile(self.uri)
-        assert_equal(200, status)
-        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', res.code)
+        else:
+            assert_equal(200, status)
+            assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 
         res, status = self.fapi.deleteUploadedSourceFile(self.uri16)
-        assert_equal(200, status)
-        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', res.code)
+        else:
+            assert_equal(200, status)
+            assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
 
         print("tearDown", "OK")
 
@@ -204,10 +210,13 @@ class testFapiV2(object):
     def testStatus(self):
         res, status = self.fapi.getFileTranslationStatusAllLocales(self.uri)
 
-        assert_equal(200, status)
-        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
-        assert_equal(res.data.fileUri, self.uri)
-        assert_equal(True, len(res.data.items) > 0)
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', res.code)
+        else:
+            assert_equal(200, status)
+            assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
+            assert_equal(res.data.fileUri, self.uri)
+            assert_equal(True, len(res.data.items) > 0)
 
         print("testStatus", "OK")
 
@@ -215,10 +224,13 @@ class testFapiV2(object):
     def testStatusLocale(self):
         res, status = self.fapi.getFileTranslationStatusSingleLocale(self.MY_LOCALE, self.uri)
 
-        assert_equal(200, status)
-        assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
-        assert_equal(res.data.fileUri, self.uri)
-        assert_equal(res.data.fileType, self.FILE_TYPE)
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', res.code)
+        else:
+            assert_equal(200, status)
+            assert_equal(self.CODE_SUCCESS_TOKEN, res.code)
+            assert_equal(res.data.fileUri, self.uri)
+            assert_equal(res.data.fileType, self.FILE_TYPE)
 
         print("testStatusLocale", "OK")
 
@@ -276,10 +288,13 @@ class testFapiV2(object):
 
         resp, status = self.fapi.importFileTranslations(file=translatedPath, fileType=self.FILE_TYPE_IMPORT, localeId=self.MY_LOCALE, fileUri=self.uri_import, translationState="PUBLISHED")
 
-        assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
-        assert_equal(resp.data.wordCount, 2)
-        assert_equal(resp.data.stringCount, 2)
-        assert_equal(resp.data.translationImportErrors, [])
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', resp.code)
+        else:
+            assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
+            assert_equal(resp.data.wordCount, 2)
+            assert_equal(resp.data.stringCount, 2)
+            assert_equal(resp.data.translationImportErrors, [])
 
         res, status = self.fapi.deleteUploadedSourceFile(self.uri_import)
         assert_equal(200, status)
