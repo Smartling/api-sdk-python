@@ -82,8 +82,11 @@ class testImport(object):
         uploadData.uri = self.uri
         uploadData.name = self.FILE_NAME_IMPORT
         resp, status = self.fapi.import_call(uploadData, self.locale, translationState="PUBLISHED")
-        assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
-        assert_equal(resp.data.wordCount, 2)
-        assert_equal(resp.data.stringCount, 2)
-        assert_equal(resp.data.translationImportErrors, [])
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', resp.code)
+        else:
+            assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
+            assert_equal(resp.data.wordCount, 2)
+            assert_equal(resp.data.stringCount, 2)
+            assert_equal(resp.data.translationImportErrors, [])
 

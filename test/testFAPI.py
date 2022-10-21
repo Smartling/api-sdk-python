@@ -99,10 +99,16 @@ class testFapi(object):
 
     def testFileStatus(self):
         res, status = self.fapi.status(self.uri, self.locale)
-        assert_equal(self.SUCCESS_TOKEN, res.code)
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', res.code)
+        else:
+            assert_equal(self.SUCCESS_TOKEN, res.code)
         
         res, status = self.fapi.status(self.uri16, self.locale)
-        assert_equal(self.SUCCESS_TOKEN, res.code)
+        if str(status) == '423':
+            assert_equal('RESOURCE_LOCKED', res.code)
+        else:
+            assert_equal(self.SUCCESS_TOKEN, res.code)
 
     def testGetFileFromServer(self):
         res, status = self.fapi.get(self.uri, self.locale)
