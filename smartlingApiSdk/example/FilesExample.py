@@ -279,7 +279,8 @@ class testFilesApi(object):
             details :  https://api-reference.smartling.com/#operation/getRecentlyUploadedSourceFilesList
         """
         fileTypes=[FileTypes.android, FileTypes.javaProperties]
-        res, status = self.files_api.getRecentlyUploadedSourceFilesList(fileTypes=fileTypes)
+        orderBy='created_desc'
+        res, status = self.files_api.getRecentlyUploadedSourceFilesList(fileTypes=fileTypes, orderBy=orderBy)
 
 
         uris = [x['fileUri'] for x in res.data.items]

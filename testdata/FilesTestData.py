@@ -199,7 +199,8 @@ assert_equal(True, 'zh-TW'+'/'+self.uri16 in names)
 
     'getRecentlyUploadedSourceFilesList' : TestData(
         {
-            'fileTypes' : Code('[FileTypes.android, FileTypes.javaProperties]')
+            'fileTypes' : Code('[FileTypes.android, FileTypes.javaProperties]'),
+            'orderBy' : 'created_desc'
         },
         customTestCheck='''
 uris = [x['fileUri'] for x in res.data.items]
