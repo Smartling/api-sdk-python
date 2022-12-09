@@ -48,3 +48,12 @@ class test_ApiResponse(object):
         assert_equal(ar.data.fileUri, 'javaUTF16.properties')
         assert_equal(ar.data.completedStringCount, 0)
         assert_equal(ar.data.callbackUrl, 'http://yourdomain.com/callback')
+
+    def test_ApiResponse_failed(self):
+        failed_json = '{"response":{"code":"VALIDATION_ERROR","errors":[{"key":null,"message":"File not found: test_import.xml_2.2.4_1629202583.584802","details":null}]}}'
+        ar = ApiResponse(failed_json, "404", {"Content-Type":"application-json"})
+        try:
+            ua = ar.unexisting
+        except AttributeError as e:
+            assert_equal(str(e), "ApiResponse has no attribute 'unexisting'")
+        assert_equal(ar.code, "VALIDATION_ERROR")
