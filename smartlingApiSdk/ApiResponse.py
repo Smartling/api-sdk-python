@@ -42,9 +42,9 @@ class ApiResponse:
         self.isApiResonse = self.responseDict.get('response', None) and dict == type(self.responseDict['response'])
         self.headers = headers
         if self.isApiResonse:
-            self.parseResponse()
+            self.parseResponse(responseString)
 
-    def parseResponse(self):
+    def parseResponse(self, responseString):
         """ parses json and fills object attributes according json attributes """
 
         for k, v in list(self.responseDict['response'].items()):
@@ -59,9 +59,9 @@ class ApiResponse:
             return getattr(self.responseDict, key)
 
         try:
-            return self.__dict__[key]
+            return getattr(self, key)
         except:
-            raise AttributeError("ApiResponse has no attribute %r" % ( key ))
+            pass
 
     def __str__(self):
         return str(self.responseString)
