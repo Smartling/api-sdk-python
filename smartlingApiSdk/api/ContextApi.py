@@ -131,7 +131,7 @@ class ContextApi(ApiV2):
         return response, status
 
 
-    def runAutomaticContextMatching(self, contextUid, contentFileUri='', stringHashcodes=[], translationJobUids=[], overrideContextOlderThanDays=0, **kwargs):
+    def runAutomaticContextMatching(self, contextUid, contentFileUri='', stringHashcodes=[], translationJobUids=[], overrideContextOlderThanDays=0, videoMatchingMode='', **kwargs):
         """
             method  :  POST
             api url :  /context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async
@@ -145,6 +145,7 @@ class ContextApi(ApiV2):
             'stringHashcodes':stringHashcodes,
             'translationJobUids':translationJobUids,
             'overrideContextOlderThanDays':overrideContextOlderThanDays,
+            'videoMatchingMode':videoMatchingMode,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/context-api/v2/projects/{projectId}/contexts/{contextUid}/match/async', contextUid=contextUid, **kwargs)

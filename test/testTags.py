@@ -203,3 +203,7 @@ class testTagsApi(object):
         t.checkRemoveTagsFromStrings()
         t.checkAddTagToStrings()
         t.checkRemoveAllTagsFromStrings()
+        # not covered by tests #
+        '''
+        getTagsListByAccount
+        '''

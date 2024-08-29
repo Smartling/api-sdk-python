@@ -26,7 +26,7 @@ class AccountProjectsApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def getProjectsByAccount(self, accountUid, projectNameFilter='', includeArchived='', offset=0, limit=0, **kwargs):
+    def getProjectsByAccount(self, accountUid, projectNameFilter='', includeArchived='', offset=0, limit=0, projectTypeCode='', projectTypeCodes=[], **kwargs):
         """
             method  :  GET
             api url :  /accounts-api/v2/accounts/{accountUid}/projects
@@ -40,6 +40,8 @@ class AccountProjectsApi(ApiV2):
             'includeArchived':includeArchived,
             'offset':offset,
             'limit':limit,
+            'projectTypeCode':projectTypeCode,
+            'projectTypeCodes':projectTypeCodes,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/accounts-api/v2/accounts/{accountUid}/projects', accountUid=accountUid, **kwargs)

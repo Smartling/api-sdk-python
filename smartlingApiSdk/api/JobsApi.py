@@ -121,7 +121,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def getStringsForTranslationJob(self, translationJobUid, targetLocaleId='', limit=0, offset=0, **kwargs):
+    def getStringsForTranslationJob(self, translationJobUid, targetLocaleId='', limit=1000, offset=0, **kwargs):
         """
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/strings
@@ -371,7 +371,7 @@ class JobsApi(ApiV2):
         return response, status
 
 
-    def getJobFilesList(self, translationJobUid, limit=0, offset=0, **kwargs):
+    def getJobFilesList(self, translationJobUid, limit=1000, offset=0, **kwargs):
         """
             method  :  GET
             api url :  /jobs-api/v3/projects/{projectId}/jobs/{translationJobUid}/files

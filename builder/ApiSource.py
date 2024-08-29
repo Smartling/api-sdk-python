@@ -44,16 +44,6 @@ class ApiSource():
                     self.methods.append(m)
 
     def patchMethods(self, descr, m, swaggerDict):
-        if descr['operationId'] == 'exportFileTranslations':
-            propDict = {
-                "type": "string",
-                "format": "binary",
-                "description": "The file contents to upload."
-            }
-            mp = MultipartProperty('file', propDict, swaggerDict)
-            mp.setRequired()
-            m.needMultipart = True
-            m.multipartParameters.insert(0, mp)
         if descr['operationId'] in ('getAllSourceStringsByProject'):
             m.method = 'post'
             m.isJson = True

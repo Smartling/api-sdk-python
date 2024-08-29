@@ -28,9 +28,9 @@ setup(
     description="python library to work with Smartling translation services APIs",
     license='Apache License v2.0',
     keywords='translation localization internationalization',
-    url="https://api-reference.smartling.com/",
+    url="",
     long_description="python SDK to work with Smartling API for computer assisted translation",
-    packages=['smartlingApiSdk','smartlingApiSdk/example','smartlingApiSdk/api'],
+    packages=['smartlingApiSdk','smartlingApiSdk/example','smartlingApiSdk/api','smartlingApiSdk/resources'],
     include_package_data = True,
     package_data = {
         '': ['*.properties', '*.xml', '*.png', '*.csv'],
