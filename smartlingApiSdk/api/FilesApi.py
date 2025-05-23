@@ -26,7 +26,7 @@ class FilesApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
-    def uploadSourceFile(self, file, fileUri, fileType, authorize=False, localeIdsToAuthorize=[], callbackUrl='', directives={}, **kwargs):
+    def uploadSourceFile(self, file, fileUri, fileType, callbackUrl='', directives={}, **kwargs):
         """
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/file
@@ -41,8 +41,6 @@ class FilesApi(ApiV2):
             'file':self.processFile(file),
             'fileUri':fileUri,
             'fileType':fileType,
-            'authorize':authorize,
-            'localeIdsToAuthorize':localeIdsToAuthorize,
             'callbackUrl':callbackUrl,
         }
         self.addLibIdDirective(kw)

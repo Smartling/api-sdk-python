@@ -71,6 +71,8 @@ class testApiChanges:
 
             if 'JobBatchesV2' == api_name:
                 api_name = 'Job Batches V2'
+                continue # api description is moved to yaml format whuch is not supported yet:
+                # "/job-batches-api/v2/projects/{projectId}/batches": {  "$ref": "./spec/job_batches_v2/job_batches_endpoints.yaml#/x-paths/create_list_batches"
 
             print ("Cheking:%s" % api_name)
             apisrc = ApiBuilder(api_name).apisrc

@@ -204,6 +204,10 @@ def example():
     t.checkRemoveTagsFromStrings()
     t.checkAddTagToStrings()
     t.checkRemoveAllTagsFromStrings()
+    # not covered by tests #
+    '''
+    getTagsListByAccount
+    '''
     t.tearDown()
 
 if __name__ == '__main__':

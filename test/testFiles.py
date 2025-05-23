@@ -133,8 +133,7 @@ class testFilesApi(object):
         file=self.FILE_PATH + self.FILE_NAME
         fileUri=self.uri
         fileType=self.FILE_TYPE
-        localeIdsToAuthorize=[self.MY_LOCALE]
-        res, status = self.files_api.uploadSourceFile(file=file, fileUri=fileUri, fileType=fileType, localeIdsToAuthorize=localeIdsToAuthorize)
+        res, status = self.files_api.uploadSourceFile(file=file, fileUri=fileUri, fileType=fileType)
 
 
         assert_equal(res.data.wordCount, 6)

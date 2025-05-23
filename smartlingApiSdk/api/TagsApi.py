@@ -26,6 +26,27 @@ class TagsApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
 
+    def getTagsListByAccount(self, accountUid, projectIds=[], tagMask='', limit=1500, offset=0, **kwargs):
+        """
+            method  :  POST
+            api url :  /tags-api/v2/accounts/{accountUid}/tags
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/tags-api/v2/accounts/$smartlingAccountUid/tags
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getTagsListByAccount
+        """
+        kw = {
+            'projectIds':projectIds,
+            'tagMask':tagMask,
+            'limit':limit,
+            'offset':offset,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/tags-api/v2/accounts/{accountUid}/tags', accountUid=accountUid, **kwargs)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
+
+
     def getTagsListByProject(self, tagMask='', limit=100, offset=0, **kwargs):
         """
             method  :  GET
