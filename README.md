@@ -24,7 +24,7 @@ Quick start
 -----------
 
 Clone the repo: `git clone git@github.com:Smartling/api-sdk-python.git`.
-You may start with examples in ./example directory.
+You may start with examples in smartlingApiSdk/example directory.
 Set your credentials as described in smartlingApiSdk/Credentials.py file.
 
 There are quite extensive examples, each SDK has own examples covering almost every API call.
@@ -46,6 +46,13 @@ from smartlingApiSdk.example.JobBatchesV2Example import example
 from smartlingApiSdk.example.TagsExample import example
 from smartlingApiSdk.example.MultipleAccountsExample import example
 from smartlingApiSdk.example.MultipleProjectsExample import example
+
+Tests
+-----
+
+pip install nose
+cd tests
+nosetests
 
 Versioning
 ----------
@@ -92,7 +99,7 @@ Greg Jones
 Copyright and license
 ---------------------
 
-Copyright 2012-2021 Smartling, Inc.
+Copyright 2012-2025 Smartling, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this work except in compliance with the License.
