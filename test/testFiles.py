@@ -32,6 +32,7 @@ from smartlingApiSdk.Credentials import Credentials
 isPython3 =  sys.version_info[:2] >= (3,0)
 
 from smartlingApiSdk.Constants import FileTypes
+from smartlingApiSdk.Settings import Settings
 from datetime import date
 import zipfile
 if isPython3:
@@ -60,6 +61,7 @@ class testFilesApi(object):
         print("tearDown", "OK")
 
     def setUp(self):
+        Settings.requestTimeoutSeconds = 60 #increase timeout for tests
         credentials = Credentials('stg') #Gets your Smartling credetnials from environment variables
         self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
         self.MY_USER_SECRET = credentials.MY_USER_SECRET
