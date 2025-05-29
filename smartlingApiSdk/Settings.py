@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -26,3 +26,4 @@ class Settings:
     logPath  = "smartling-api-sdk-python.log"
     requestTimeoutSeconds = 30
     userAgent = "Python SDK client v%s py:%s" % (version, sys.version.split()[0])
+    printToLogfile = True  # direct stdout and stderr to log file

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -174,29 +174,6 @@ Please check examples for current api usage.'''
 
         url = self.urlHelper.getUrl(self.urlHelper.IMPORT, localeId = localeId)
         return self.uploadMultipart(url, params)
-
-    def commandListAuthorizedLocales(self, fileUri):
-        """ http://docs.smartling.com/pages/API/v2/FileAPI/Authorize-Content/List-Authorized-Locales/ """
-        kw = {}
-        kw[Params.FILE_URI] = fileUri
-        url = self.urlHelper.getUrl(self.urlHelper.LIST_AUTHORIZED_LOCALES)
-        return self.command(ReqMethod.GET, url, kw)
-
-    def commandAuthorize(self, fileUri, localeIds):
-        """ http://docs.smartling.com/pages/API/v2/FileAPI/Authorize-Content/Authorize/ """
-        kw = {}
-        kw[Params.FILE_URI] = fileUri
-        kw[Params.LOCALE_IDS_BRACKET] = ",".join(localeIds)
-        url = self.urlHelper.getUrl(self.urlHelper.AUTHORIZE)
-        return self.command(ReqMethod.POST, url, kw)
-
-    def commandUnauthorize(self, fileUri, localeIds):
-        """  http://docs.smartling.com/pages/API/v2/FileAPI/Authorize-Content/Unauthorize/ """
-        kw = {}
-        kw[Params.FILE_URI] = fileUri
-        kw[Params.LOCALE_IDS_BRACKET] = ",".join(localeIds)
-        url = self.urlHelper.getUrl(self.urlHelper.UNAUTHORIZE)
-        return self.command(ReqMethod.DELETE, url, kw)
 
     def commandGetTranslations(self, fileUri, filePath, localeId, directives={}, **kw):
         """  https://developer.smartling.com/v1.0/reference#post_projects-projectid-locales-localeid-file-import """

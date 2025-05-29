@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -37,9 +37,6 @@ class UrlV2Helper:
     LAST_MODIFIED = "/files-api/v2/projects/{projectId}/locales/{localeId}/file/last-modified"
     LAST_MODIFIED_ALL = "/files-api/v2/projects/{projectId}/file/last-modified"
     IMPORT = "/files-api/v2/projects/{projectId}/locales/{localeId}/file/import"
-    LIST_AUTHORIZED_LOCALES = "/files-api/v2/projects/{projectId}/file/authorized-locales"
-    AUTHORIZE = "/files-api/v2/projects/{projectId}/file/authorized-locales"
-    UNAUTHORIZE = "/files-api/v2/projects/{projectId}/file/authorized-locales"
     GET_TRANSLATIONS = "/files-api/v2/projects/{projectId}/locales/{localeId}/file/get-translations"
     
     def __init__(self, projectId):

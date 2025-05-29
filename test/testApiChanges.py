@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -71,7 +71,7 @@ class testApiChanges:
 
             if 'JobBatchesV2' == api_name:
                 api_name = 'Job Batches V2'
-                continue # api description is moved to yaml format whuch is not supported yet:
+                continue # api description is moved to yaml format which is not supported yet:
                 # "/job-batches-api/v2/projects/{projectId}/batches": {  "$ref": "./spec/job_batches_v2/job_batches_endpoints.yaml#/x-paths/create_list_batches"
 
             print ("Cheking:%s" % api_name)

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -17,4 +17,4 @@
  * limitations under the License.
 """
 
-version = "3.1.6"
+version = "3.1.7"

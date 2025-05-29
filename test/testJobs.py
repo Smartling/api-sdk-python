@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -250,6 +250,8 @@ class testJobsApi(object):
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
         print('authorizeJob', 'OK')
+        if 202 == status:
+            time.sleep(30)  # wait for job to be authorized, otherwise next calls will fail
 
 
     def checkModifyScheduleItemsForTranslationJob(self):
@@ -562,7 +564,7 @@ class testJobsApi(object):
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
-        time.sleep(15) #wait for job to be cancelled
+        time.sleep(30) #wait for job to be cancelled
         print('cancelJob', 'OK')
 
 

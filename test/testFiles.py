@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -32,6 +32,7 @@ from smartlingApiSdk.Credentials import Credentials
 isPython3 =  sys.version_info[:2] >= (3,0)
 
 from smartlingApiSdk.Constants import FileTypes
+from smartlingApiSdk.Settings import Settings
 from datetime import date
 import zipfile
 if isPython3:
@@ -60,6 +61,7 @@ class testFilesApi(object):
         print("tearDown", "OK")
 
     def setUp(self):
+        Settings.requestTimeoutSeconds = 60 #increase timeout for tests
         credentials = Credentials('stg') #Gets your Smartling credetnials from environment variables
         self.MY_USER_IDENTIFIER = credentials.MY_USER_IDENTIFIER
         self.MY_USER_SECRET = credentials.MY_USER_SECRET

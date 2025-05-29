@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-""" Copyright 2012-2021 Smartling, Inc.
+""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -41,8 +41,9 @@ class FileApiBase:
         self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
-        sys.stdout = Logger('python-sdk', Settings.logLevel, Settings.logPath)
-        sys.stderr = Logger('STDERR', logging.ERROR, Settings.logPath)
+        if Settings.printToLogfile:
+            sys.stdout = Logger('python-sdk', Settings.logLevel, Settings.logPath)
+            sys.stderr = Logger('STDERR', logging.ERROR, Settings.logPath)
 
     def addAuth(self, params):
         params[Params.API_KEY] = self.apiKey
