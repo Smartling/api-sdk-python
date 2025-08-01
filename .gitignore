@@ -2,3 +2,4 @@
 /SmartlingApiSdk.egg-info
 /dist
 *.log
+openapi3.json
