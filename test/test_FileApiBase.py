@@ -27,10 +27,10 @@ from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from smartlingApiSdk.ObsoleteApiV1 import ObsoleteApiV1
 from smartlingApiSdk.UploadData import UploadData
 from smartlingApiSdk.Constants import Params
-from nose.tools import assert_equal
 
 
-class test_UploadData(object):
+
+class TestFileApiBase(object):
     def mock_uploadMultipart(self, uri, params):
         return params
 
@@ -41,11 +41,11 @@ class test_UploadData(object):
         api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
 
-        assert_equal(len(params), 4)
-        assert_equal(params[Params.FILE_URI], "name")
-        assert_equal(params[Params.FILE_TYPE], "type")
-        assert_equal(params[Params.FILE_PATH], "pathname")
-        assert_equal(params[Params.APPROVED], "false")
+        assert len(params) == 4
+        assert params[Params.FILE_URI] == "name"
+        assert params[Params.FILE_TYPE] == "type"
+        assert params[Params.FILE_PATH] == "pathname"
+        assert params[Params.APPROVED] == "false"
 
     def test_commandUpload_Callback_Approved(self):
         ud = UploadData("path", "name", "type")
@@ -56,9 +56,9 @@ class test_UploadData(object):
         api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
 
-        assert_equal(len(params), 5)
-        assert_equal(params[Params.APPROVED], "true")
-        assert_equal(params[Params.CALLBACK_URL], "smartling.com")
+        assert len(params) == 5
+        assert params[Params.APPROVED] == "true"
+        assert params[Params.CALLBACK_URL] == "smartling.com"
 
     def test_commandUpload_Directives(self):
         ud = UploadData("path", "name", "type")
@@ -71,6 +71,6 @@ class test_UploadData(object):
         api.uploadMultipart = self.mock_uploadMultipart
         params = api.commandUpload(ud)
 
-        assert_equal(len(params), 7)
-        assert_equal(params["smartling.placeholder_format_custom"], "\[.+?\]")
-        assert_equal(params["smartling.placeholder_format"], "IOS")
+        assert len(params) == 7
+        assert params["smartling.placeholder_format_custom"] == "\[.+?\]"
+        assert params["smartling.placeholder_format"] == "IOS"

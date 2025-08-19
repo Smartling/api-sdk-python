@@ -22,8 +22,20 @@
 from .Constants import Uri, Params, ReqMethod
 from .FileApiBase import FileApiBase
 
-class ObsoleteApiV1(FileApiBase):
-    """ Api v1 basic functionality, is obsolete, new API calls are missing here, please use ApiV2 """
+import warnings
+
+class ApiV1(FileApiBase):
+    """ Api v1 basic functionality. This API is deprecated. Please use ApiV2 instead. """
+    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}):
+        warnings.warn("ApiV1 is deprecated, please use ApiV2 instead.", DeprecationWarning, stacklevel=2)
+        super().__init__(host, proxySettings, permanentHeaders=permanentHeaders)
+        self.apiKey = apiKey
+        self.projectId = projectId
+
+    def addAuth(self, params):
+        params[Params.API_KEY] = self.apiKey
+        params[Params.PROJECT_ID] = self.projectId
+        return {}
 
     def commandUpload(self, uploadData):
         params = {

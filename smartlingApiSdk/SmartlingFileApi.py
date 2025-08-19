@@ -19,10 +19,15 @@
 
 #FileApi class implementation
 
-from .ObsoleteApiV1 import ObsoleteApiV1
+import warnings
+from .ApiV1 import ApiV1
 
 
-class ObsoleteSmartlingFileApi(ObsoleteApiV1):
+class SmartlingFileApi(ApiV1):
+    """ This API is deprecated. Please use ApiV2 instead. """
+    def __init__(self, *args, **kwargs):
+        warnings.warn("SmartlingFileApi is deprecated, please use ApiV2 instead.", DeprecationWarning, stacklevel=2)
+        super().__init__(*args, **kwargs)
     """ Is obsolete, new API calls are missing here, please use ApiV2 !
         Wrapper class providing access to all file API commands, all methods below represent API commands.
         Each command returns tuple = (response, status_code) 
@@ -46,8 +51,7 @@ class ObsoleteSmartlingFileApi(ObsoleteApiV1):
              api.list(locale='es-ES', offset=50)
         """
 
-    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}):
-        ObsoleteApiV1.__init__(self, host, apiKey, projectId, proxySettings, permanentHeaders=permanentHeaders)
+    
 
     def upload(self, uploadData):
         """ implements `upload` api command
@@ -105,4 +109,4 @@ class SmartlingFileApiFactory:
     api_host = 'api.smartling.com'
 
     def getSmartlingTranslationApi(self, apiKey, projectId, proxySettings=None):
-        return ObsoleteSmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)
+        return SmartlingFileApi(self.api_host, apiKey, projectId, proxySettings)

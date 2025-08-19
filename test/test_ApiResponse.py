@@ -24,10 +24,10 @@ lib_path = os.path.abspath('../')
 sys.path.append(lib_path)
 
 from smartlingApiSdk.ApiResponse import ApiResponse
-from nose.tools import assert_equal
 
 
-class test_ApiResponse(object):
+
+class TestApiResponse(object):
     JSON_STATUS = '{"response":{"data":{"fileUri":"javaUTF16.properties","wordCount":4,"fileType":"javaProperties","callbackUrl":"http://yourdomain.com/callback","lastUploaded":"2014-06-10T12:29:17","stringCount":4,"approvedStringCount":4,"completedStringCount":0},"code":"SUCCESS","messages":[]}}'
     def test_init(self):
         pass
@@ -35,19 +35,19 @@ class test_ApiResponse(object):
     def test_ApiResponse_status(self):
         ar = ApiResponse(self.JSON_STATUS, "200", {"Content-Type":"application-json"})
 
-        assert_equal(ar.statusCode, "200")
-        assert_equal(ar.code, "SUCCESS")
-        assert_equal(ar.messages, [])
-        assert_equal(ar.headers.get("Content-Type"), "application-json")
+        assert ar.statusCode == "200"
+        assert ar.code == "SUCCESS"
+        assert ar.messages == []
+        assert ar.headers.get("Content-Type") == "application-json"
 
-        assert_equal(ar.data.lastUploaded, '2014-06-10T12:29:17')
-        assert_equal(ar.data.fileType, 'javaProperties')
-        assert_equal(ar.data.stringCount, 4)
-        assert_equal(ar.data.wordCount, 4)
-        assert_equal(ar.data.approvedStringCount, 4)
-        assert_equal(ar.data.fileUri, 'javaUTF16.properties')
-        assert_equal(ar.data.completedStringCount, 0)
-        assert_equal(ar.data.callbackUrl, 'http://yourdomain.com/callback')
+        assert ar.data.lastUploaded == '2014-06-10T12:29:17'
+        assert ar.data.fileType == 'javaProperties'
+        assert ar.data.stringCount == 4
+        assert ar.data.wordCount == 4
+        assert ar.data.approvedStringCount == 4
+        assert ar.data.fileUri == 'javaUTF16.properties'
+        assert ar.data.completedStringCount == 0
+        assert ar.data.callbackUrl == 'http://yourdomain.com/callback'
 
     def test_ApiResponse_failed(self):
         failed_json = '{"response":{"code":"VALIDATION_ERROR","errors":[{"key":null,"message":"File not found: test_import.xml_2.2.4_1629202583.584802","details":null}]}}'
@@ -55,5 +55,5 @@ class test_ApiResponse(object):
         try:
             ua = ar.unexisting
         except AttributeError as e:
-            assert_equal(str(e), "ApiResponse has no attribute 'unexisting'")
-        assert_equal(ar.code, "VALIDATION_ERROR")
+            assert str(e) == "ApiResponse has no attribute 'unexisting'"
+        assert ar.code == "VALIDATION_ERROR"

@@ -26,4 +26,11 @@ class Settings:
     logPath  = "smartling-api-sdk-python.log"
     requestTimeoutSeconds = 30
     userAgent = "Python SDK client v%s py:%s" % (version, sys.version.split()[0])
-    printToLogfile = True  # direct stdout and stderr to log file
+
+# Configure logging
+logging.basicConfig(
+    level=Settings.logLevel,
+    format='[%(asctime)s] %(levelname)-2s %(name)-4s %(message)s',
+    filename=Settings.logPath,
+    filemode='a'
+)

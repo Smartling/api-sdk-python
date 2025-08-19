@@ -19,71 +19,63 @@
 
 #FileApi class implementation
 
-from .HttpClient import HttpClient, isPython3
-from .MultipartPostHandler import MultipartPostHandler
+from .HttpClient import HttpClient
+
 from .Constants import Params, ReqMethod
 from .ApiResponse import ApiResponse
-from .Logger import Logger
-from .Settings import Settings
-import io
-import sys
 import logging
 import json
+from pathlib import Path
 
 
 class FileApiBase:
     """ basic class implementing low-level api calls """
-    response_as_string = False
+    
 
-    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}):
+    def __init__(self, host, proxySettings=None, permanentHeaders={}):
         self.host = host
-        self.apiKey = apiKey
-        self.projectId = projectId
         self.proxySettings = proxySettings
         self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
-        if Settings.printToLogfile:
-            sys.stdout = Logger('python-sdk', Settings.logLevel, Settings.logPath)
-            sys.stderr = Logger('STDERR', logging.ERROR, Settings.logPath)
 
-    def addAuth(self, params):
-        params[Params.API_KEY] = self.apiKey
-        params[Params.PROJECT_ID] = self.projectId
-        return {}
+    
 
-    def processFile(self, file):
-        """"
-            returns file-like object form string or file
-            tries to treat string as file path or make it file-like object to be uploaded
+    def processFile(self, file_content: str | Path):
+        """Returns a file-like object from a string or file path.
+        Tries to treat string as file path or make it file-like object to be uploaded.
         """
-        if not file or file==type(file):
-            return file
-        try:
-            f = open(file, 'rb')
-        except:
-            f = io.StringIO(file)
+        if isinstance(file_content, Path):
+            return open(file_content, 'rb')
+        elif isinstance(file_content, str):
+            f = io.StringIO(file_content)
             f.seek(0)
             f.name = 'String'
-        return f
+            return f
+        else:
+            return file_content
 
     def filterOutDefaults(self, params):
         if hasattr(params, 'items'):
+            keys_to_delete = []
             for k, v in list(params.items()):
                 if k == 'namespace':
-                    continue #when namespace is not specified it's replaced with 'smartling.strings-api.default.namespace' for strings api
-                if bool == type(v): continue
-                if not v: del params[k]
-                if k == 'projectId': del params[k]
+                    continue
+                if isinstance(v, bool): 
+                    continue
+                if not v:
+                    keys_to_delete.append(k)
+            for k in keys_to_delete:
+                del params[k]
 
-    def uploadMultipart(self, uri, params, response_as_string=False):
+    def uploadMultipart(self, uri, params):
         self.filterOutDefaults(params)
         authHeader = self.addAuth(params)
         if Params.FILE_PATH in params:
             params[Params.FILE] = open(params[Params.FILE_PATH], 'rb')
             del params[Params.FILE_PATH]  # no need in extra field in POST
 
-        response_data, status_code, headers = self.getHttpResponseAndStatus(ReqMethod.POST ,uri, params, MultipartPostHandler, extraHeaders = authHeader)
+        response_data, status_code, headers = self.getHttpResponseAndStatus(ReqMethod.POST ,uri, params, extraHeaders = authHeader)
         response_data = response_data.strip()
-        if self.response_as_string or response_as_string or not self.isJsonResponse(headers):
+        if not self.isJsonResponse(headers):
             return response_data, status_code
         return ApiResponse(response_data, status_code, headers), status_code
 
@@ -96,31 +88,26 @@ class FileApiBase:
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
         if not code in [200,202]:
             rId = headers.get("X-SL-RequestId","Unknown")
-            print ("code:%d RequestId:%s jsonBody=%s" % (code, rId, jsonBody))
+            logging.error("code:%d RequestId:%s jsonBody=%s" % (code, rId, jsonBody))
 
 
-        if self.response_as_string or not self.isJsonResponse(headers):
-            return data, code
-        return  ApiResponse(data, code, headers), code
+        if not self.isJsonResponse(headers):
 
-    def getHttpResponseAndStatus(self, method, uri, params, handler=None, extraHeaders = None):
-        return self.httpClient.getHttpResponseAndStatus(method, uri, params, handler, extraHeaders = extraHeaders)
+    def getHttpResponseAndStatus(self, method, uri, params, extraHeaders = None):
+        return self.httpClient.getHttpResponseAndStatus(method, uri, params, extraHeaders = extraHeaders)
   
     def getResponseAndStatus(self, method, uri, params):
         authHeader = self.addAuth(params)
         return self.getHttpResponseAndStatus(method, uri, params, extraHeaders = authHeader)
 
     def isJsonResponse(self, headers):
-        if isPython3:
-            hdr = 'Content-Type'
-        else:
-            hdr = 'content-type'
+        hdr = 'Content-Type'
         return 'json' in headers.get(hdr,'')
 
     def command(self, method, uri, params):
         self.filterOutDefaults(params)
         data, code, headers = self.getResponseAndStatus(method, uri, params)
-        if self.response_as_string or not self.isJsonResponse(headers):
+        if not self.isJsonResponse(headers):
             return data, code
         result = ApiResponse(data, code, headers)
         if result.isApiResonse:

@@ -20,7 +20,7 @@
 from .HttpClient import HttpClient
 from .ApiResponse import ApiResponse
 from .Constants import ReqMethod
-
+import logging
 import time
 
 
@@ -50,7 +50,7 @@ class AuthClient:
             self.accessExpiresAt = now + apiResponse.data.expiresIn - self.timeJitter
             self.refreshExpiresAt = now + apiResponse.data.refreshExpiresIn - self.timeJitter
         except Exception as e:
-            print(e)
+            logging.error(e)
             self.accessToken = None
 
     def authenticate(self):

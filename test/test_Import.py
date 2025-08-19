@@ -28,7 +28,7 @@ import smartlingApiSdk
 from smartlingApiSdk.ObsoleteSmartlingFileApi import ObsoleteSmartlingFileApi
 from smartlingApiSdk.ProxySettings import ProxySettings
 from smartlingApiSdk.UploadData import UploadData
-from nose.tools import assert_equal
+
 
 # don't forget to set real API_KEY and PROJECT_ID
 # or use environment variables:
@@ -37,7 +37,7 @@ from nose.tools import assert_equal
 # export SL_LOCALE=**-**
 
 
-class testImport(object):
+class TestImport(object):
     MY_API_KEY = "YOUR_API_KEY"
     MY_PROJECT_ID = "YOUR_PROJECT_ID"
     SL_LOCALE = "ru-RU"
@@ -53,7 +53,7 @@ class testImport(object):
 
     CODE_SUCCESS_TOKEN = 'SUCCESS'
 
-    def setUp(self):
+    def setup_method(self, method):
         self.MY_API_KEY = os.environ.get('SL_API_KEY', self.MY_API_KEY)
         self.MY_PROJECT_ID = os.environ.get('SL_PROJECT_ID', self.MY_PROJECT_ID)
         useProxy = False
@@ -74,7 +74,7 @@ class testImport(object):
         uploadData.setUri(uri)
         return self.fapi.upload(uploadData)
 
-    def tearDown(self):
+    def teardown_method(self, method):
         print(self.fapi.delete(self.uri))
         
     def testImport(self):
@@ -83,10 +83,10 @@ class testImport(object):
         uploadData.name = self.FILE_NAME_IMPORT
         resp, status = self.fapi.import_call(uploadData, self.locale, translationState="PUBLISHED")
         if str(status) == '423':
-            assert_equal('RESOURCE_LOCKED', resp.code)
+            assert 'RESOURCE_LOCKED' == resp.code
         else:
-            assert_equal(resp.code, self.CODE_SUCCESS_TOKEN)
-            assert_equal(resp.data.wordCount, 2)
-            assert_equal(resp.data.stringCount, 2)
-            assert_equal(resp.data.translationImportErrors, [])
+            assert resp.code == self.CODE_SUCCESS_TOKEN
+            assert resp.data.wordCount == 2
+            assert resp.data.stringCount == 2
+            assert resp.data.translationImportErrors == []
 

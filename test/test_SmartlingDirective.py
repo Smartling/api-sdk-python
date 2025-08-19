@@ -26,43 +26,43 @@ sys.path.append(lib_path)
 from smartlingApiSdk.SmartlingDirective import SmartlingDirective
 from smartlingApiSdk.version import version
 from smartlingApiSdk.ApiV2 import ApiV2
-
-from nose.tools import assert_equal
-from nose.tools import raises
+import pytest
 
 
-class test_SmartlingDirective(object):
+
+
+class TestSmartlingDirective(object):
     def test_init(self):
         d = SmartlingDirective("placeholder_format_custom", "%s")
-        assert_equal(d.name, "placeholder_format_custom")
-        assert_equal(d.value, "%s")
+        assert d.name == "placeholder_format_custom"
+        assert d.value == "%s"
 
         d1 = SmartlingDirective("plaCeholder_Format_cusTom", None)
-        assert_equal(d1.name, "placeholder_format_custom")
-        assert_equal(d1.value, "")
+        assert d1.name == "placeholder_format_custom"
+        assert d1.value == ""
 
-    @raises(Exception)
     def test_init_empty_name(self):
-        SmartlingDirective("", "%s")
+        with pytest.raises(Exception):
+            SmartlingDirective("", "%s")
 
-    @raises(Exception)
     def test_init_None_name(self):
-        SmartlingDirective(None, "%s")
+        with pytest.raises(Exception):
+            SmartlingDirective(None, "%s")
 
     def test_remove_sl_prefix(self):
         d = SmartlingDirective("smartling.placeholder_format_custom", "%s")
-        assert_equal(d.name, "placeholder_format_custom")
+        assert d.name == "placeholder_format_custom"
 
         d2 = SmartlingDirective("sl.placeholder_format_custom", "%s")
-        assert_equal(d2.name, "sl.placeholder_format_custom")
+        assert d2.name == "sl.placeholder_format_custom"
 
         d3 = SmartlingDirective("smartling.placeholder_format_custom smartling.none", "%s")
-        assert_equal(d3.name, "placeholder_format_custom smartling.none")
+        assert d3.name == "placeholder_format_custom smartling.none"
 
     def test_lib_id_directive(self):
         apiV2 = ApiV2("1", "2", "3")
         apiV2.clientUid = "test_test"
         params = {}
         apiV2.addLibIdDirective(params)
-        assert_equal(True, SmartlingDirective.SL_PREFIX + 'client_lib_id' in params)
-        assert_equal(params[SmartlingDirective.SL_PREFIX + 'client_lib_id'], "test_test")
+        assert True == (SmartlingDirective.SL_PREFIX + 'client_lib_id' in params)
+        assert params[SmartlingDirective.SL_PREFIX + 'client_lib_id'] == "test_test"
