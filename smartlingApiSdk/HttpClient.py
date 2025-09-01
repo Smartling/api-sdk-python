@@ -39,11 +39,11 @@ import ssl
 class HttpClient:
     protocol = 'https://'
 
-    def __init__(self, host, proxySettings=None, permanentHeaders={}):
+    def __init__(self, host, proxySettings=None, permanentHeaders={}, ignore_errors=False):
         self.host = host
         self.proxySettings = proxySettings
         self.permanentHeaders = permanentHeaders
-        self.ignore_errors = False
+        self.ignore_errors = ignore_errors
         self.list_brackets = True  # Add [] suffix to GET list keys in urls, like &hashcodes[]=abcd, required by Files API
         self.force_multipart = True
 

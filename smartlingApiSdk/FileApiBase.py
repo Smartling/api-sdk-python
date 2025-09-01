@@ -35,12 +35,13 @@ class FileApiBase:
     """ basic class implementing low-level api calls """
     response_as_string = False
 
-    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}):
+    def __init__(self, host, apiKey, projectId, proxySettings=None, permanentHeaders={}, ignore_errors=False):
         self.host = host
         self.apiKey = apiKey
         self.projectId = projectId
         self.proxySettings = proxySettings
-        self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders)
+        self.ignore_errors = ignore_errors
+        self.httpClient = HttpClient(host, proxySettings, permanentHeaders=permanentHeaders, ignore_errors=ignore_errors)
         if Settings.printToLogfile:
             sys.stdout = Logger('python-sdk', Settings.logLevel, Settings.logPath)
             sys.stderr = Logger('STDERR', logging.ERROR, Settings.logPath)
@@ -94,7 +95,7 @@ class FileApiBase:
         jsonBody = json.dumps(params).encode('utf8')
 
         data, code, headers = self.httpClient.getHttpResponseAndStatus(method, uri, params={}, requestBody = jsonBody, extraHeaders = authHeader)
-        if not code in [200,202]:
+        if not code in [200,202] and not self.ignore_errors:
             rId = headers.get("X-SL-RequestId","Unknown")
             print ("code:%d RequestId:%s jsonBody=%s" % (code, rId, jsonBody))
 

@@ -23,8 +23,8 @@ from smartlingApiSdk.ApiV2 import ApiV2
 
 class ContextApi(ApiV2):
 
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod', ignore_errors=False):
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env, ignore_errors=ignore_errors)
 
     def uploadNewVisualContext(self, name='', content='', **kwargs):
         """

@@ -34,13 +34,13 @@ class ApiV2(FileApiBase):
     hostStg = 'api.stg.smartling.net'
     clientUid = "{\"client\":\"smartling-api-sdk-python\",\"version\":\"%s\"}" % version
 
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod', ignore_errors=False):
         self.host = self.hostProd
         self.userIdentifier = userIdentifier
         if 'stg'==env:
             self.host = self.hostStg
-        FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
-        self.authClient = AuthClient(self.host, userIdentifier, userSecret, proxySettings)
+        FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders, ignore_errors=ignore_errors)
+        self.authClient = AuthClient(self.host, userIdentifier, userSecret, proxySettings, ignore_errors=ignore_errors)
         self.urlHelper = UrlV2Helper(projectId)
 
     def addAuth(self, params):
