@@ -3,3 +3,5 @@
 /dist
 *.log
 openapi3.json
+GEMINI.md
+.env

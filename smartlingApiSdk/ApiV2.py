@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-
-""" Copyright 2012-2025 Smartling, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this work except in compliance with the License.
@@ -17,6 +12,7 @@
  * limitations under the License.
 """
 
+# FileApi class implementation
 # FileApi class implementation
 
 from .AuthClient import AuthClient
@@ -39,7 +35,7 @@ class ApiV2(FileApiBase):
         self.userIdentifier = userIdentifier
         if 'stg'==env:
             self.host = self.hostStg
-        FileApiBase.__init__(self, self.host, userIdentifier, userSecret, proxySettings, permanentHeaders=permanentHeaders)
+        FileApiBase.__init__(self, self.host, proxySettings, permanentHeaders=permanentHeaders)
         self.authClient = AuthClient(self.host, userIdentifier, userSecret, proxySettings)
         self.urlHelper = UrlV2Helper(projectId)
 
