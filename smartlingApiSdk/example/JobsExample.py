@@ -664,6 +664,7 @@ def example():
     # not covered by tests #
     '''
     closeJob
+    getJobsWithProcesses
     getJobAsyncProcessStatus
     '''
     t.tearDown()

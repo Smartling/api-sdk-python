@@ -49,6 +49,26 @@ class AccountProjectsApi(ApiV2):
         return response, status
 
 
+    def getAccountProjectTypes(self, accountUid, projectTypeGroupCode='', **kwargs):
+        """
+            method  :  GET
+            api url :  /accounts-api/v2/accounts/{accountUid}/project-types
+            as curl :  curl -H "Authorization: Bearer $smartlingToken" "https://api.smartling.com/accounts-api/v2/accounts/$smartlingAccountId/project-types?projectTypeGroupCode=GENERAL"
+            Responses:
+                200 : OK
+                400 : The `projectTypeGroupCode` value is not supported.
+                403 : The user is not allowed to list project types of the account.
+            details :  https://api-reference.smartling.com/#operation/getAccountProjectTypes
+        """
+        kw = {
+            'projectTypeGroupCode':projectTypeGroupCode,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/accounts-api/v2/accounts/{accountUid}/project-types', accountUid=accountUid, **kwargs)
+        response, status = self.command('GET', url, kw)
+        return response, status
+
+
     def getProjectDetails(self, includeDisabledLocales='', **kwargs):
         """
             method  :  GET
@@ -116,5 +136,58 @@ class AccountProjectsApi(ApiV2):
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/copy/{processUid}', processUid=processUid, **kwargs)
         response, status = self.command('GET', url, kw)
+        return response, status
+
+
+    def renameProject(self, projectName, **kwargs):
+        """
+            method  :  PUT
+            api url :  /projects-api/v2/projects/{projectId}/rename
+            as curl :  curl -X PUT -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"projectName": "Android XML Content v2"}' https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId/rename
+            Responses:
+                200 : OK
+                400 : Provided request parameters are invalid.
+            details :  https://api-reference.smartling.com/#operation/renameProject
+        """
+        kw = {
+            'projectName':projectName,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/rename', **kwargs)
+        response, status = self.commandJson('PUT', url, kw)
+        return response, status
+
+
+    def archiveProject(self, **kwargs):
+        """
+            method  :  POST
+            api url :  /projects-api/v2/projects/{projectId}/archive
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId/archive
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/archiveProject
+        """
+        kw = {
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/archive', **kwargs)
+        response, status = self.command('POST', url, kw)
+        return response, status
+
+
+    def unarchiveProject(self, **kwargs):
+        """
+            method  :  POST
+            api url :  /projects-api/v2/projects/{projectId}/unarchive
+            as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" https://api.smartling.com/projects-api/v2/projects/$smartlingProjectId/unarchive
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/unarchiveProject
+        """
+        kw = {
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/projects-api/v2/projects/{projectId}/unarchive', **kwargs)
+        response, status = self.command('POST', url, kw)
         return response, status
 

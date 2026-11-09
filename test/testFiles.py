@@ -204,25 +204,25 @@ class testFilesApi(object):
         print('getFileTranslationStatusSingleLocale', 'OK')
 
 
-    def checkDownloadTranslatedFileSingleLocale(self):
+    def checkDownloadTranslatedFile(self):
         """
             method  :  GET
-            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeIds}/file
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -o $smartlingLocaleId$smartlingFileUri -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file"
             Responses:
                 200 : OK
-            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
+            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFile
         """
-        localeId=self.MY_LOCALE
+        localeIds=self.MY_LOCALE
         fileUri=self.uri
-        res, status = self.files_api.downloadTranslatedFileSingleLocale(localeId=localeId, fileUri=fileUri)
+        res, status = self.files_api.downloadTranslatedFile(localeIds=localeIds, fileUri=fileUri)
 
 
         resp_lines_count = len(res.decode('utf-8').split('\n'))
         file_lines_count = len( open(self.FILE_PATH + self.FILE_NAME, "rb").read().decode('utf-8').split('\n') )
         assert_equal(resp_lines_count, file_lines_count)
 
-        print('downloadTranslatedFileSingleLocale', 'OK')
+        print('downloadTranslatedFile', 'OK')
 
 
     def checkDownloadTranslatedFilesAllLocales(self):
@@ -479,7 +479,7 @@ class testFilesApi(object):
         t.checkDownloadSourceFile()
         t.checkGetFileTranslationStatusAllLocales()
         t.checkGetFileTranslationStatusSingleLocale()
-        t.checkDownloadTranslatedFileSingleLocale()
+        t.checkDownloadTranslatedFile()
         t.checkDownloadTranslatedFilesAllLocales()
         t.checkDownloadMultipleTranslatedFiles()
         t.checkGetRecentlyUploadedSourceFilesList()
@@ -491,3 +491,7 @@ class testFilesApi(object):
         t.checkExportFileTranslations()
         t.checkGetRecentlyPublishedFilesList()
         t.checkDeleteUploadedSourceFile()
+        # not covered by tests #
+        '''
+        downloadMultipleTranslatedFilesPost
+        '''

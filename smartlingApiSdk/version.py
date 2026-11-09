@@ -17,4 +17,4 @@
  * limitations under the License.
 """
 
-version = "3.1.9"
+version = "3.2.0"

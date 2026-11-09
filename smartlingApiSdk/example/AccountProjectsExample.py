@@ -191,6 +191,13 @@ def example():
     t.checkAddLocaleToProject()
     t.checkCopyProject()
     t.checkGetProjectCopyRequestStatus()
+    # not covered by tests #
+    '''
+    getAccountProjectTypes
+    renameProject
+    archiveProject
+    unarchiveProject
+    '''
     t.tearDown()
 
 if __name__ == '__main__':

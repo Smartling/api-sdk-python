@@ -315,6 +315,23 @@ class JobsApi(ApiV2):
         return response, status
 
 
+    def getJobsWithProcesses(self, translationJobUids, **kwargs):
+        """
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/processes
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getJobsWithProcesses
+        """
+        kw = {
+            'translationJobUids':translationJobUids,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/jobs-api/v3/projects/{projectId}/jobs/processes', **kwargs)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
+
+
     def getJobAsyncProcessStatus(self, translationJobUid, processUid, **kwargs):
         """
             method  :  GET

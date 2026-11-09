@@ -663,5 +663,6 @@ class testJobsApi(object):
         # not covered by tests #
         '''
         closeJob
+        getJobsWithProcesses
         getJobAsyncProcessStatus
         '''

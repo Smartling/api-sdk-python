@@ -190,3 +190,10 @@ class testAccountProjectsApi(object):
         t.checkAddLocaleToProject()
         t.checkCopyProject()
         t.checkGetProjectCopyRequestStatus()
+        # not covered by tests #
+        '''
+        getAccountProjectTypes
+        renameProject
+        archiveProject
+        unarchiveProject
+        '''

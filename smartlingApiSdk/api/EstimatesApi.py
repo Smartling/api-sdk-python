@@ -51,7 +51,7 @@ class EstimatesApi(ApiV2):
         return response, status
 
 
-    def generateJobFuzzyEstimateReports(self, translationJobUid, contentType='ALL_CONTENT', tags=[], **kwargs):
+    def generateJobFuzzyEstimateReports(self, translationJobUid, contentType='ALL_CONTENT', tags=[], localeWorkflows=[], fuzzyProfileUid='', localeWorkflowStepsFilter=[], **kwargs):
         """
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy
@@ -62,6 +62,9 @@ class EstimatesApi(ApiV2):
         kw = {
             'contentType':contentType,
             'tags':tags,
+            'localeWorkflows':localeWorkflows,
+            'fuzzyProfileUid':fuzzyProfileUid,
+            'localeWorkflowStepsFilter':localeWorkflowStepsFilter,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/fuzzy', translationJobUid=translationJobUid, **kwargs)
@@ -94,7 +97,7 @@ class EstimatesApi(ApiV2):
         return response, status
 
 
-    def generateJobCostEstimateReports(self, translationJobUid, contentType='ALL_CONTENT', tags=[], localeWorkflows=[], fuzzyProfileUid='', **kwargs):
+    def generateJobCostEstimateReports(self, translationJobUid, contentType='ALL_CONTENT', tags=[], localeWorkflows=[], fuzzyProfileUid='', localeWorkflowStepsFilter=[], **kwargs):
         """
             method  :  POST
             api url :  /estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost
@@ -107,6 +110,7 @@ class EstimatesApi(ApiV2):
             'tags':tags,
             'localeWorkflows':localeWorkflows,
             'fuzzyProfileUid':fuzzyProfileUid,
+            'localeWorkflowStepsFilter':localeWorkflowStepsFilter,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/estimates-api/v2/projects/{projectId}/jobs/{translationJobUid}/reports/cost', translationJobUid=translationJobUid, **kwargs)

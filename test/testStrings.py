@@ -85,6 +85,11 @@ class testStringsApi(object):
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
+            Parameters example:
+            authorization: {
+                "localeWorkflows": "[]",
+                "translationJobUid": "''"
+                }
             Responses:
                 200 : OK
                 202 : ACCEPTED
@@ -217,3 +222,8 @@ class testStringsApi(object):
         t.checkGetAddStringsToProjectRequestStatus()
         t.checkGetAllSourceStringsByProject()
         t.checkGetAllTranslationsByProject()
+        # not covered by tests #
+        '''
+        getAllSourceStringsByProjectPost
+        getAllTranslationsByProjectPost
+        '''

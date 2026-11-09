@@ -25,7 +25,7 @@ testsOrder = [
     'downloadSourceFile',
     'getFileTranslationStatusAllLocales',
     'getFileTranslationStatusSingleLocale',
-    'downloadTranslatedFileSingleLocale',
+    'downloadTranslatedFile',
     'downloadTranslatedFilesAllLocales',
     'downloadMultipleTranslatedFiles',
     'getRecentlyUploadedSourceFilesList',
@@ -156,10 +156,10 @@ assert_equal(res.data.fileType, self.FILE_TYPE)
 '''
     ),
 
-    'downloadTranslatedFileSingleLocale':  TestData(
+    'downloadTranslatedFile':  TestData(
         {
             'fileUri' :  Code('self.uri'),
-            'localeId' : Code('self.MY_LOCALE')
+            'localeIds' : Code('self.MY_LOCALE')
         },
         customTestCheck='''
 resp_lines_count = len(res.decode('utf-8').split('\\n'))
