@@ -80,7 +80,7 @@ class ApiBuilder:
 def main():
     sys.stdout = Logger('python-sdk', Settings.logLevel)
     ApiBuilder("Jobs").build().buildExample().buildTest()
-    #ApiBuilder("Job Batches V2").build().buildExample().buildTest() - uses yaml format now
+    ApiBuilder("Job Batches V2").build().buildExample().buildTest()
     ApiBuilder("Strings").build().buildExample().buildTest()
     ApiBuilder("Context").build().buildExample().buildTest()
     ApiBuilder("Estimates").build().buildExample().buildTest()

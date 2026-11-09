@@ -29,10 +29,13 @@ LEGACY_ALIASES = {
     'Files': [
         "    def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):",
         '        """ Deprecated: use downloadTranslatedFile """',
-        "        return self.downloadTranslatedFile(localeId, fileUri, retrievalType, includeOriginalStrings, **kwargs)",
+        "        return self.downloadTranslatedFile(localeIds=localeId, fileUri=fileUri, retrievalType=retrievalType, includeOriginalStrings=includeOriginalStrings, **kwargs)",
         '',
     ],
 }
+
+# Spec duplicates of methods already forced to POST + JSON in ApiSource.patchMethods
+SKIPPED_OPERATIONS = ('getAllSourceStringsByProjectPost', 'getAllTranslationsByProjectPost')
 
 
 class ApiSource():
@@ -49,6 +52,8 @@ class ApiSource():
                 if method == '$ref':
                     continue
                 if toBuild and descr['operationId'] not in toBuild:  # Debug build for specific methods only
+                    continue
+                if descr.get('operationId') in SKIPPED_OPERATIONS:
                     continue
                 if self.fullName in descr['tags']:
                     try:

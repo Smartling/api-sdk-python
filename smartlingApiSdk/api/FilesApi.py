@@ -368,4 +368,4 @@ class FilesApi(ApiV2):
 
     def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):
         """ Deprecated: use downloadTranslatedFile """
-        return self.downloadTranslatedFile(localeId, fileUri, retrievalType, includeOriginalStrings, **kwargs)
+        return self.downloadTranslatedFile(localeIds=localeId, fileUri=fileUri, retrievalType=retrievalType, includeOriginalStrings=includeOriginalStrings, **kwargs)

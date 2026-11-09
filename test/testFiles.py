@@ -268,6 +268,29 @@ class testFilesApi(object):
         print('downloadMultipleTranslatedFiles', 'OK')
 
 
+    def checkDownloadMultipleTranslatedFilesPost(self):
+        """
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/files/zip
+            Responses:
+                200 : OK
+                204 : No content — returned when `fileFilter=PUBLISHED_FILES_ONLY` and none of the requested files are fully published.
+            details :  https://api-reference.smartling.com/#operation/downloadMultipleTranslatedFilesPost
+        """
+        files=[{'fileUri': self.uri, 'localeIds': [self.MY_LOCALE, 'zh-TW']}, {'fileUri': self.uri16, 'localeIds': [self.MY_LOCALE]}]
+        res, status = self.files_api.downloadMultipleTranslatedFilesPost(files=files)
+
+
+        zfile = self.getZipFile(res)
+        names = zfile.namelist()
+        assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
+        assert_equal(True, 'zh-TW'+'/'+self.uri in names)
+        assert_equal(True, self.MY_LOCALE+'/'+self.uri16 in names)
+        assert_equal(False, 'zh-TW'+'/'+self.uri16 in names)
+
+        print('downloadMultipleTranslatedFilesPost', 'OK')
+
+
     def checkGetRecentlyUploadedSourceFilesList(self):
         """
             method  :  GET
@@ -482,6 +505,7 @@ class testFilesApi(object):
         t.checkDownloadTranslatedFile()
         t.checkDownloadTranslatedFilesAllLocales()
         t.checkDownloadMultipleTranslatedFiles()
+        t.checkDownloadMultipleTranslatedFilesPost()
         t.checkGetRecentlyUploadedSourceFilesList()
         t.checkGetFileTypesList()
         t.checkRenameUploadedSourceFile()
@@ -491,7 +515,3 @@ class testFilesApi(object):
         t.checkExportFileTranslations()
         t.checkGetRecentlyPublishedFilesList()
         t.checkDeleteUploadedSourceFile()
-        # not covered by tests #
-        '''
-        downloadMultipleTranslatedFilesPost
-        '''

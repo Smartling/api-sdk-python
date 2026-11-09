@@ -26,6 +26,7 @@ testsOrder = [
     'getJobBatchStatusV2',
     'uploadFileToJobBatchV2',
     'processBatchActionV2',
+    'createJobV2',
 ]
 
 extraInitializations = '''
@@ -64,6 +65,17 @@ testDecorators = {
     'callbackUrl' : 'https://www.callback.com/smartling/python/sdk/jb2.test',
 },
     ["textData = open(smartlingApiSdk.__path__[0]+'/resources/java.properties', 'rb').read().decode('utf-8', 'ignore')"]
+),
+
+'createJobV2': TestData({
+    'nameTemplate': Code('self.job_name'),  # test_job_ prefix: cleaned up by testJobs.deleteTestJobs
+    'targetLocaleIds': Code('[self.MY_LOCALE]'),
+},
+    ['self.job_name = "test_job_jb2_%d" % time.time()'],
+    customTestCheck='''
+assert_equal(self.job_name, res.data.jobName)
+assert_equal([self.MY_LOCALE], res.data.targetLocaleIds)
+'''
 ),
 
 

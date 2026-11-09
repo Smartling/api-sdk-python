@@ -75,10 +75,10 @@ class testJobBatchesV2Api(object):
         """
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches
-            as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"]}'
+            as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"], "localeWorkflows": [{"targetLocaleId": "fr-FR", "workflowUid": "2b91c391d71a"}], "rushJob": false}'
             Responses:
                 200 : OK
-                404 : provided translationJobUid is not found in the TMS
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/createJobBatchV2
         """
         self.file_uri = "java.properties.jb2.%d" % time.time()
@@ -114,7 +114,6 @@ class testJobBatchesV2Api(object):
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
             Responses:
                 200 : OK
-                404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/getJobBatchStatusV2
         """
         batchUid=self.batch_uid
@@ -132,7 +131,6 @@ class testJobBatchesV2Api(object):
             as curl :  curl -X POST \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/{batchUid}/file' \-H "Authorization: Bearer $smartlingToken" \-F "file=@file.properties;type=text/plain" \-F "fileUri=file.properties" \-F "fileType=javaProperties" \-F "localeIdsToAuthorize[]=fr-FR" \-F "localeIdsToAuthorize[]=ru-RU"
             Responses:
                 202 : ACCEPTED
-                404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
         """
         textData = open(smartlingApiSdk.__path__[0]+'/resources/java.properties', 'rb').read().decode('utf-8', 'ignore')
@@ -157,7 +155,7 @@ class testJobBatchesV2Api(object):
             as curl :  curl -X PUT \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/$batchUid' \-H "Authorization: Bearer $smartlingToken" \-H "Content-Type: application/json" \-d '{ "action": "CANCEL_FILE", "fileUri": "file1.xml", "reason": "Requested asset doesn't exist in Zendesk" }'
             Responses:
                 200 : SUCCESS
-                404 : Batch provided in path is not found
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/processBatchActionV2
         """
         batchUid=self.batch_uid
@@ -171,6 +169,30 @@ class testJobBatchesV2Api(object):
         print('processBatchActionV2', 'OK')
 
 
+    def checkCreateJobV2(self):
+        """
+            method  :  POST
+            api url :  /job-batches-api/v2/projects/{projectId}/jobs
+            as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/jobs" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"nameTemplate": "Localization Project Q2 2024", "description": "Q2 2024 product localization", "targetLocaleIds": ["fr-FR", "de-DE"], "mode": "REUSE_EXISTING", "salt": "RANDOM_ALPHANUMERIC", "timeZoneName": "America/New_York"}'
+            Responses:
+                200 : OK
+                400 : Validation error
+            details :  https://api-reference.smartling.com/#operation/createJobV2
+        """
+        self.job_name = "test_job_jb2_%d" % time.time()
+        nameTemplate=self.job_name
+        targetLocaleIds=[self.MY_LOCALE]
+        res, status = self.job_batches_v2_api.createJobV2(nameTemplate=nameTemplate, targetLocaleIds=targetLocaleIds)
+
+
+        assert_equal(self.job_name, res.data.jobName)
+        assert_equal([self.MY_LOCALE], res.data.targetLocaleIds)
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('createJobV2', 'OK')
+
+
 
 def example():
     t = testJobBatchesV2Api()
@@ -180,6 +202,7 @@ def example():
     t.checkGetJobBatchStatusV2()
     t.checkUploadFileToJobBatchV2()
     t.checkProcessBatchActionV2()
+    t.checkCreateJobV2()
     t.tearDown()
 
 if __name__ == '__main__':

@@ -223,11 +223,6 @@ def example():
     t.checkGetAddStringsToProjectRequestStatus()
     t.checkGetAllSourceStringsByProject()
     t.checkGetAllTranslationsByProject()
-    # not covered by tests #
-    '''
-    getAllSourceStringsByProjectPost
-    getAllTranslationsByProjectPost
-    '''
     t.tearDown()
 
 if __name__ == '__main__':

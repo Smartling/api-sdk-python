@@ -57,7 +57,10 @@ class UrlV2Helper:
             url = url.replace("{accountUid}", accountUid)
 
         for k in kw:
-            url = url.replace("{%s}" % k, kw[k])
+            value = kw[k]
+            if isinstance(value, (list, tuple)):  # e.g. localeIds=['fr-FR', 'de-DE'] -> fr-FR,de-DE
+                value = ','.join(value)
+            url = url.replace("{%s}" % k, value)
         
         if "{localeId}" in url:
             raise "Unhandled localeId placeholder:" + url

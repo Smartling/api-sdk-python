@@ -217,6 +217,25 @@ class testJobsApi(object):
         print('getJobFilesList', 'OK')
 
 
+    def checkGetJobsWithProcesses(self):
+        """
+            method  :  POST
+            api url :  /jobs-api/v3/projects/{projectId}/jobs/processes
+            Responses:
+                200 : OK
+            details :  https://api-reference.smartling.com/#operation/getJobsWithProcesses
+        """
+        translationJobUids=[self.test_job_uid]
+        res, status = self.jobs_api.getJobsWithProcesses(translationJobUids=translationJobUids)
+
+
+        assert_equal(True, res.data.totalCount >= 0)
+
+        assert_equal(True, status in [200,202])
+        assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
+        print('getJobsWithProcesses', 'OK')
+
+
     def checkGetJobFileProgress(self):
         """
             method  :  GET
@@ -638,6 +657,7 @@ class testJobsApi(object):
         t.checkAddStringsToJob()
         t.checkAddFileToJob()
         t.checkGetJobFilesList()
+        t.checkGetJobsWithProcesses()
         t.checkGetJobFileProgress()
         t.checkAuthorizeJob()
         t.checkModifyScheduleItemsForTranslationJob()
@@ -663,6 +683,5 @@ class testJobsApi(object):
         # not covered by tests #
         '''
         closeJob
-        getJobsWithProcesses
         getJobAsyncProcessStatus
         '''

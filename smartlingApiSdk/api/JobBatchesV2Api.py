@@ -26,14 +26,14 @@ class JobBatchesV2Api(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod', ignore_errors=False):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env, ignore_errors=ignore_errors)
 
-    def createJobBatchV2(self, authorize, translationJobUid, fileUris, localeWorkflows=[], **kwargs):
+    def createJobBatchV2(self, authorize, translationJobUid, fileUris, localeWorkflows=[], rushJob='', **kwargs):
         """
             method  :  POST
             api url :  /job-batches-api/v2/projects/{projectId}/batches
-            as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"]}'
+            as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"translationJobUid": "$translationJobUid", "authorize": true, "fileUris": ["example.json", "test.xml"], "localeWorkflows": [{"targetLocaleId": "fr-FR", "workflowUid": "2b91c391d71a"}], "rushJob": false}'
             Responses:
                 200 : OK
-                404 : provided translationJobUid is not found in the TMS
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/createJobBatchV2
         """
         kw = {
@@ -41,6 +41,7 @@ class JobBatchesV2Api(ApiV2):
             'translationJobUid':translationJobUid,
             'fileUris':fileUris,
             'localeWorkflows':localeWorkflows,
+            'rushJob':rushJob,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches', **kwargs)
@@ -77,7 +78,6 @@ class JobBatchesV2Api(ApiV2):
             api url :  /job-batches-api/v2/projects/{projectId}/batches/{batchUid}
             Responses:
                 200 : OK
-                404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/getJobBatchStatusV2
         """
         kw = {
@@ -95,7 +95,7 @@ class JobBatchesV2Api(ApiV2):
             as curl :  curl -X PUT \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/$batchUid' \-H "Authorization: Bearer $smartlingToken" \-H "Content-Type: application/json" \-d '{ "action": "CANCEL_FILE", "fileUri": "file1.xml", "reason": "Requested asset doesn't exist in Zendesk" }'
             Responses:
                 200 : SUCCESS
-                404 : Batch provided in path is not found
+                400 : Validation error
             details :  https://api-reference.smartling.com/#operation/processBatchActionV2
         """
         kw = {
@@ -116,7 +116,6 @@ class JobBatchesV2Api(ApiV2):
             as curl :  curl -X POST \'https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/batches/{batchUid}/file' \-H "Authorization: Bearer $smartlingToken" \-F "file=@file.properties;type=text/plain" \-F "fileUri=file.properties" \-F "fileType=javaProperties" \-F "localeIdsToAuthorize[]=fr-FR" \-F "localeIdsToAuthorize[]=ru-RU"
             Responses:
                 202 : ACCEPTED
-                404 : Batch provided in path is not found
             details :  https://api-reference.smartling.com/#operation/uploadFileToJobBatchV2
         """
         kw = {
@@ -131,4 +130,28 @@ class JobBatchesV2Api(ApiV2):
         self.processDirectives(kw, directives)
         url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/batches/{batchUid}/file', batchUid=batchUid)
         return self.uploadMultipart(url, kw)
+
+
+    def createJobV2(self, nameTemplate, description='', targetLocaleIds=[], mode='', salt='', timeZoneName='', **kwargs):
+        """
+            method  :  POST
+            api url :  /job-batches-api/v2/projects/{projectId}/jobs
+            as curl :  curl -X POST "https://api.smartling.com/job-batches-api/v2/projects/$smartlingProjectId/jobs" -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d '{"nameTemplate": "Localization Project Q2 2024", "description": "Q2 2024 product localization", "targetLocaleIds": ["fr-FR", "de-DE"], "mode": "REUSE_EXISTING", "salt": "RANDOM_ALPHANUMERIC", "timeZoneName": "America/New_York"}'
+            Responses:
+                200 : OK
+                400 : Validation error
+            details :  https://api-reference.smartling.com/#operation/createJobV2
+        """
+        kw = {
+            'nameTemplate':nameTemplate,
+            'description':description,
+            'targetLocaleIds':targetLocaleIds,
+            'mode':mode,
+            'salt':salt,
+            'timeZoneName':timeZoneName,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/job-batches-api/v2/projects/{projectId}/jobs', **kwargs)
+        response, status = self.commandJson('POST', url, kw)
+        return response, status
 
