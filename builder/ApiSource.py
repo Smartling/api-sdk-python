@@ -18,9 +18,24 @@
  """
 
 import importlib
+import sys
 from builder.Parameters import MultipartProperty
-from builder.Method import Method
+from builder.Method import Method, UnsupportedSchema
 from builder.ExampleData import EXAMPLE_HEADER, EXAMPLE_FOOTER, TESTS_FOOTER, COPYRIGHT_HEADER
+
+
+# Backward-compatible wrappers for methods whose operationId was renamed upstream
+LEGACY_ALIASES = {
+    'Files': [
+        "    def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):",
+        '        """ Deprecated: use downloadTranslatedFile """',
+        "        return self.downloadTranslatedFile(localeIds=localeId, fileUri=fileUri, retrievalType=retrievalType, includeOriginalStrings=includeOriginalStrings, **kwargs)",
+        '',
+    ],
+}
+
+# Spec duplicates of methods already forced to POST + JSON in ApiSource.patchMethods
+SKIPPED_OPERATIONS = ('getAllSourceStringsByProjectPost', 'getAllTranslationsByProjectPost')
 
 
 class ApiSource():
@@ -38,8 +53,14 @@ class ApiSource():
                     continue
                 if toBuild and descr['operationId'] not in toBuild:  # Debug build for specific methods only
                     continue
+                if descr.get('operationId') in SKIPPED_OPERATIONS:
+                    continue
                 if self.fullName in descr['tags']:
-                    m = Method(self.apiName, self.apiNameUnderscore, k, method, descr, swaggerDict)
+                    try:
+                        m = Method(self.apiName, self.apiNameUnderscore, k, method, descr, swaggerDict)
+                    except UnsupportedSchema as e:
+                        sys.stderr.write('SKIPPED %s\n' % e)
+                        continue
                     self.patchMethods(descr, m, swaggerDict)
                     self.methods.append(m)
 
@@ -67,8 +88,8 @@ from smartlingApiSdk.ApiV2 import ApiV2
 
 class %sApi(ApiV2):
 
-    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod'):
-        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env)
+    def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod', ignore_errors=False):
+        ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env, ignore_errors=ignore_errors)
 ''' % self.apiName
         rows = header.split('\n')
         for m in self.methods[:]:
@@ -78,6 +99,7 @@ class %sApi(ApiV2):
                 rows.append(built)
                 rows.append('')
                 rows.append('')
+        rows.extend(LEGACY_ALIASES.get(self.apiName, []))
         return '\n'.join(rows)
 
     def methodByName(self, name):

@@ -27,6 +27,7 @@ testsOrder = [
    'addStringsToJob',
    'addFileToJob',
    'getJobFilesList',
+   'getJobsWithProcesses',
    'getJobFileProgress',
    'authorizeJob',
    'modifyScheduleItemsForTranslationJob',
@@ -172,6 +173,11 @@ else:
 'getJobLastCompletionDatesPerLocale' : TestData({'translationJobUid':jobUidCode}),
 'findScheduleForTranslationJob' :      TestData({'translationJobUid':jobUidCode}),
 'getJobFilesList' :                    TestData({'translationJobUid':jobUidCode}),
+
+'getJobsWithProcesses' : TestData({'translationJobUids':Code('[self.test_job_uid]')},
+    customTestCheck='''
+assert_equal(True, res.data.totalCount >= 0)
+'''),
 
 'authorizeJob' : TestData({
     'localeWorkflows': Code(' [ { "targetLocaleId": "zh-TW", "workflowUid": "748398939979" } ]'),

@@ -22,6 +22,9 @@ import importlib
 from builder.Parameters import ApiCore, Parameter, MultipartProperty
 
 
+class UnsupportedSchema(Exception):
+    pass
+
 class Method(ApiCore):
     indent = '    '
     indent2 = indent*2
@@ -43,6 +46,12 @@ class Method(ApiCore):
         self.parameters = []
 
         for p in descriptionDict['parameters']:
+            if '$ref' in p:
+                p, _ = self.resolveRef(p['$ref'])
+                if 'projectUid' == p['name']:
+                    # Shared projectUid component is the same as projectId class member
+                    self.path = self.path.replace('{projectUid}', '{projectId}')
+                    continue
             if 'projectId' == p['name']:
                 continue  # We have projectId as api class member
             parameter = Parameter(p, swaggerDict)
@@ -277,6 +286,8 @@ class Method(ApiCore):
 
         props = schema.get('properties', None)
         if props is None:
+            if 'type' not in schema:  # e.g. oneOf/allOf polymorphic bodies
+                raise UnsupportedSchema('%s: unsupported requestBody schema keys %s' % (self.operationId, list(schema.keys())))
             if 'array' == schema['type']:
                 self.listProperty(refname)
                 return

@@ -25,9 +25,10 @@ testsOrder = [
     'downloadSourceFile',
     'getFileTranslationStatusAllLocales',
     'getFileTranslationStatusSingleLocale',
-    'downloadTranslatedFileSingleLocale',
+    'downloadTranslatedFile',
     'downloadTranslatedFilesAllLocales',
     'downloadMultipleTranslatedFiles',
+    'downloadMultipleTranslatedFilesPost',
     'getRecentlyUploadedSourceFilesList',
     'getFileTypesList',
     'renameUploadedSourceFile',
@@ -156,10 +157,10 @@ assert_equal(res.data.fileType, self.FILE_TYPE)
 '''
     ),
 
-    'downloadTranslatedFileSingleLocale':  TestData(
+    'downloadTranslatedFile':  TestData(
         {
             'fileUri' :  Code('self.uri'),
-            'localeId' : Code('self.MY_LOCALE')
+            'localeIds' : Code('self.MY_LOCALE')
         },
         customTestCheck='''
 resp_lines_count = len(res.decode('utf-8').split('\\n'))
@@ -193,6 +194,21 @@ assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
 assert_equal(True, self.MY_LOCALE+'/'+self.uri16 in names)
 assert_equal(True, 'zh-TW'+'/'+self.uri in names)
 assert_equal(True, 'zh-TW'+'/'+self.uri16 in names)
+''',
+        isApiV2Response= False,
+    ),
+
+    'downloadMultipleTranslatedFilesPost' : TestData(
+        {
+            'files' : Code("[{'fileUri': self.uri, 'localeIds': [self.MY_LOCALE, 'zh-TW']}, {'fileUri': self.uri16, 'localeIds': [self.MY_LOCALE]}]"),
+        },
+        customTestCheck='''
+zfile = self.getZipFile(res)
+names = zfile.namelist()
+assert_equal(True, self.MY_LOCALE+'/'+self.uri in names)
+assert_equal(True, 'zh-TW'+'/'+self.uri in names)
+assert_equal(True, self.MY_LOCALE+'/'+self.uri16 in names)
+assert_equal(False, 'zh-TW'+'/'+self.uri16 in names)
 ''',
         isApiV2Response= False,
     ),

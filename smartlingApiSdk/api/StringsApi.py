@@ -26,11 +26,16 @@ class StringsApi(ApiV2):
     def __init__(self, userIdentifier, userSecret, projectId, proxySettings=None, permanentHeaders={}, env='prod', ignore_errors=False):
         ApiV2.__init__(self, userIdentifier, userSecret, projectId, proxySettings, permanentHeaders=permanentHeaders, env=env, ignore_errors=ignore_errors)
 
-    def addStringsToProject(self, strings, placeholderFormat='', placeholderFormatCustom='', namespace='smartling.strings-api.default.namespace', **kwargs):
+    def addStringsToProject(self, strings, placeholderFormat='', placeholderFormatCustom='', namespace='smartling.strings-api.default.namespace', uri='', authorization='', **kwargs):
         """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}
             as curl :  curl -X POST -H "Authorization: Bearer $smartlingToken" -H "Content-Type: application/json" -d "$smartlingStringJSON" https://api.smartling.com/strings-api/v2/projects/$smartlingProjectId
+            Parameters example:
+            authorization: {
+                "localeWorkflows": "[]",
+                "translationJobUid": "''"
+                }
             Responses:
                 200 : OK
                 202 : ACCEPTED
@@ -41,6 +46,8 @@ class StringsApi(ApiV2):
             'placeholderFormat':placeholderFormat,
             'placeholderFormatCustom':placeholderFormatCustom,
             'namespace':namespace,
+            'uri':uri,
+            'authorization':authorization,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}', **kwargs)
@@ -65,7 +72,7 @@ class StringsApi(ApiV2):
         return response, status
 
 
-    def getAllSourceStringsByProject(self, hashcodes=[], fileUri='', limit='', offset='', **kwargs):
+    def getAllSourceStringsByProject(self, hashcodes=[], fileUri='', limit=0, offset=0, showPlaceholderValues=True, **kwargs):
         """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/source-strings
@@ -79,6 +86,7 @@ class StringsApi(ApiV2):
             'fileUri':fileUri,
             'limit':limit,
             'offset':offset,
+            'showPlaceholderValues':showPlaceholderValues,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/source-strings', **kwargs)
@@ -86,7 +94,7 @@ class StringsApi(ApiV2):
         return response, status
 
 
-    def getAllTranslationsByProject(self, targetLocaleId, hashcodes=[], retrievalType='', fileUri='', limit='', offset='', **kwargs):
+    def getAllTranslationsByProject(self, targetLocaleId, hashcodes=[], retrievalType='', fileUri='', limit=500, offset=0, showPlaceholderValues=True, **kwargs):
         """
             method  :  POST
             api url :  /strings-api/v2/projects/{projectId}/translations
@@ -102,6 +110,7 @@ class StringsApi(ApiV2):
             'fileUri':fileUri,
             'limit':limit,
             'offset':offset,
+            'showPlaceholderValues':showPlaceholderValues,
         }
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/strings-api/v2/projects/{projectId}/translations', **kwargs)

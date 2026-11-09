@@ -101,14 +101,14 @@ class FilesApi(ApiV2):
         return response, status
 
 
-    def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):
+    def downloadTranslatedFile(self, localeIds, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):
         """
             method  :  GET
-            api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file
+            api url :  /files-api/v2/projects/{projectId}/locales/{localeIds}/file
             as curl :  curl -H "Authorization: Bearer $smartlingToken" -o $smartlingLocaleId$smartlingFileUri -G --data-urlencode "fileUri=$smartlingFileUri" "https://api.smartling.com/files-api/v2/projects/$smartlingProjectId/locales/$smartlingLocaleId/file"
             Responses:
                 200 : OK
-            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFileSingleLocale
+            details :  https://api-reference.smartling.com/#operation/downloadTranslatedFile
         """
         kw = {
             'fileUri':fileUri,
@@ -116,7 +116,7 @@ class FilesApi(ApiV2):
             'includeOriginalStrings':includeOriginalStrings,
         }
         kw.update(kwargs)
-        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeId}/file', localeId=localeId, **kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/locales/{localeIds}/file', localeIds=localeIds, **kwargs)
         response, status = self.command('GET', url, kw)
         return response, status
 
@@ -162,6 +162,30 @@ class FilesApi(ApiV2):
         kw.update(kwargs)
         url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/files/zip', **kwargs)
         response, status = self.command('GET', url, kw)
+        return response, status
+
+
+    def downloadMultipleTranslatedFilesPost(self, files, retrievalType='', includeOriginalStrings='', fileNameMode='', localeMode='', zipFileName='', fileFilter='', **kwargs):
+        """
+            method  :  POST
+            api url :  /files-api/v2/projects/{projectId}/files/zip
+            Responses:
+                200 : OK
+                204 : No content — returned when `fileFilter=PUBLISHED_FILES_ONLY` and none of the requested files are fully published.
+            details :  https://api-reference.smartling.com/#operation/downloadMultipleTranslatedFilesPost
+        """
+        kw = {
+            'files':files,
+            'retrievalType':retrievalType,
+            'includeOriginalStrings':includeOriginalStrings,
+            'fileNameMode':fileNameMode,
+            'localeMode':localeMode,
+            'zipFileName':zipFileName,
+            'fileFilter':fileFilter,
+        }
+        kw.update(kwargs)
+        url = self.urlHelper.getUrl('/files-api/v2/projects/{projectId}/files/zip', **kwargs)
+        response, status = self.commandJson('POST', url, kw)
         return response, status
 
 
@@ -281,7 +305,7 @@ class FilesApi(ApiV2):
         return response, status
 
 
-    def importFileTranslations(self, localeId, file, fileUri, fileType, translationState, overwrite='', **kwargs):
+    def importFileTranslations(self, localeId, file, fileUri, fileType, translationState='PUBLISHED', overwrite=False, **kwargs):
         """
             method  :  POST
             api url :  /files-api/v2/projects/{projectId}/locales/{localeId}/file/import
@@ -341,3 +365,7 @@ class FilesApi(ApiV2):
         response, status = self.command('GET', url, kw)
         return response, status
 
+
+    def downloadTranslatedFileSingleLocale(self, localeId, fileUri, retrievalType='', includeOriginalStrings='', **kwargs):
+        """ Deprecated: use downloadTranslatedFile """
+        return self.downloadTranslatedFile(localeIds=localeId, fileUri=fileUri, retrievalType=retrievalType, includeOriginalStrings=includeOriginalStrings, **kwargs)
