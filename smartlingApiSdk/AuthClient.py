@@ -28,6 +28,9 @@ class AuthClient:
     authUri = "/auth-api/v2/authenticate"
     refreshUri = "/auth-api/v2/authenticate/refresh"
     timeJitter = 5  # Seconds off server expiration time
+    # A refreshed token living shorter than this is capped by the SSO session max lifespan:
+    # re-authenticate to start a new session instead of refreshing a session that is about to end
+    sessionCapThreshold = 90  # Seconds
 
     def __init__(self, host, userIdentifier, userSecret, proxySettings=None, ignore_errors=False):
         self.httpClient = HttpClient(host, proxySettings, ignore_errors=ignore_errors)
@@ -35,6 +38,7 @@ class AuthClient:
         self.userSecret = userSecret
         self.accessExpiresAt = 0
         self.refreshExpiresAt = 0
+        self.refreshExpiresIn = 0
 
     def request(self, uri, body):
         header = {"Content-Type": "application/json"}
@@ -49,6 +53,7 @@ class AuthClient:
             self.refreshToken = apiResponse.data.refreshToken
             self.accessExpiresAt = now + apiResponse.data.expiresIn - self.timeJitter
             self.refreshExpiresAt = now + apiResponse.data.refreshExpiresIn - self.timeJitter
+            self.refreshExpiresIn = apiResponse.data.refreshExpiresIn
         except Exception as e:
             print(e)
             self.accessToken = None
@@ -73,6 +78,12 @@ class AuthClient:
         if now >= self.accessExpiresAt:
             if now < self.refreshExpiresAt:
                 self.refresh()
+                if not self.accessToken or self.isSessionCapped():
+                    # refresh failed or returned a session-capped token: start a new session
+                    self.authenticate()
             else:
                 self.authenticate()
         return self.accessToken
+
+    def isSessionCapped(self):
+        return self.refreshExpiresIn < self.sessionCapThreshold

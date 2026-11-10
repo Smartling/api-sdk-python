@@ -1,9 +1,12 @@
+Nov 9, 2026  - 3.2.1
+   - AuthClient re-authenticates instead of returning a session-capped refreshed token (refreshExpiresIn < 90s)
+   - AuthClient re-authenticates when a token refresh fails
+
 Nov 9, 2026  - 3.2.0
    - API rebuilt from current OpenAPI spec: new Jobs, Account & Projects, Strings, Files, Estimates, Job Batches V2 endpoints/params
    - Job Batches V2 is generated again; adds createJobV2
    - FilesApi.downloadTranslatedFile replaces downloadTranslatedFileSingleLocale (kept as deprecated alias); localeIds accepts a list
    - builder: ignore_errors in template, $ref params support, skip unsupported oneOf bodies
-   - known gap: Account & Projects createAccountProject (polymorphic oneOf body) is not generated yet
 
 Sep 2, 2025  - 3.1.9
    - FileApiBase.commandJson supports ignore_errors flag, fix by @kenvac
