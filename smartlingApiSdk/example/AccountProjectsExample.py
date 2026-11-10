@@ -80,9 +80,27 @@ class testAccountProjectsApi(object):
         assert_equal('COMPLETED', res.data.processState)
         return res.data.newProjectUid
 
-    def isProjectArchived(self, projectId):
-        res, status = self.account_projects_api.getProjectsByAccount(self.MY_ACCOUNT_UID, projectNameFilter=self.copy_project_name, includeArchived=True)
-        return [p['archived'] for p in res.data.items if p['projectId'] == projectId][0]
+    def copiedProject(self, field):
+        # looked up by id under the base name, so a lost rename doesn't break archive checks
+        offset = 0
+        while True:
+            res, status = self.account_projects_api.getProjectsByAccount(self.MY_ACCOUNT_UID, projectNameFilter='python SDK test',
+                                                                         includeArchived=True, limit=100, offset=offset)
+            for p in res.data.items:
+                if p['projectId'] == self.copied_project_uid:
+                    return p[field]
+            if len(res.data.items) < 100:
+                return None
+            offset += 100
+
+    def waitFor(self, getValue, expected, attempts=30):
+        # project changes reach reads asynchronously on the server (getProjectDetails may stay stale longer)
+        for i in range(attempts):
+            value = getValue()
+            if value == expected:
+                break
+            time.sleep(1)
+        return value
 
     def checkGetProjectsByAccount(self):
         """
@@ -236,8 +254,7 @@ class testAccountProjectsApi(object):
         res, status = self.account_projects_api.renameProject(projectName=projectName)
 
 
-        res, status = self.account_projects_api.getProjectDetails()
-        assert_equal(self.copy_project_name, res.data.projectName)
+        assert_equal(self.copy_project_name, self.waitFor(lambda: self.copiedProject('projectName'), self.copy_project_name))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -256,7 +273,7 @@ class testAccountProjectsApi(object):
         res, status = self.account_projects_api.archiveProject()
 
 
-        assert_equal(True, self.isProjectArchived(self.copied_project_uid))
+        assert_equal(True, self.waitFor(lambda: self.copiedProject('archived'), True))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -275,7 +292,7 @@ class testAccountProjectsApi(object):
         res, status = self.account_projects_api.unarchiveProject()
 
 
-        assert_equal(False, self.isProjectArchived(self.copied_project_uid))
+        assert_equal(False, self.waitFor(lambda: self.copiedProject('archived'), False))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])

@@ -253,14 +253,14 @@ class testFapiV2(object):
         assert_equal(self.CODE_SUCCESS_TOKEN, resp.code)
 
         lm_date = resp.data.lastModified[:10]
-        assert_equal(lm_date,  date.today().isoformat())
+        assert_equal(lm_date,  time.strftime('%Y-%m-%d', time.gmtime()))
 
         resp, status = self.fapi.getTranslatedFileLastModifiedDateSingleLocale(self.MY_LOCALE, self.uri16)
         assert_equal(200, status)
         assert_equal(self.CODE_SUCCESS_TOKEN, resp.code)
 
         lm_date = resp.data.lastModified[:10]
-        assert_equal(lm_date,  date.today().isoformat())
+        assert_equal(lm_date,  time.strftime('%Y-%m-%d', time.gmtime()))
 
         print("testLastModified", "OK")
 
