@@ -79,7 +79,6 @@ class AuthClient:
             if now < self.refreshExpiresAt:
                 self.refresh()
                 if not self.accessToken or self.isSessionCapped():
-                    # refresh failed or returned a session-capped token: start a new session
                     self.authenticate()
             else:
                 self.authenticate()

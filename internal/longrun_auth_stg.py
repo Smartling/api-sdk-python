@@ -47,7 +47,7 @@ KEEP_FILES = ('test_import.xml_2.2.4_1629202583.584802',)  # hardcoded in testJo
 
 
 def utcIso(ts):
-    return datetime.datetime.utcfromtimestamp(ts).strftime('%Y-%m-%dT%H:%M:%SZ')
+    return datetime.datetime.fromtimestamp(ts, datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
 class AuthLog:
