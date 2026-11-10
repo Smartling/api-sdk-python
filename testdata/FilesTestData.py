@@ -253,7 +253,7 @@ res, status = self.files_api.renameUploadedSourceFile(self.uri_to_rename, self.u
         },
         customTestCheck='''
 lm_date = res.data.lastModified[:10]
-assert_equal(lm_date,  date.today().isoformat())
+assert_equal(lm_date,  time.strftime('%Y-%m-%d', time.gmtime()))
 '''
     ),
 
@@ -267,7 +267,7 @@ assert_equal(True, len(res.data.items) > 0)
 for l in res.data.items:
     if l['localeId'] == self.MY_LOCALE:
         lm_date = l['lastModified'][:10]
-        assert_equal(lm_date,  date.today().isoformat())
+        assert_equal(lm_date,  time.strftime('%Y-%m-%d', time.gmtime()))
 '''
     ),
 

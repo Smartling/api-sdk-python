@@ -369,7 +369,7 @@ class testFilesApi(object):
 
 
         lm_date = res.data.lastModified[:10]
-        assert_equal(lm_date,  date.today().isoformat())
+        assert_equal(lm_date,  time.strftime('%Y-%m-%d', time.gmtime()))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
@@ -393,7 +393,7 @@ class testFilesApi(object):
         for l in res.data.items:
             if l['localeId'] == self.MY_LOCALE:
                 lm_date = l['lastModified'][:10]
-                assert_equal(lm_date,  date.today().isoformat())
+                assert_equal(lm_date,  time.strftime('%Y-%m-%d', time.gmtime()))
 
         assert_equal(True, status in [200,202])
         assert_equal(True, res.code in [self.CODE_SUCCESS_TOKEN, self.ACCEPTED_TOKEN])
